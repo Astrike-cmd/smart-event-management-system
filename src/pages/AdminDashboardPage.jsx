@@ -129,40 +129,28 @@ function AdminDashboardPage() {
 
       <div className="row g-4 mb-4">
         <div className="col-md-6 col-xl-3">
-          <div className="feature-card dashboard-stat-card p-4 h-100">
-            <div className="feature-icon mb-3">
-              <i className="bi bi-calendar-event"></i>
-            </div>
+          <div className="feature-card dashboard-stat-card h-100">
             <span className="dashboard-stat-label">Total Events</span>
             <h2 className="h5 mb-2">{eventStats.total}</h2>
             <p className="text-muted mb-0 small">Every event record currently visible to admins.</p>
           </div>
         </div>
         <div className="col-md-6 col-xl-3">
-          <div className="feature-card dashboard-stat-card p-4 h-100">
-            <div className="feature-icon mb-3">
-              <i className="bi bi-broadcast"></i>
-            </div>
+          <div className="feature-card dashboard-stat-card h-100">
             <span className="dashboard-stat-label">Published</span>
             <h2 className="h5 mb-2">{eventStats.published}</h2>
             <p className="text-muted mb-0 small">Events currently exposed to public event discovery.</p>
           </div>
         </div>
         <div className="col-md-6 col-xl-3">
-          <div className="feature-card dashboard-stat-card p-4 h-100">
-            <div className="feature-icon mb-3">
-              <i className="bi bi-x-octagon"></i>
-            </div>
+          <div className="feature-card dashboard-stat-card h-100">
             <span className="dashboard-stat-label">Cancelled</span>
             <h2 className="h5 mb-2">{eventStats.cancelled}</h2>
             <p className="text-muted mb-0 small">Events that are no longer active on the platform.</p>
           </div>
         </div>
         <div className="col-md-6 col-xl-3">
-          <div className="feature-card dashboard-stat-card p-4 h-100">
-            <div className="feature-icon mb-3">
-              <i className="bi bi-trash3"></i>
-            </div>
+          <div className="feature-card dashboard-stat-card h-100">
             <span className="dashboard-stat-label">Needs Cleanup</span>
             <h2 className="h5 mb-2">{eventStats.cleanup}</h2>
             <p className="text-muted mb-0 small">Expired event records that can be removed from admin.</p>

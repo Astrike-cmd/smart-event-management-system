@@ -12,9 +12,15 @@ function MainLayout() {
         <nav className="navbar navbar-expand-lg">
           <div className="container py-2 flex-wrap gap-3">
             <NavLink className="navbar-brand d-flex align-items-center gap-3" to="/">
-              <img src={brandMark} alt="Smart Event Management" width="42" height="42" />
+              <img
+                className="brand-mark"
+                src={brandMark}
+                alt="eventify"
+                width="42"
+                height="42"
+              />
               <div>
-                <span className="brand-title d-block">Smart Event Management</span>
+                <span className="brand-title d-block">eventify</span>
                 <small className="brand-subtitle">Event booking platform</small>
               </div>
             </NavLink>
@@ -85,7 +91,7 @@ function MainLayout() {
 
       <footer className="border-top border-subtle py-4">
         <div className="container d-flex flex-column flex-md-row justify-content-between gap-2 text-muted small">
-          <span>Smart event publishing, ticket booking, and account management in one workspace</span>
+          <span>eventify keeps event publishing, ticket booking, and account access in one workspace</span>
           <span>Admins manage platform quality while users manage their own events and bookings</span>
         </div>
       </footer>

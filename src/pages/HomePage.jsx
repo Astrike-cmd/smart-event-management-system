@@ -218,8 +218,8 @@ function HomePage() {
                   A cleaner way to publish, manage, and book events
                 </h1>
                 <p className="lead text-muted mb-4">
-                  Smart Event Management brings event discovery, account access, booking,
-                  and admin oversight together in one tighter, production-focused interface.
+                  eventify brings event discovery, account access, booking, and admin
+                  oversight together in one tighter, production-focused interface.
                 </p>
 
                 <div className="d-flex flex-wrap gap-3 mt-4">
@@ -450,10 +450,7 @@ function HomePage() {
           <div className="row g-4">
             {audienceCards.map((card) => (
               <div className="col-lg-6" key={card.title}>
-                <div className="feature-card audience-card h-100 p-4 p-md-5">
-                  <div className="feature-icon mb-3">
-                    <i className={`bi ${card.icon}`}></i>
-                  </div>
+                <div className="feature-card audience-card h-100">
                   <span className="section-eyebrow">Audience Focus</span>
                   <h2 className="h4 mb-3">{card.title}</h2>
                   <p className="text-muted mb-4">{card.description}</p>

@@ -107,6 +107,10 @@ body[data-theme='dark'] footer {
   letter-spacing: -0.02em;
 }
 
+.brand-mark {
+  filter: grayscale(1) saturate(0) contrast(1.08);
+}
+
 .brand-subtitle {
   color: var(--text-secondary);
 }
@@ -428,6 +432,17 @@ body[data-theme='dark'] .event-price-chip {
   letter-spacing: 0.08em;
 }
 
+.audience-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 1.5rem;
+}
+
+.audience-card .section-eyebrow {
+  margin-bottom: 0.35rem;
+}
+
 .audience-card .auth-feature-item {
   width: 100%;
   justify-content: flex-start;
@@ -529,7 +544,11 @@ body[data-theme='dark'] .dashboard-check-item {
 }
 
 .dashboard-stat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
   overflow: hidden;
+  padding: 1.4rem;
 }
 
 .dashboard-stat-label {

@@ -344,6 +344,7 @@ function MyEventsPage() {
                   <option value="Networking">Networking</option>
                   <option value="Workshop">Workshop</option>
                   <option value="Music">Music</option>
+                  <option value="Other">Other</option>
                 </select>
               </div>
               <div className="col-md-6">

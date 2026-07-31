@@ -83,8 +83,8 @@ const audienceCards = [
 ];
 
 const roadmap = [
-  { phase: 'Phase 3', label: 'Landing Page', status: 'Current build' },
-  { phase: 'Phase 4', label: 'User Dashboard', status: 'Next up' },
+  { phase: 'Phase 3', label: 'Landing Page', status: 'Completed' },
+  { phase: 'Phase 4', label: 'User Dashboard', status: 'Current build' },
   { phase: 'Phase 5', label: 'Events Module', status: 'Planned' },
   { phase: 'Phase 6', label: 'Booking Module', status: 'Planned' }
 ];
@@ -136,7 +136,7 @@ function HomePage() {
             <div className="col-lg-7">
               <div className="glass-panel p-4 p-md-5">
                 <span className="badge rounded-pill text-bg-primary px-3 py-2 mb-3 hero-badge">
-                  Phase 3 Active: Landing Page Experience
+                  Phase 3 Complete: Landing Experience Live
                 </span>
                 <h1 className="display-5 fw-semibold mb-3">
                   Launch and book standout events from one modern platform

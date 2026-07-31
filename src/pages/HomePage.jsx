@@ -7,8 +7,8 @@ import useAuth from '../hooks/useAuth';
 const heroHighlights = [
   {
     icon: 'bi-calendar-event',
-    title: 'Discover curated events',
-    description: 'Browse concerts, conferences, campus festivals, workshops, and community experiences.'
+    title: 'Discover user-created events',
+    description: 'Browse concerts, conferences, campus festivals, workshops, and community experiences created on the platform.'
   },
   {
     icon: 'bi-ticket-perforated',
@@ -18,7 +18,7 @@ const heroHighlights = [
   {
     icon: 'bi-shield-check',
     title: 'Built on secure access',
-    description: 'JWT sessions, role-based access, and protected routes already power the platform foundation.'
+    description: 'JWT sessions, role-based access, and protected routes support user event creation plus admin operations.'
   }
 ];
 
@@ -93,8 +93,8 @@ const audienceCards = [
   {
     icon: 'bi-kanban',
     title: 'For Organizers and Admins',
-    description: 'Manage the platform with secure admin access across live events and booking operations.',
-    points: ['Admin-only dashboard entry', 'Role-restricted controls', 'Booking oversight tools']
+    description: 'Users create events while admins oversee the platform and operate booking workflows.',
+    points: ['User event creator workspace', 'Admin booking controls', 'Role-restricted oversight tools']
   }
 ];
 

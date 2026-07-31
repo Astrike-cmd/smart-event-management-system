@@ -46,9 +46,14 @@ function MainLayout() {
                     {user?.name} ({user?.role})
                   </span>
                   {!isAdmin ? (
-                    <NavLink className="btn btn-nav-link" to="/bookings">
-                      My Bookings
-                    </NavLink>
+                    <>
+                      <NavLink className="btn btn-nav-link" to="/my-events">
+                        My Events
+                      </NavLink>
+                      <NavLink className="btn btn-nav-link" to="/bookings">
+                        My Bookings
+                      </NavLink>
+                    </>
                   ) : (
                     <NavLink className="btn btn-nav-link" to="/admin/bookings">
                       Admin Bookings
@@ -68,7 +73,7 @@ function MainLayout() {
 
               <div className="d-none d-xl-flex align-items-center gap-2 text-muted small">
                 <i className="bi bi-stars"></i>
-                <span>Booking module live with user and admin flows</span>
+                <span>Users can create events and admins can operate bookings</span>
               </div>
 
               <ThemeToggle />
@@ -84,7 +89,7 @@ function MainLayout() {
       <footer className="border-top border-subtle py-4">
         <div className="container d-flex flex-column flex-md-row justify-content-between gap-2 text-muted small">
           <span>TYBSc IT Final Year Project for smart event and ticket booking</span>
-          <span>Phase 6 adds booking APIs, attendee history, and admin booking oversight</span>
+          <span>Users can create events while admins handle booking operations and event oversight</span>
         </div>
       </footer>
     </div>

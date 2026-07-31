@@ -11,6 +11,7 @@ import EventDetailsPage from './pages/EventDetailsPage';
 import EventsPage from './pages/EventsPage';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
+import MyEventsPage from './pages/MyEventsPage';
 import NotFoundPage from './pages/NotFoundPage';
 import RegisterPage from './pages/RegisterPage';
 import UserDashboardPage from './pages/UserDashboardPage';
@@ -34,6 +35,7 @@ function App() {
 
         <Route element={<ProtectedRoute allowedRoles={['user']} />}>
           <Route path="/dashboard" element={<UserDashboardPage />} />
+          <Route path="/my-events" element={<MyEventsPage />} />
           <Route path="/bookings" element={<BookingsPage />} />
         </Route>
 

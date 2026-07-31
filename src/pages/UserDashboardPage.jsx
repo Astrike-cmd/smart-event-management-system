@@ -93,6 +93,11 @@ function UserDashboardPage() {
       description: 'Review confirmed tickets, cancellations, payment state, and event timelines.'
     },
     {
+      icon: 'bi-calendar-plus',
+      title: 'Event Creator Tools',
+      description: 'Create your own events, update listings, and manage ticket inventory from a protected route.'
+    },
+    {
       icon: 'bi-stars',
       title: 'Personalized Journey',
       description: 'Future dashboard updates can highlight saved interests, recommended events, and reminders.'
@@ -103,7 +108,7 @@ function UserDashboardPage() {
     'Secure sign-in and session restoration are already working.',
     'Role-based routing keeps this dashboard available only to normal users.',
     'Profile metadata is now visible from the live authenticated user object.',
-    'Live event discovery, booking creation, and booking history are now connected.'
+    'Live event discovery, booking creation, booking history, and user-created events are now connected.'
   ];
 
   const quickActions = [
@@ -120,6 +125,13 @@ function UserDashboardPage() {
       description: 'Open the live events listing and browse what is currently available on the platform.',
       to: '/events',
       buttonLabel: 'View Events'
+    },
+    {
+      icon: 'bi-calendar-plus',
+      title: 'Manage My Events',
+      description: 'Create your own events, update ticket inventory, and maintain organizer listings.',
+      to: '/my-events',
+      buttonLabel: 'Open My Events'
     },
     {
       icon: 'bi-ticket-perforated',
@@ -158,7 +170,7 @@ function UserDashboardPage() {
             </h1>
             <p className="text-muted mb-4">
               Your dashboard now presents a personalized account workspace with profile
-              visibility, session status, and direct access to your live booking workspace.
+              visibility, session status, and direct access to booking plus event-creation tools.
             </p>
             <div className="d-flex flex-wrap gap-3">
               <Link className="btn btn-primary btn-lg px-4" to="/">
@@ -263,6 +275,9 @@ function UserDashboardPage() {
           </div>
           <Link className="btn btn-outline-primary" to="/events">
             Open Events Module
+          </Link>
+          <Link className="btn btn-primary" to="/my-events">
+            Manage My Events
           </Link>
         </div>
 

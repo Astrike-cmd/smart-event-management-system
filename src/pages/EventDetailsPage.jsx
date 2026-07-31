@@ -79,7 +79,7 @@ function EventDetailsPage() {
     if (isAdmin) {
       setFeedback({
         type: 'danger',
-        message: 'Admin accounts cannot create attendee bookings. Use a user account to continue.'
+        message: 'Admin accounts cannot self-book here. Use the admin booking console to create bookings for users.'
       });
       return;
     }
@@ -264,6 +264,11 @@ function EventDetailsPage() {
                 {isAuthenticated && !isAdmin ? (
                   <Link className="btn btn-nav-link" to="/bookings">
                     View My Bookings
+                  </Link>
+                ) : null}
+                {isAuthenticated && isAdmin ? (
+                  <Link className="btn btn-nav-link" to="/admin/bookings">
+                    Open Admin Booking Console
                   </Link>
                 ) : null}
               </div>

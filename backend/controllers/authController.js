@@ -166,3 +166,20 @@ export const getCurrentUser = async (req, res) => {
     user: req.user
   });
 };
+
+export const getAdminUsers = async (req, res, next) => {
+  try {
+    const users = await User.find({ role: 'user' })
+      .select('name email role createdAt')
+      .sort({ name: 1, email: 1 })
+      .lean();
+
+    res.status(200).json({
+      success: true,
+      count: users.length,
+      users
+    });
+  } catch (error) {
+    next(error);
+  }
+};

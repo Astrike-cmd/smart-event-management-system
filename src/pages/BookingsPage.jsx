@@ -184,14 +184,24 @@ function BookingsPage() {
                   </div>
                   <div className="event-meta-row">
                     <span>Status</span>
-                    <strong>{booking.event?.status === 'sold_out' ? 'Sold Out Event' : 'Scheduled'}</strong>
+                    <strong>
+                      {!booking.event
+                        ? 'Event Removed'
+                        : booking.event.status === 'sold_out'
+                          ? 'Sold Out Event'
+                          : booking.bookingStatus === 'cancelled'
+                            ? 'Cancelled Booking'
+                            : 'Scheduled'}
+                    </strong>
                   </div>
                 </div>
 
                 <div className="d-flex gap-2 flex-wrap mt-4">
-                  <Link className="btn btn-outline-primary" to={`/events/${booking.eventSlug}`}>
-                    View Event
-                  </Link>
+                  {booking.event ? (
+                    <Link className="btn btn-outline-primary" to={`/events/${booking.eventSlug}`}>
+                      View Event
+                    </Link>
+                  ) : null}
                   {booking.bookingStatus === 'confirmed' ? (
                     <button
                       type="button"

@@ -1,4 +1,5 @@
 import Event from '../models/Event.js';
+import Booking from '../models/Booking.js';
 
 const createSlug = (title) =>
   title
@@ -106,6 +107,9 @@ const getSortDirection = (sort) => {
   return 1;
 };
 
+const canManageEvent = (event, user) =>
+  user.role === 'admin' || String(event.createdBy) === String(user._id);
+
 export const getPublishedEvents = async (req, res, next) => {
   try {
     const limit = Number(req.query.limit) || 20;
@@ -160,6 +164,25 @@ export const getEventBySlug = async (req, res, next) => {
 export const getAdminEvents = async (req, res, next) => {
   try {
     const events = await Event.find()
+      .populate('createdBy', 'name email role')
+      .sort({ createdAt: -1 })
+      .lean();
+
+    res.status(200).json({
+      success: true,
+      count: events.length,
+      events
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getManagedEvents = async (req, res, next) => {
+  try {
+    const query = req.user.role === 'admin' ? {} : { createdBy: req.user._id };
+    const events = await Event.find(query)
+      .populate('createdBy', 'name email role')
       .sort({ createdAt: -1 })
       .lean();
 
@@ -211,6 +234,12 @@ export const updateEvent = async (req, res, next) => {
       return;
     }
 
+    if (!canManageEvent(existingEvent, req.user)) {
+      res.status(403);
+      next(new Error('You are not allowed to manage this event.'));
+      return;
+    }
+
     const payload = normalizeEventPayload({
       ...existingEvent.toObject(),
       ...req.body
@@ -244,6 +273,45 @@ export const updateEvent = async (req, res, next) => {
       success: true,
       message: 'Event updated successfully.',
       event: existingEvent
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteEvent = async (req, res, next) => {
+  try {
+    const existingEvent = await Event.findById(req.params.id);
+
+    if (!existingEvent) {
+      res.status(404);
+      next(new Error('Event not found.'));
+      return;
+    }
+
+    if (!canManageEvent(existingEvent, req.user)) {
+      res.status(403);
+      next(new Error('You are not allowed to delete this event.'));
+      return;
+    }
+
+    const cancelledBookings = await Booking.updateMany(
+      {
+        event: existingEvent._id,
+        bookingStatus: 'confirmed'
+      },
+      {
+        bookingStatus: 'cancelled',
+        paymentStatus: 'refunded'
+      }
+    );
+
+    await existingEvent.deleteOne();
+
+    res.status(200).json({
+      success: true,
+      message: 'Event deleted successfully.',
+      cancelledBookingsCount: cancelledBookings.modifiedCount || 0
     });
   } catch (error) {
     next(error);

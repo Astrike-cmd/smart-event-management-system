@@ -15,7 +15,7 @@ function MainLayout() {
               <img src={brandMark} alt="Smart Event Management" width="42" height="42" />
               <div>
                 <span className="brand-title d-block">Smart Event Management</span>
-                <small className="brand-subtitle">Phase 2 Authentication</small>
+                <small className="brand-subtitle">Phase 3 Landing Page</small>
               </div>
             </NavLink>
 
@@ -55,8 +55,8 @@ function MainLayout() {
               )}
 
               <div className="d-none d-xl-flex align-items-center gap-2 text-muted small">
-                <i className="bi bi-shield-check"></i>
-                <span>JWT, bcrypt, role-based auth</span>
+                <i className="bi bi-stars"></i>
+                <span>Landing page live, auth foundation ready</span>
               </div>
 
               <ThemeToggle />
@@ -71,8 +71,8 @@ function MainLayout() {
 
       <footer className="border-top border-subtle py-4">
         <div className="container d-flex flex-column flex-md-row justify-content-between gap-2 text-muted small">
-          <span>TYBSc IT Final Year Project Authentication Module</span>
-          <span>JWT secured frontend and backend foundation</span>
+          <span>TYBSc IT Final Year Project for smart event and ticket booking</span>
+          <span>Phase 3 delivers the public landing experience on top of the auth-ready stack</span>
         </div>
       </footer>
     </div>

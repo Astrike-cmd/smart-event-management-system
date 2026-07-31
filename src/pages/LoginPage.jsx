@@ -48,7 +48,7 @@ function LoginPage() {
   return (
     <AuthFormCard
       title="User Login"
-      subtitle="Sign in to access your bookings, profile, and future event features."
+      subtitle="Sign in to access your bookings, profile, and event tools."
       error={error}
       isSubmitting={isSubmitting}
       onSubmit={handleSubmit}

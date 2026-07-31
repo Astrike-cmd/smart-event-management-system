@@ -124,6 +124,10 @@ export const getPublishedEvents = async (req, res, next) => {
       query.category = req.query.category;
     }
 
+    if (req.query.upcoming === 'true') {
+      query.endDate = { $gte: new Date() };
+    }
+
     const events = await Event.find(query)
       .sort({ startDate: getSortDirection(sort), createdAt: -1 })
       .limit(limit)

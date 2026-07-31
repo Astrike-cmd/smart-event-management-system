@@ -1,6 +1,6 @@
 # Smart Event Management and Ticket Booking System
 
-Phase 6 adds the booking module on top of the existing project foundation. The app now includes user and admin authentication, a public landing page, a user dashboard, a live events API, event detail pages, ticket booking APIs, user booking history, sample event bootstrapping, an events discovery page, and admin-protected event plus booking oversight.
+Smart Event Management is a full-stack event publishing and ticket booking platform. The app includes user and admin authentication, a public homepage, a user dashboard, live events APIs, event detail pages, ticket booking APIs, user booking history, an events discovery page, and admin-protected event plus booking oversight.
 
 ## Project Structure
 
@@ -50,17 +50,10 @@ npm run dev
 - `GET /api/events?featured=true&limit=3` returns featured events for the landing page.
 - `GET /api/events/:slug` returns one published event by slug.
 - `GET /api/events/admin/list` returns all events for admins.
-- `POST /api/events` creates a new event for admins.
-- `PUT /api/events/:id` updates an existing event for admins.
+- `POST /api/events` creates a new event for an authenticated user.
+- `PUT /api/events/:id` updates an existing event for an authorized user.
 - `GET /api/bookings` returns bookings for the logged-in user.
 - `POST /api/bookings` creates a booking for the logged-in user.
 - `POST /api/bookings/:id/cancel` cancels a user booking and restores inventory.
 - `GET /api/bookings/admin/list` returns all bookings for admins.
 - `GET /api/health` returns API and database health information.
-
-## Current Phases
-
-- `Phase 3` delivers the landing page.
-- `Phase 4` delivers the user dashboard.
-- `Phase 5` delivers the events module.
-- `Phase 6` delivers the booking module.

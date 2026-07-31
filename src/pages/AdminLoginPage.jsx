@@ -50,7 +50,7 @@ function AdminLoginPage() {
   return (
     <AuthFormCard
       title="Admin Login"
-      subtitle="Sign in with an admin account to access protected administration routes."
+      subtitle="Sign in with an admin account to manage platform events and bookings."
       error={error}
       successMessage={successMessage}
       isSubmitting={isSubmitting}

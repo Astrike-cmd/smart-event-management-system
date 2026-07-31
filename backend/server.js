@@ -3,7 +3,6 @@ import dotenv from 'dotenv';
 import express from 'express';
 import morgan from 'morgan';
 import bootstrapAdminUser from './config/bootstrapAdmin.js';
-import bootstrapEvents from './config/bootstrapEvents.js';
 import connectDatabase from './config/db.js';
 import errorMiddleware from './middleware/errorMiddleware.js';
 import notFoundMiddleware from './middleware/notFoundMiddleware.js';
@@ -20,7 +19,6 @@ const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173';
 
 connectDatabase().then(() => {
   bootstrapAdminUser();
-  bootstrapEvents();
 });
 
 app.use(

@@ -197,8 +197,8 @@ function EventDetailsPage() {
 
           <div className="col-lg-4">
             <div className="glass-panel p-4 p-md-5">
-              <span className="badge rounded-pill text-bg-primary px-3 py-2 mb-3">
-                Phase 6 Booking Module
+              <span className="section-pill mb-3">
+                Ticket Booking
               </span>
               <h2 className="h3 mb-3">Book your tickets</h2>
               <p className="text-muted">

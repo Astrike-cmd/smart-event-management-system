@@ -497,7 +497,8 @@ function MyEventsPage() {
             {loading ? <p className="text-muted mb-0">Loading your events...</p> : null}
 
             {!loading && events.length > 0 ? (
-              <div className="event-admin-list">
+              <div className="scroll-panel">
+                <div className="event-admin-list">
                 {events.map((eventItem) => (
                   <article className="dashboard-action-card" key={eventItem._id}>
                     <div className="d-flex justify-content-between gap-3 flex-wrap mb-2">
@@ -552,6 +553,7 @@ function MyEventsPage() {
                     </div>
                   </article>
                 ))}
+                </div>
               </div>
             ) : null}
 

@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cancelBooking, getMyBookings } from '../services/bookings';
 
+const HOMEPAGE_BOOKINGS_PREFERENCE_KEY = 'smart-event-homepage-bookings';
+
 const formatDate = (value) => {
   const date = new Date(value);
 
@@ -27,6 +29,10 @@ function BookingsPage() {
     message: location.state?.successMessage || ''
   });
   const [activeBookingId, setActiveBookingId] = useState('');
+  const [showOnHome, setShowOnHome] = useState(() => {
+    const storedPreference = window.localStorage.getItem(HOMEPAGE_BOOKINGS_PREFERENCE_KEY);
+    return storedPreference !== 'false';
+  });
 
   useEffect(() => {
     const loadBookings = async () => {
@@ -83,22 +89,37 @@ function BookingsPage() {
     }
   };
 
+  const handleHomepageDisplayToggle = () => {
+    const nextValue = !showOnHome;
+    setShowOnHome(nextValue);
+    window.localStorage.setItem(HOMEPAGE_BOOKINGS_PREFERENCE_KEY, String(nextValue));
+  };
+
   return (
     <section className="container py-5">
       <div className="glass-panel p-4 p-md-5 mb-4">
         <div className="d-flex justify-content-between align-items-end gap-3 flex-wrap">
           <div>
-            <span className="badge rounded-pill text-bg-primary px-3 py-2 mb-3">
-              Phase 6 Booking Workspace
+            <span className="section-pill mb-3">
+              Booking History
             </span>
             <h1 className="display-6 fw-semibold mb-3">Track your bookings</h1>
             <p className="text-muted mb-0">
               Review confirmed tickets, watch event schedules, and cancel bookings when plans change.
             </p>
           </div>
-          <Link className="btn btn-outline-primary" to="/events">
-            Book More Events
-          </Link>
+          <div className="d-flex gap-2 flex-wrap">
+            <button
+              type="button"
+              className="btn btn-outline-primary"
+              onClick={handleHomepageDisplayToggle}
+            >
+              {showOnHome ? 'Hide On Home' : 'Show On Home'}
+            </button>
+            <Link className="btn btn-primary" to="/events">
+              Book More Events
+            </Link>
+          </div>
         </div>
       </div>
 
@@ -114,7 +135,7 @@ function BookingsPage() {
           <div className="feature-card dashboard-stat-card p-4 h-100">
             <span className="dashboard-stat-label">Confirmed</span>
             <h2 className="h4 mb-2">{bookingStats.confirmed}</h2>
-            <p className="text-muted mb-0 small">Bookings currently active for future attendance.</p>
+            <p className="text-muted mb-0 small">Bookings currently active for scheduled events.</p>
           </div>
         </div>
         <div className="col-md-6 col-xl-3">
@@ -145,7 +166,9 @@ function BookingsPage() {
             <span className="section-eyebrow">Booking History</span>
             <h2 className="h3 mb-0">Your ticket timeline</h2>
           </div>
-          <span className="text-muted small">Newest bookings appear first.</span>
+          <span className="text-muted small">
+            Homepage display is {showOnHome ? 'enabled' : 'hidden'}.
+          </span>
         </div>
 
         {loading ? <p className="text-muted mb-0">Loading your bookings...</p> : null}

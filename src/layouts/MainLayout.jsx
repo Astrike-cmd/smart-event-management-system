@@ -15,65 +15,62 @@ function MainLayout() {
               <img src={brandMark} alt="Smart Event Management" width="42" height="42" />
               <div>
                 <span className="brand-title d-block">Smart Event Management</span>
-                <small className="brand-subtitle">Phase 6 Booking Module</small>
+                <small className="brand-subtitle">Event booking platform</small>
               </div>
             </NavLink>
 
-            <div className="d-flex align-items-center flex-wrap gap-2 ms-lg-auto">
-              <NavLink className="btn btn-nav-link" to="/">
-                Home
-              </NavLink>
-              <NavLink className="btn btn-nav-link" to="/events">
-                Events
-              </NavLink>
+            <div className="d-flex align-items-center gap-2 ms-lg-auto flex-grow-1 justify-content-lg-end">
+              <div className="app-nav-scroll">
+                <NavLink className="btn btn-nav-link" to="/">
+                  Home
+                </NavLink>
+                <NavLink className="btn btn-nav-link" to="/events">
+                  Events
+                </NavLink>
 
-              {!isAuthenticated ? (
-                <>
-                  <NavLink className="btn btn-nav-link" to="/login">
-                    User Login
-                  </NavLink>
-                  <NavLink className="btn btn-nav-link" to="/register">
-                    Register
-                  </NavLink>
-                  <NavLink className="btn btn-nav-link" to="/admin/login">
-                    Admin Login
-                  </NavLink>
-                </>
-              ) : (
-                <>
-                  <span className="d-none d-md-inline-block text-muted small nav-user-pill">
-                    <i className="bi bi-person-circle me-2"></i>
-                    {user?.name} ({user?.role})
-                  </span>
-                  {!isAdmin ? (
-                    <>
-                      <NavLink className="btn btn-nav-link" to="/my-events">
-                        My Events
-                      </NavLink>
-                      <NavLink className="btn btn-nav-link" to="/bookings">
-                        My Bookings
-                      </NavLink>
-                    </>
-                  ) : (
-                    <NavLink className="btn btn-nav-link" to="/admin/bookings">
-                      Admin Bookings
+                {!isAuthenticated ? (
+                  <>
+                    <NavLink className="btn btn-nav-link" to="/login">
+                      User Login
                     </NavLink>
-                  )}
-                  <NavLink
-                    className="btn btn-nav-link"
-                    to={isAdmin ? '/admin/dashboard' : '/dashboard'}
-                  >
-                    {isAdmin ? 'Admin Dashboard' : 'Dashboard'}
-                  </NavLink>
-                  <button type="button" className="btn btn-nav-link" onClick={logout}>
-                    Logout
-                  </button>
-                </>
-              )}
-
-              <div className="d-none d-xl-flex align-items-center gap-2 text-muted small">
-                <i className="bi bi-stars"></i>
-                <span>Users can create events and admins can operate bookings</span>
+                    <NavLink className="btn btn-nav-link" to="/register">
+                      Register
+                    </NavLink>
+                    <NavLink className="btn btn-nav-link" to="/admin/login">
+                      Admin Login
+                    </NavLink>
+                  </>
+                ) : (
+                  <>
+                    <span className="d-none d-md-inline-flex text-muted small nav-user-pill">
+                      <i className="bi bi-person-circle me-2"></i>
+                      {user?.name} ({user?.role})
+                    </span>
+                    {!isAdmin ? (
+                      <>
+                        <NavLink className="btn btn-nav-link" to="/my-events">
+                          My Events
+                        </NavLink>
+                        <NavLink className="btn btn-nav-link" to="/bookings">
+                          My Bookings
+                        </NavLink>
+                      </>
+                    ) : (
+                      <NavLink className="btn btn-nav-link" to="/admin/bookings">
+                        Admin Bookings
+                      </NavLink>
+                    )}
+                    <NavLink
+                      className="btn btn-nav-link"
+                      to={isAdmin ? '/admin/dashboard' : '/dashboard'}
+                    >
+                      {isAdmin ? 'Admin Dashboard' : 'Dashboard'}
+                    </NavLink>
+                    <button type="button" className="btn btn-nav-link" onClick={logout}>
+                      Logout
+                    </button>
+                  </>
+                )}
               </div>
 
               <ThemeToggle />
@@ -88,8 +85,8 @@ function MainLayout() {
 
       <footer className="border-top border-subtle py-4">
         <div className="container d-flex flex-column flex-md-row justify-content-between gap-2 text-muted small">
-          <span>TYBSc IT Final Year Project for smart event and ticket booking</span>
-          <span>Users can create events while admins handle booking operations and event oversight</span>
+          <span>Smart event publishing, ticket booking, and account management in one workspace</span>
+          <span>Admins manage platform quality while users manage their own events and bookings</span>
         </div>
       </footer>
     </div>

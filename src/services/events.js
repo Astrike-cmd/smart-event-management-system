@@ -18,8 +18,10 @@ export const getEvents = async (params = {}) => {
   return data.events;
 };
 
-export const getFeaturedEvents = async (limit = 3) => {
-  const { data } = await api.get(`/events${buildQueryString({ featured: true, limit })}`);
+export const getFeaturedEvents = async (limit = 3, params = {}) => {
+  const { data } = await api.get(
+    `/events${buildQueryString({ featured: true, upcoming: true, limit, ...params })}`
+  );
   return data.events;
 };
 

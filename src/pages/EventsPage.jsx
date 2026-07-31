@@ -57,13 +57,13 @@ function EventsPage() {
       <div className="glass-panel p-4 p-md-5 mb-4">
         <div className="d-flex justify-content-between gap-4 flex-wrap align-items-end">
           <div>
-            <span className="badge rounded-pill text-bg-primary px-3 py-2 mb-3">
-              Phase 5 Events Module
+            <span className="section-pill mb-3">
+              Live Events
             </span>
             <h1 className="display-6 fw-semibold mb-3">Discover upcoming events</h1>
             <p className="text-muted mb-0">
-              Explore live events published from the new backend events module, including
-              conferences, festivals, networking sessions, and future booking-ready experiences.
+              Explore live events published through the platform, including conferences,
+              festivals, networking sessions, and booking-ready experiences.
             </p>
           </div>
           <Link className="btn btn-outline-primary" to="/">
@@ -73,7 +73,7 @@ function EventsPage() {
       </div>
 
       <div className="glass-panel p-4 mb-4">
-        <div className="d-flex flex-wrap gap-2 align-items-center">
+        <div className="chip-scroll align-items-center">
           <span className="section-eyebrow mb-0">Categories</span>
           {categories.map((category) => (
             <button

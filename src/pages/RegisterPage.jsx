@@ -69,7 +69,7 @@ function RegisterPage() {
   return (
     <AuthFormCard
       title="Create User Account"
-      subtitle="Register securely to start booking events in the next modules."
+      subtitle="Register securely to start browsing and booking events."
       error={error}
       isSubmitting={isSubmitting}
       onSubmit={handleSubmit}

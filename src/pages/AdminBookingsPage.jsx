@@ -42,6 +42,7 @@ function AdminBookingsPage() {
   const [isCreating, setIsCreating] = useState(false);
   const [activeBookingId, setActiveBookingId] = useState('');
   const [transferTargets, setTransferTargets] = useState({});
+  const [isFeedCleared, setIsFeedCleared] = useState(false);
 
   const bookableEvents = useMemo(
     () => events.filter((event) => event.status === 'published' && event.availableTickets > 0),
@@ -118,6 +119,7 @@ function AdminBookingsPage() {
     try {
       const booking = await createAdminBooking(createForm);
       setBookings((currentBookings) => [booking, ...currentBookings]);
+      setIsFeedCleared(false);
       setCreateForm({
         userId: '',
         eventId: '',
@@ -146,6 +148,7 @@ function AdminBookingsPage() {
     try {
       const updatedBooking = await cancelAdminBooking(bookingId);
       replaceBooking(updatedBooking);
+      setIsFeedCleared(false);
       const refreshedEvents = await getManagedEvents();
       setEvents(refreshedEvents);
       setFeedback({
@@ -186,6 +189,7 @@ function AdminBookingsPage() {
     try {
       const updatedBooking = await transferAdminBooking(bookingId, { userId });
       replaceBooking(updatedBooking);
+      setIsFeedCleared(false);
       setFeedback({
         type: 'success',
         message: `Booking ${updatedBooking.bookingReference} was transferred successfully.`
@@ -205,13 +209,13 @@ function AdminBookingsPage() {
       <div className="glass-panel p-4 p-md-5 mb-4">
         <div className="d-flex justify-content-between align-items-end gap-3 flex-wrap">
           <div>
-            <span className="badge rounded-pill text-bg-warning px-3 py-2 mb-3">
+            <span className="section-pill mb-3">
               Admin Booking Operations
             </span>
             <h1 className="display-6 fw-semibold mb-3">Operate user bookings</h1>
             <p className="text-muted mb-0">
               Create bookings for any user, transfer active bookings to a different user, and
-              cancel bookings when needed.
+              cancel bookings when needed from one cleaner operations screen.
             </p>
           </div>
           <div className="d-flex gap-2 flex-wrap">
@@ -339,13 +343,31 @@ function AdminBookingsPage() {
 
         <div className="col-xl-7">
           <div className="glass-panel p-4 p-md-5 h-100">
-            <span className="section-eyebrow">Booking Records</span>
-            <h2 className="h3 mb-4">Admin booking feed</h2>
+            <div className="d-flex justify-content-between align-items-end gap-3 flex-wrap mb-4">
+              <div>
+                <span className="section-eyebrow">Booking Records</span>
+                <h2 className="h3 mb-0">Admin booking feed</h2>
+              </div>
+              <div className="d-flex gap-2 flex-wrap">
+                <span className="text-muted small align-self-center">
+                  {bookings.length} record{bookings.length === 1 ? '' : 's'}
+                </span>
+                <button
+                  type="button"
+                  className="btn btn-outline-primary"
+                  onClick={() => setIsFeedCleared((currentState) => !currentState)}
+                  disabled={loading || bookings.length === 0}
+                >
+                  {isFeedCleared ? 'Restore Feed' : 'Clear Feed'}
+                </button>
+              </div>
+            </div>
 
             {loading ? <p className="text-muted mb-0">Loading booking records...</p> : null}
 
-            {!loading && bookings.length > 0 ? (
-              <div className="booking-list">
+            {!loading && bookings.length > 0 && !isFeedCleared ? (
+              <div className="scroll-panel scroll-panel--compact">
+                <div className="booking-list">
                 {bookings.map((booking) => (
                   <article className="dashboard-action-card booking-card" key={booking._id}>
                     <div className="d-flex justify-content-between gap-3 flex-wrap mb-3">
@@ -434,6 +456,7 @@ function AdminBookingsPage() {
                     </div>
                   </article>
                 ))}
+                </div>
               </div>
             ) : null}
 
@@ -443,6 +466,22 @@ function AdminBookingsPage() {
                 <p className="text-muted mb-0">
                   Bookings will appear here once users or admins begin creating bookings.
                 </p>
+              </div>
+            ) : null}
+
+            {!loading && bookings.length > 0 && isFeedCleared ? (
+              <div className="dashboard-mini-card p-4">
+                <h3 className="h5 mb-2">Booking feed cleared from view</h3>
+                <p className="text-muted mb-3">
+                  The records still exist. Restore the feed whenever you want to review them again.
+                </p>
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={() => setIsFeedCleared(false)}
+                >
+                  Restore Feed
+                </button>
               </div>
             ) : null}
           </div>

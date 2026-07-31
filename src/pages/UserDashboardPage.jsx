@@ -65,7 +65,7 @@ function UserDashboardPage() {
       icon: 'bi-calendar2-check',
       label: 'Member Since',
       value: accountSummary.memberSince,
-      description: 'Your dashboard now surfaces core account details from the live session.'
+      description: 'Core account details are available directly from your session.'
     },
     {
       icon: 'bi-shield-lock',
@@ -75,16 +75,16 @@ function UserDashboardPage() {
     },
     {
       icon: 'bi-arrow-up-right-circle',
-      label: 'Next Module',
-      value: 'Phase 6 Booking Live',
-      description: 'Your account now connects event discovery, booking creation, and booking history.'
+      label: 'Booking Status',
+      value: 'Connected',
+      description: 'Your account connects event discovery, booking creation, and booking history.'
     }
   ];
 
   const workspaceCards = [
     {
       icon: 'bi-person-vcard',
-      title: 'Profile Snapshot',
+      title: 'Profile Details',
       description: 'Review the identity details currently stored in your authenticated account.'
     },
     {
@@ -99,16 +99,16 @@ function UserDashboardPage() {
     },
     {
       icon: 'bi-stars',
-      title: 'Personalized Journey',
-      description: 'Future dashboard updates can highlight saved interests, recommended events, and reminders.'
+      title: 'Account Overview',
+      description: 'Keep your event activity, profile details, and key actions in one place.'
     }
   ];
 
-  const readinessItems = [
-    'Secure sign-in and session restoration are already working.',
+  const workspaceHighlights = [
+    'Secure sign-in and session restoration are active.',
     'Role-based routing keeps this dashboard available only to normal users.',
-    'Profile metadata is now visible from the live authenticated user object.',
-    'Live event discovery, booking creation, booking history, and user-created events are now connected.'
+    'Profile metadata stays synced with the authenticated account.',
+    'Event discovery, booking history, and user-created events are connected.'
   ];
 
   const quickActions = [
@@ -143,9 +143,9 @@ function UserDashboardPage() {
   ];
 
   useEffect(() => {
-    const loadUpcomingEvents = async () => {
+    const loadVisibleEvents = async () => {
       try {
-        const events = await getEvents({ limit: 3 });
+        const events = await getEvents({ limit: 3, upcoming: true });
         setUpcomingEvents(events);
       } catch (error) {
         setUpcomingEvents([]);
@@ -154,7 +154,7 @@ function UserDashboardPage() {
       }
     };
 
-    loadUpcomingEvents();
+    loadVisibleEvents();
   }, []);
 
   return (
@@ -162,15 +162,15 @@ function UserDashboardPage() {
       <div className="glass-panel p-4 p-md-5 mb-4">
         <div className="dashboard-hero-grid">
           <div>
-            <span className="badge rounded-pill text-bg-primary px-3 py-2 mb-3">
-              Phase 6 Dashboard Connected To Booking Flow
+            <span className="section-pill mb-3">
+              User Workspace
             </span>
             <h1 className="display-6 fw-semibold mb-3">
               Welcome back, {accountSummary.firstName}
             </h1>
             <p className="text-muted mb-4">
-              Your dashboard now presents a personalized account workspace with profile
-              visibility, session status, and direct access to booking plus event-creation tools.
+              Your dashboard brings profile visibility, session details, and direct access
+              to booking and event tools into one place.
             </p>
             <div className="d-flex flex-wrap gap-3">
               <Link className="btn btn-primary btn-lg px-4" to="/">
@@ -189,7 +189,7 @@ function UserDashboardPage() {
               <span className="section-eyebrow">Account Overview</span>
               <h2 className="h4 mb-1">{user?.name}</h2>
               <p className="text-muted mb-4">
-                Personal dashboard access is active and ready for feature expansion.
+                Personal dashboard access is active and ready to use.
               </p>
             </div>
 
@@ -234,7 +234,7 @@ function UserDashboardPage() {
         <div className="col-lg-7">
           <div className="glass-panel p-4 p-md-5 h-100">
             <span className="section-eyebrow">Workspace</span>
-            <h2 className="h3 mb-4">What this dashboard now covers</h2>
+            <h2 className="h3 mb-4">Tools in your workspace</h2>
             <div className="row g-3">
               {workspaceCards.map((card) => (
                 <div className="col-md-4" key={card.title}>
@@ -253,10 +253,10 @@ function UserDashboardPage() {
 
         <div className="col-lg-5">
           <div className="glass-panel p-4 p-md-5 h-100">
-            <span className="section-eyebrow">Readiness Checklist</span>
-            <h2 className="h3 mb-4">Platform progress for users</h2>
+            <span className="section-eyebrow">Workspace Highlights</span>
+            <h2 className="h3 mb-4">What is available here</h2>
             <div className="dashboard-checklist">
-              {readinessItems.map((item) => (
+              {workspaceHighlights.map((item) => (
                 <div className="dashboard-check-item" key={item}>
                   <i className="bi bi-check2-circle"></i>
                   <span>{item}</span>

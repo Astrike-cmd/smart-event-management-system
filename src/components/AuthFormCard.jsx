@@ -39,7 +39,7 @@ function AuthFormCard({
         </button>
       </form>
 
-      {footer?.content ? <div className="mt-4 text-center text-muted">{footer.content}</div> : null}
+      {footer?.content ? <div className="mt-4 pt-1 text-center text-muted">{footer.content}</div> : null}
     </div>
   );
 }

@@ -9,7 +9,7 @@ function NotFoundPage() {
         </span>
         <h1 className="display-6 fw-semibold mb-3">Page Not Found</h1>
         <p className="text-muted mb-4">
-          The page you are looking for does not exist in the project setup yet.
+          The page you are looking for does not exist or is no longer available.
         </p>
         <Link className="btn btn-primary px-4" to="/">
           Back To Home

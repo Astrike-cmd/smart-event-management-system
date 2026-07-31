@@ -19,11 +19,18 @@ const formatDate = (value) => {
   }).format(date);
 };
 
+const isPastEvent = (event) => {
+  const comparisonDate = new Date(event.endDate || event.startDate);
+  return !Number.isNaN(comparisonDate.getTime()) && comparisonDate.getTime() < Date.now();
+};
+
 function AdminDashboardPage() {
   const { user } = useAuth();
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeDeleteId, setActiveDeleteId] = useState('');
+  const [isInventoryCleared, setIsInventoryCleared] = useState(false);
+  const [showCleanupOnly, setShowCleanupOnly] = useState(false);
   const [feedback, setFeedback] = useState({
     type: '',
     message: ''
@@ -32,10 +39,15 @@ function AdminDashboardPage() {
   const eventStats = useMemo(() => {
     const published = events.filter((event) => event.status === 'published').length;
     const cancelled = events.filter((event) => event.status === 'cancelled').length;
-    const tickets = events.reduce((sum, event) => sum + (event.availableTickets || 0), 0);
+    const cleanup = events.filter(isPastEvent).length;
 
-    return { total: events.length, published, cancelled, tickets };
+    return { total: events.length, published, cancelled, cleanup };
   }, [events]);
+
+  const displayedEvents = useMemo(
+    () => (showCleanupOnly ? events.filter(isPastEvent) : events),
+    [events, showCleanupOnly]
+  );
 
   useEffect(() => {
     const loadAdminEvents = async () => {
@@ -72,6 +84,7 @@ function AdminDashboardPage() {
     try {
       const response = await deleteEvent(eventId);
       setEvents((currentEvents) => currentEvents.filter((event) => event._id !== eventId));
+      setIsInventoryCleared(false);
       setFeedback({
         type: 'success',
         message:
@@ -94,13 +107,13 @@ function AdminDashboardPage() {
       <div className="glass-panel p-4 p-md-5 mb-4">
         <div className="d-flex justify-content-between align-items-end gap-3 flex-wrap">
           <div>
-            <span className="badge rounded-pill text-bg-warning px-3 py-2 mb-3">
+            <span className="section-pill mb-3">
               Admin Event Oversight
             </span>
             <h1 className="display-6 fw-semibold mb-3">Oversee platform events</h1>
             <p className="text-muted mb-0">
               Signed in as <strong>{user?.email}</strong>. Admin accounts can review all events,
-              delete events, and manage bookings, but they can no longer create events.
+              delete stale records, and manage bookings from one place.
             </p>
           </div>
           <div className="d-flex gap-2 flex-wrap">
@@ -148,11 +161,11 @@ function AdminDashboardPage() {
         <div className="col-md-6 col-xl-3">
           <div className="feature-card dashboard-stat-card p-4 h-100">
             <div className="feature-icon mb-3">
-              <i className="bi bi-ticket-perforated"></i>
+              <i className="bi bi-trash3"></i>
             </div>
-            <span className="dashboard-stat-label">Tickets Available</span>
-            <h2 className="h5 mb-2">{eventStats.tickets}</h2>
-            <p className="text-muted mb-0 small">Open inventory remaining across all listed events.</p>
+            <span className="dashboard-stat-label">Needs Cleanup</span>
+            <h2 className="h5 mb-2">{eventStats.cleanup}</h2>
+            <p className="text-muted mb-0 small">Expired event records that can be removed from admin.</p>
           </div>
         </div>
       </div>
@@ -169,14 +182,37 @@ function AdminDashboardPage() {
             <span className="section-eyebrow">Event Inventory</span>
             <h2 className="h3 mb-0">Platform-wide event feed</h2>
           </div>
-          <span className="text-muted small">Admins can review or delete any event record.</span>
+          <div className="d-flex gap-2 flex-wrap">
+            <span className="text-muted small align-self-center">
+              {showCleanupOnly
+                ? 'Showing events that have already ended.'
+                : 'Admins can review or delete any event record.'}
+            </span>
+            <button
+              type="button"
+              className="btn btn-nav-link"
+              onClick={() => setShowCleanupOnly((currentState) => !currentState)}
+              disabled={loading || events.length === 0}
+            >
+              {showCleanupOnly ? 'Show All Events' : 'Show Cleanup Items'}
+            </button>
+            <button
+              type="button"
+              className="btn btn-outline-primary"
+              onClick={() => setIsInventoryCleared((currentState) => !currentState)}
+              disabled={loading || events.length === 0}
+            >
+              {isInventoryCleared ? 'Restore Feed' : 'Clear Feed'}
+            </button>
+          </div>
         </div>
 
         {loading ? <p className="text-muted mb-0">Loading events...</p> : null}
 
-        {!loading && events.length > 0 ? (
-          <div className="event-admin-list">
-            {events.map((event) => (
+        {!loading && displayedEvents.length > 0 && !isInventoryCleared ? (
+          <div className="scroll-panel">
+            <div className="event-admin-list">
+            {displayedEvents.map((event) => (
               <article className="dashboard-action-card" key={event._id}>
                 <div className="d-flex justify-content-between gap-3 flex-wrap mb-2">
                   <div>
@@ -187,6 +223,7 @@ function AdminDashboardPage() {
                   </div>
                   <div className="d-flex gap-2 flex-wrap">
                     <span className="spotlight-tag">{event.status}</span>
+                    {isPastEvent(event) ? <span className="event-price-chip">Needs Cleanup</span> : null}
                     {event.featured ? <span className="event-price-chip">Featured</span> : null}
                   </div>
                 </div>
@@ -198,7 +235,7 @@ function AdminDashboardPage() {
                   </div>
                   <div className="event-meta-row">
                     <span>Created By</span>
-                    <strong>{event.createdBy?.email || 'Seeded record'}</strong>
+                    <strong>{event.createdBy?.email || 'System record'}</strong>
                   </div>
                   <div className="event-meta-row">
                     <span>Date</span>
@@ -228,11 +265,37 @@ function AdminDashboardPage() {
                 </div>
               </article>
             ))}
+            </div>
           </div>
         ) : null}
 
         {!loading && events.length === 0 ? (
           <p className="text-muted mb-0">No events exist yet. User-created events will appear here.</p>
+        ) : null}
+
+        {!loading && events.length > 0 && displayedEvents.length === 0 && !isInventoryCleared ? (
+          <div className="dashboard-mini-card p-4">
+            <h3 className="h5 mb-2">Nothing to clean up</h3>
+            <p className="text-muted mb-0">
+              There are no expired events in the current inventory.
+            </p>
+          </div>
+        ) : null}
+
+        {!loading && events.length > 0 && isInventoryCleared ? (
+          <div className="dashboard-mini-card p-4">
+            <h3 className="h5 mb-2">Event feed cleared from view</h3>
+            <p className="text-muted mb-3">
+              The records are still stored. Restore the feed when you want to continue reviewing or deleting events.
+            </p>
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={() => setIsInventoryCleared(false)}
+            >
+              Restore Feed
+            </button>
+          </div>
         ) : null}
       </div>
     </section>

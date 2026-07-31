@@ -94,17 +94,22 @@ function AdminDashboardPage() {
         <div className="d-flex justify-content-between align-items-end gap-3 flex-wrap">
           <div>
             <span className="badge rounded-pill text-bg-warning px-3 py-2 mb-3">
-              Phase 5 Admin Events Console
+              Phase 6 Admin Events And Booking Console
             </span>
             <h1 className="display-6 fw-semibold mb-3">Manage live events</h1>
             <p className="text-muted mb-0">
               Signed in as <strong>{user?.email}</strong>. This protected admin area now supports
-              event publishing for the new events module before the full admin system arrives.
+              event publishing alongside booking oversight for the active booking module.
             </p>
           </div>
-          <Link className="btn btn-outline-primary" to="/events">
-            View Public Events Page
-          </Link>
+          <div className="d-flex gap-2 flex-wrap">
+            <Link className="btn btn-outline-primary" to="/events">
+              View Public Events Page
+            </Link>
+            <Link className="btn btn-primary" to="/admin/bookings">
+              Review Bookings
+            </Link>
+          </div>
         </div>
       </div>
 

@@ -15,7 +15,7 @@ function MainLayout() {
               <img src={brandMark} alt="Smart Event Management" width="42" height="42" />
               <div>
                 <span className="brand-title d-block">Smart Event Management</span>
-                <small className="brand-subtitle">Phase 5 Events Module</small>
+                <small className="brand-subtitle">Phase 6 Booking Module</small>
               </div>
             </NavLink>
 
@@ -45,6 +45,15 @@ function MainLayout() {
                     <i className="bi bi-person-circle me-2"></i>
                     {user?.name} ({user?.role})
                   </span>
+                  {!isAdmin ? (
+                    <NavLink className="btn btn-nav-link" to="/bookings">
+                      My Bookings
+                    </NavLink>
+                  ) : (
+                    <NavLink className="btn btn-nav-link" to="/admin/bookings">
+                      Admin Bookings
+                    </NavLink>
+                  )}
                   <NavLink
                     className="btn btn-nav-link"
                     to={isAdmin ? '/admin/dashboard' : '/dashboard'}
@@ -59,7 +68,7 @@ function MainLayout() {
 
               <div className="d-none d-xl-flex align-items-center gap-2 text-muted small">
                 <i className="bi bi-stars"></i>
-                <span>Events module live, booking module next</span>
+                <span>Booking module live with user and admin flows</span>
               </div>
 
               <ThemeToggle />
@@ -75,7 +84,7 @@ function MainLayout() {
       <footer className="border-top border-subtle py-4">
         <div className="container d-flex flex-column flex-md-row justify-content-between gap-2 text-muted small">
           <span>TYBSc IT Final Year Project for smart event and ticket booking</span>
-          <span>Phase 5 adds live events APIs, discovery pages, and admin event publishing</span>
+          <span>Phase 6 adds booking APIs, attendee history, and admin booking oversight</span>
         </div>
       </footer>
     </div>

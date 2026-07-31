@@ -23,6 +23,11 @@ export const getFeaturedEvents = async (limit = 3) => {
   return data.events;
 };
 
+export const getEventBySlug = async (slug) => {
+  const { data } = await api.get(`/events/${slug}`);
+  return data.event;
+};
+
 export const getAdminEvents = async () => {
   const { data } = await api.get('/events/admin/list');
   return data.events;

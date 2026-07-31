@@ -110,7 +110,7 @@ export const getPublishedEvents = async (req, res, next) => {
   try {
     const limit = Number(req.query.limit) || 20;
     const sort = req.query.sort || 'upcoming';
-    const query = { status: 'published' };
+    const query = { status: { $in: ['published', 'sold_out'] } };
 
     if (req.query.featured === 'true') {
       query.featured = true;
@@ -139,7 +139,7 @@ export const getEventBySlug = async (req, res, next) => {
   try {
     const event = await Event.findOne({
       slug: req.params.slug,
-      status: 'published'
+      status: { $in: ['published', 'sold_out'] }
     }).lean();
 
     if (!event) {

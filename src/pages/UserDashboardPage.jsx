@@ -76,8 +76,8 @@ function UserDashboardPage() {
     {
       icon: 'bi-arrow-up-right-circle',
       label: 'Next Module',
-      value: 'Phase 6 Booking',
-      description: 'Event discovery is now live, and the next release will connect bookings to this workspace.'
+      value: 'Phase 6 Booking Live',
+      description: 'Your account now connects event discovery, booking creation, and booking history.'
     }
   ];
 
@@ -90,7 +90,7 @@ function UserDashboardPage() {
     {
       icon: 'bi-ticket-detailed',
       title: 'Booking Workspace',
-      description: 'This area is prepared for ticket history, confirmation states, and purchase tracking.'
+      description: 'Review confirmed tickets, cancellations, payment state, and event timelines.'
     },
     {
       icon: 'bi-stars',
@@ -103,7 +103,7 @@ function UserDashboardPage() {
     'Secure sign-in and session restoration are already working.',
     'Role-based routing keeps this dashboard available only to normal users.',
     'Profile metadata is now visible from the live authenticated user object.',
-    'Live event discovery is connected, and booking history is the next workspace addition.'
+    'Live event discovery, booking creation, and booking history are now connected.'
   ];
 
   const quickActions = [
@@ -120,6 +120,13 @@ function UserDashboardPage() {
       description: 'Open the live events listing and browse what is currently available on the platform.',
       to: '/events',
       buttonLabel: 'View Events'
+    },
+    {
+      icon: 'bi-ticket-perforated',
+      title: 'View My Bookings',
+      description: 'Review your confirmed tickets, track totals, and cancel bookings if needed.',
+      to: '/bookings',
+      buttonLabel: 'Open Bookings'
     }
   ];
 
@@ -144,14 +151,14 @@ function UserDashboardPage() {
         <div className="dashboard-hero-grid">
           <div>
             <span className="badge rounded-pill text-bg-primary px-3 py-2 mb-3">
-              Phase 4 Dashboard Connected To Phase 5 Events
+              Phase 6 Dashboard Connected To Booking Flow
             </span>
             <h1 className="display-6 fw-semibold mb-3">
               Welcome back, {accountSummary.firstName}
             </h1>
             <p className="text-muted mb-4">
               Your dashboard now presents a personalized account workspace with profile
-              visibility, session status, and a clear bridge toward events and booking modules.
+              visibility, session status, and direct access to your live booking workspace.
             </p>
             <div className="d-flex flex-wrap gap-3">
               <Link className="btn btn-primary btn-lg px-4" to="/">

@@ -133,6 +133,14 @@ function EventsPage() {
                     <strong>{event.availableTickets}</strong>
                   </div>
                 </div>
+                <div className="d-flex gap-2 flex-wrap mt-4">
+                  <Link className="btn btn-primary" to={`/events/${event.slug}`}>
+                    {event.availableTickets === 0 ? 'View Details' : 'Book Now'}
+                  </Link>
+                  <Link className="btn btn-outline-primary" to="/">
+                    Home
+                  </Link>
+                </div>
               </article>
             </div>
           ))}

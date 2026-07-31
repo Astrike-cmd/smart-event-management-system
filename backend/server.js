@@ -8,6 +8,7 @@ import connectDatabase from './config/db.js';
 import errorMiddleware from './middleware/errorMiddleware.js';
 import notFoundMiddleware from './middleware/notFoundMiddleware.js';
 import authRoutes from './routes/authRoutes.js';
+import bookingRoutes from './routes/bookingRoutes.js';
 import eventRoutes from './routes/eventRoutes.js';
 import healthRoutes from './routes/healthRoutes.js';
 
@@ -40,6 +41,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/auth', authRoutes);
+app.use('/api/bookings', bookingRoutes);
 app.use('/api/events', eventRoutes);
 app.use('/api/health', healthRoutes);
 

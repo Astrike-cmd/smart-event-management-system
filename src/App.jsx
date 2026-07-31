@@ -2,9 +2,12 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import ProtectedRoute from './components/ProtectedRoute';
 import PublicOnlyRoute from './components/PublicOnlyRoute';
 import AuthLayout from './layouts/AuthLayout';
+import AdminBookingsPage from './pages/AdminBookingsPage';
 import MainLayout from './layouts/MainLayout';
 import AdminDashboardPage from './pages/AdminDashboardPage';
 import AdminLoginPage from './pages/AdminLoginPage';
+import BookingsPage from './pages/BookingsPage';
+import EventDetailsPage from './pages/EventDetailsPage';
 import EventsPage from './pages/EventsPage';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
@@ -19,6 +22,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/home" element={<Navigate to="/" replace />} />
         <Route path="/events" element={<EventsPage />} />
+        <Route path="/events/:slug" element={<EventDetailsPage />} />
 
         <Route element={<PublicOnlyRoute />}>
           <Route element={<AuthLayout />}>
@@ -30,12 +34,14 @@ function App() {
 
         <Route element={<ProtectedRoute allowedRoles={['user']} />}>
           <Route path="/dashboard" element={<UserDashboardPage />} />
+          <Route path="/bookings" element={<BookingsPage />} />
         </Route>
 
         <Route
           element={<ProtectedRoute allowedRoles={['admin']} redirectPath="/admin/login" />}
         >
           <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
+          <Route path="/admin/bookings" element={<AdminBookingsPage />} />
         </Route>
 
         <Route path="*" element={<NotFoundPage />} />

@@ -79,7 +79,7 @@ const experienceSteps = [
   {
     icon: 'bi-credit-card',
     title: 'Book with confidence',
-    description: 'Upcoming booking flows will connect event selection, ticket quantity, and confirmation screens.'
+    description: 'Live booking flows now connect event details, ticket quantity, and confirmation tracking.'
   }
 ];
 
@@ -88,21 +88,21 @@ const audienceCards = [
     icon: 'bi-people',
     title: 'For Attendees',
     description: 'Make discovery easy with featured events, simple navigation, and a clear path to booking.',
-    points: ['Quick sign-up and login', 'Future booking history', 'Personalized event access']
+    points: ['Quick sign-up and login', 'Live booking history', 'Personalized event access']
   },
   {
     icon: 'bi-kanban',
     title: 'For Organizers and Admins',
-    description: 'Manage the platform with secure admin access before advanced event and booking modules arrive.',
-    points: ['Admin-only dashboard entry', 'Role-restricted controls', 'Ready for event operations']
+    description: 'Manage the platform with secure admin access across live events and booking operations.',
+    points: ['Admin-only dashboard entry', 'Role-restricted controls', 'Booking oversight tools']
   }
 ];
 
 const roadmap = [
   { phase: 'Phase 3', label: 'Landing Page', status: 'Completed' },
   { phase: 'Phase 4', label: 'User Dashboard', status: 'Completed' },
-  { phase: 'Phase 5', label: 'Events Module', status: 'Current build' },
-  { phase: 'Phase 6', label: 'Booking Module', status: 'Planned' }
+  { phase: 'Phase 5', label: 'Events Module', status: 'Completed' },
+  { phase: 'Phase 6', label: 'Booking Module', status: 'Current build' }
 ];
 
 const formatEventDate = (value) => {
@@ -183,7 +183,7 @@ function HomePage() {
             <div className="col-lg-7">
               <div className="glass-panel p-4 p-md-5">
                 <span className="badge rounded-pill text-bg-primary px-3 py-2 mb-3 hero-badge">
-                  Phase 5 Active: Events Module Live
+                  Phase 6 Active: Booking Module Live
                 </span>
                 <h1 className="display-5 fw-semibold mb-3">
                   Launch and book standout events from one modern platform
@@ -192,7 +192,7 @@ function HomePage() {
                   Smart Event Management and Ticket Booking System now moves beyond the
                   setup baseline with a polished public-facing experience that introduces
                   events, explains the product journey, and guides visitors toward secure
-                  account access.
+                  booking and account access.
                 </p>
 
                 <div className="d-flex flex-wrap gap-3 mt-4">
@@ -299,7 +299,7 @@ function HomePage() {
               <h2 className="display-6 fw-semibold mb-0">Showcase the experiences people want to attend</h2>
             </div>
             <p className="text-muted mb-0 landing-section-copy">
-              Featured event cards now load from the live events API, turning the landing page into a real event discovery surface.
+              Featured event cards now load from the live events API and lead directly into the active booking flow.
             </p>
           </div>
 
@@ -331,6 +331,11 @@ function HomePage() {
                       <strong>{event.availableTickets}</strong>
                     </div>
                   </div>
+                  <div className="mt-4">
+                    <Link className="btn btn-primary" to={`/events/${event.slug}`}>
+                      {event.availableTickets === 0 ? 'View Details' : 'Book Event'}
+                    </Link>
+                  </div>
                 </div>
               </div>
             ))}
@@ -352,8 +357,8 @@ function HomePage() {
                 <span className="section-eyebrow">Booking Journey</span>
                 <h2 className="display-6 fw-semibold mb-3">Guide visitors from interest to action</h2>
                 <p className="text-muted mb-0">
-                  Earlier phases established the landing experience and dashboard, while Phase 5 now
-                  connects that journey to live event discovery before booking flows arrive next.
+                  Earlier phases established the landing experience and dashboard, while Phase 6 now
+                  connects live event discovery to a full ticket booking workflow.
                 </p>
               </div>
               <div className="col-lg-7">
@@ -410,10 +415,10 @@ function HomePage() {
             <div>
               <span className="section-eyebrow text-white-50">Ready To Continue</span>
               <h2 className="display-6 fw-semibold text-white mb-2">
-                The events module is ready for the booking phase
+                The booking module is now part of the live product
               </h2>
               <p className="mb-0 text-white-50">
-                Continue from live event discovery into the upcoming ticket booking workflow in Phase 6.
+                Continue from live event discovery into the active ticket booking workflow in Phase 6.
               </p>
             </div>
             <div className="cta-actions">

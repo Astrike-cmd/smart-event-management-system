@@ -1,6 +1,6 @@
 # Smart Event Management and Ticket Booking System
 
-Phase 5 adds the events module on top of the existing project foundation. The app now includes user and admin authentication, a public landing page, a user dashboard, a live events API, sample event bootstrapping, an events discovery page, and admin-protected event publishing.
+Phase 6 adds the booking module on top of the existing project foundation. The app now includes user and admin authentication, a public landing page, a user dashboard, a live events API, event detail pages, ticket booking APIs, user booking history, sample event bootstrapping, an events discovery page, and admin-protected event plus booking oversight.
 
 ## Project Structure
 
@@ -52,6 +52,10 @@ npm run dev
 - `GET /api/events/admin/list` returns all events for admins.
 - `POST /api/events` creates a new event for admins.
 - `PUT /api/events/:id` updates an existing event for admins.
+- `GET /api/bookings` returns bookings for the logged-in user.
+- `POST /api/bookings` creates a booking for the logged-in user.
+- `POST /api/bookings/:id/cancel` cancels a user booking and restores inventory.
+- `GET /api/bookings/admin/list` returns all bookings for admins.
 - `GET /api/health` returns API and database health information.
 
 ## Current Phases
@@ -59,4 +63,4 @@ npm run dev
 - `Phase 3` delivers the landing page.
 - `Phase 4` delivers the user dashboard.
 - `Phase 5` delivers the events module.
-- `Phase 6` is planned for the booking module.
+- `Phase 6` delivers the booking module.

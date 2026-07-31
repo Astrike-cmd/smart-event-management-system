@@ -15,13 +15,16 @@ function MainLayout() {
               <img src={brandMark} alt="Smart Event Management" width="42" height="42" />
               <div>
                 <span className="brand-title d-block">Smart Event Management</span>
-                <small className="brand-subtitle">Phase 4 User Dashboard</small>
+                <small className="brand-subtitle">Phase 5 Events Module</small>
               </div>
             </NavLink>
 
             <div className="d-flex align-items-center flex-wrap gap-2 ms-lg-auto">
               <NavLink className="btn btn-nav-link" to="/">
                 Home
+              </NavLink>
+              <NavLink className="btn btn-nav-link" to="/events">
+                Events
               </NavLink>
 
               {!isAuthenticated ? (
@@ -56,7 +59,7 @@ function MainLayout() {
 
               <div className="d-none d-xl-flex align-items-center gap-2 text-muted small">
                 <i className="bi bi-stars"></i>
-                <span>User dashboard live, events module next</span>
+                <span>Events module live, booking module next</span>
               </div>
 
               <ThemeToggle />
@@ -72,7 +75,7 @@ function MainLayout() {
       <footer className="border-top border-subtle py-4">
         <div className="container d-flex flex-column flex-md-row justify-content-between gap-2 text-muted small">
           <span>TYBSc IT Final Year Project for smart event and ticket booking</span>
-          <span>Phase 4 adds the user dashboard on top of the landing page and auth-ready stack</span>
+          <span>Phase 5 adds live events APIs, discovery pages, and admin event publishing</span>
         </div>
       </footer>
     </div>

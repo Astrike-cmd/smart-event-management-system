@@ -1,5 +1,6 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { getEvents } from '../services/events';
 import useAuth from '../hooks/useAuth';
 
 const formatDate = (value, options) => {
@@ -18,6 +19,8 @@ const formatDate = (value, options) => {
 
 function UserDashboardPage() {
   const { user } = useAuth();
+  const [upcomingEvents, setUpcomingEvents] = useState([]);
+  const [eventsLoading, setEventsLoading] = useState(true);
 
   const accountSummary = useMemo(() => {
     const memberSince = formatDate(user?.createdAt, {
@@ -73,8 +76,8 @@ function UserDashboardPage() {
     {
       icon: 'bi-arrow-up-right-circle',
       label: 'Next Module',
-      value: 'Phase 5 Events',
-      description: 'The upcoming release will connect this dashboard to live event data.'
+      value: 'Phase 6 Booking',
+      description: 'Event discovery is now live, and the next release will connect bookings to this workspace.'
     }
   ];
 
@@ -100,7 +103,7 @@ function UserDashboardPage() {
     'Secure sign-in and session restoration are already working.',
     'Role-based routing keeps this dashboard available only to normal users.',
     'Profile metadata is now visible from the live authenticated user object.',
-    'The next step is wiring event discovery and booking history into this workspace.'
+    'Live event discovery is connected, and booking history is the next workspace addition.'
   ];
 
   const quickActions = [
@@ -113,12 +116,27 @@ function UserDashboardPage() {
     },
     {
       icon: 'bi-calendar-event',
-      title: 'Prepare For Events Module',
-      description: 'This dashboard is now ready to receive featured events and upcoming attendance data.',
-      to: '/',
-      buttonLabel: 'View Roadmap'
+      title: 'Open Events Module',
+      description: 'Open the live events listing and browse what is currently available on the platform.',
+      to: '/events',
+      buttonLabel: 'View Events'
     }
   ];
+
+  useEffect(() => {
+    const loadUpcomingEvents = async () => {
+      try {
+        const events = await getEvents({ limit: 3 });
+        setUpcomingEvents(events);
+      } catch (error) {
+        setUpcomingEvents([]);
+      } finally {
+        setEventsLoading(false);
+      }
+    };
+
+    loadUpcomingEvents();
+  }, []);
 
   return (
     <section className="container py-5">
@@ -126,7 +144,7 @@ function UserDashboardPage() {
         <div className="dashboard-hero-grid">
           <div>
             <span className="badge rounded-pill text-bg-primary px-3 py-2 mb-3">
-              Phase 4 User Dashboard
+              Phase 4 Dashboard Connected To Phase 5 Events
             </span>
             <h1 className="display-6 fw-semibold mb-3">
               Welcome back, {accountSummary.firstName}
@@ -228,6 +246,48 @@ function UserDashboardPage() {
             </div>
           </div>
         </div>
+      </div>
+
+      <div className="glass-panel p-4 p-md-5 mb-4">
+        <div className="d-flex justify-content-between align-items-end gap-3 flex-wrap mb-4">
+          <div>
+            <span className="section-eyebrow">Upcoming Events</span>
+            <h2 className="h3 mb-0">What users can explore next</h2>
+          </div>
+          <Link className="btn btn-outline-primary" to="/events">
+            Open Events Module
+          </Link>
+        </div>
+
+        {eventsLoading ? <p className="text-muted mb-0">Loading upcoming events...</p> : null}
+
+        {!eventsLoading && upcomingEvents.length > 0 ? (
+          <div className="row g-3">
+            {upcomingEvents.map((event) => (
+              <div className="col-md-4" key={event._id}>
+                <div className="dashboard-mini-card h-100">
+                  <span className="spotlight-tag">{event.category}</span>
+                  <h3 className="h6 mt-3 mb-2">{event.title}</h3>
+                  <p className="text-muted small mb-3">{event.description}</p>
+                  <div className="event-meta-list">
+                    <div className="event-meta-row">
+                      <span>City</span>
+                      <strong>{event.city}</strong>
+                    </div>
+                    <div className="event-meta-row">
+                      <span>Tickets Left</span>
+                      <strong>{event.availableTickets}</strong>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : null}
+
+        {!eventsLoading && upcomingEvents.length === 0 ? (
+          <p className="text-muted mb-0">Upcoming events will appear here once the events API is reachable.</p>
+        ) : null}
       </div>
 
       <div className="row g-4">

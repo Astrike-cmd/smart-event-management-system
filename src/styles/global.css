@@ -268,6 +268,48 @@ body[data-theme='dark'] .spotlight-tag {
   color: #8fb7ff;
 }
 
+.event-price-chip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 0.45rem 0.85rem;
+  background: rgba(111, 66, 193, 0.12);
+  color: #6f42c1;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+body[data-theme='dark'] .event-price-chip {
+  background: rgba(139, 92, 246, 0.2);
+  color: #c4b5fd;
+}
+
+.event-card {
+  overflow: hidden;
+}
+
+.event-meta-list {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.event-meta-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.7rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.event-meta-row:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.event-meta-row span {
+  color: var(--text-secondary);
+}
+
 .journey-step {
   position: relative;
   padding: 1.5rem;
@@ -427,6 +469,23 @@ body[data-theme='dark'] .dashboard-check-item {
   padding: 1.1rem;
 }
 
+.event-admin-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.event-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--text-primary);
+}
+
+.event-checkbox input {
+  width: 18px;
+  height: 18px;
+}
+
 .list-group-item {
   background: transparent;
   color: var(--text-primary);
@@ -517,6 +576,11 @@ body[data-theme='dark'] .auth-input {
   }
 
   .dashboard-meta-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .event-meta-row {
     flex-direction: column;
     align-items: flex-start;
   }

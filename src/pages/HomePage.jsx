@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../services/api';
+import { getFeaturedEvents } from '../services/events';
 import useAuth from '../hooks/useAuth';
 
 const heroHighlights = [
@@ -28,24 +29,39 @@ const platformStats = [
   { value: 'MongoDB', label: 'Backend data layer is connected and scalable.' }
 ];
 
-const spotlightEvents = [
+const defaultFeaturedEvents = [
   {
-    icon: 'bi-music-note-beamed',
+    slug: 'sample-music-night',
     category: 'Music Nights',
     title: 'Live concerts and DJ showcases',
-    description: 'Highlight high-energy performances with seat visibility, dates, and ticket availability.'
+    description: 'Highlight high-energy performances with seat visibility, dates, and ticket availability.',
+    venue: 'Grand Arena',
+    city: 'Mumbai',
+    availableTickets: 120,
+    startDate: '2026-09-12T10:00:00.000Z',
+    price: 999
   },
   {
-    icon: 'bi-mortarboard',
+    slug: 'sample-campus-fest',
     category: 'Campus Events',
     title: 'College fests and seminars',
-    description: 'Promote academic programs, technical sessions, and celebration-driven campus activities.'
+    description: 'Promote academic programs, technical sessions, and celebration-driven campus activities.',
+    venue: 'University Main Ground',
+    city: 'Pune',
+    availableTickets: 320,
+    startDate: '2026-10-03T09:00:00.000Z',
+    price: 399
   },
   {
-    icon: 'bi-briefcase',
+    slug: 'sample-networking',
     category: 'Professional Meetups',
     title: 'Workshops and networking sessions',
-    description: 'Support speaker-led events with structured schedules, venue details, and attendee flows.'
+    description: 'Support speaker-led events with structured schedules, venue details, and attendee flows.',
+    venue: 'CoLab Business Hub',
+    city: 'Bengaluru',
+    availableTickets: 80,
+    startDate: '2026-08-21T14:00:00.000Z',
+    price: 799
   }
 ];
 
@@ -84,10 +100,24 @@ const audienceCards = [
 
 const roadmap = [
   { phase: 'Phase 3', label: 'Landing Page', status: 'Completed' },
-  { phase: 'Phase 4', label: 'User Dashboard', status: 'Current build' },
-  { phase: 'Phase 5', label: 'Events Module', status: 'Planned' },
+  { phase: 'Phase 4', label: 'User Dashboard', status: 'Completed' },
+  { phase: 'Phase 5', label: 'Events Module', status: 'Current build' },
   { phase: 'Phase 6', label: 'Booking Module', status: 'Planned' }
 ];
+
+const formatEventDate = (value) => {
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return 'Date TBD';
+  }
+
+  return new Intl.DateTimeFormat('en-IN', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric'
+  }).format(date);
+};
 
 function HomePage() {
   const { isAuthenticated, isAdmin, user } = useAuth();
@@ -96,6 +126,7 @@ function HomePage() {
     status: 'Checking API connection...',
     variant: 'secondary'
   });
+  const [featuredEvents, setFeaturedEvents] = useState(defaultFeaturedEvents);
 
   useEffect(() => {
     const checkHealth = async () => {
@@ -123,6 +154,22 @@ function HomePage() {
     checkHealth();
   }, []);
 
+  useEffect(() => {
+    const loadFeaturedEvents = async () => {
+      try {
+        const events = await getFeaturedEvents(3);
+
+        if (events.length > 0) {
+          setFeaturedEvents(events);
+        }
+      } catch (error) {
+        setFeaturedEvents(defaultFeaturedEvents);
+      }
+    };
+
+    loadFeaturedEvents();
+  }, []);
+
   const healthBadgeClass = useMemo(
     () => `badge rounded-pill text-bg-${health.variant} px-3 py-2`,
     [health.variant]
@@ -136,7 +183,7 @@ function HomePage() {
             <div className="col-lg-7">
               <div className="glass-panel p-4 p-md-5">
                 <span className="badge rounded-pill text-bg-primary px-3 py-2 mb-3 hero-badge">
-                  Phase 3 Complete: Landing Experience Live
+                  Phase 5 Active: Events Module Live
                 </span>
                 <h1 className="display-5 fw-semibold mb-3">
                   Launch and book standout events from one modern platform
@@ -252,25 +299,47 @@ function HomePage() {
               <h2 className="display-6 fw-semibold mb-0">Showcase the experiences people want to attend</h2>
             </div>
             <p className="text-muted mb-0 landing-section-copy">
-              The landing page now frames the product around discovery, ticketing, and trust instead of setup-only messaging.
+              Featured event cards now load from the live events API, turning the landing page into a real event discovery surface.
             </p>
           </div>
 
           <div className="row g-4">
-            {spotlightEvents.map((event) => (
-              <div className="col-md-4" key={event.title}>
+            {featuredEvents.map((event) => (
+              <div className="col-md-4" key={event._id || event.slug}>
                 <div className="feature-card spotlight-card h-100 p-4">
                   <div className="d-flex justify-content-between align-items-center gap-3 mb-4">
                     <span className="spotlight-tag">{event.category}</span>
-                    <div className="feature-icon">
-                      <i className={`bi ${event.icon}`}></i>
-                    </div>
+                    <span className="event-price-chip">
+                      {event.price === 0 ? 'Free' : `Rs. ${event.price}`}
+                    </span>
                   </div>
                   <h2 className="h5 mb-2">{event.title}</h2>
-                  <p className="text-muted mb-0">{event.description}</p>
+                  <p className="text-muted mb-3">{event.description}</p>
+                  <div className="event-meta-list">
+                    <div className="event-meta-row">
+                      <span>Date</span>
+                      <strong>{formatEventDate(event.startDate)}</strong>
+                    </div>
+                    <div className="event-meta-row">
+                      <span>Venue</span>
+                      <strong>
+                        {event.venue}, {event.city}
+                      </strong>
+                    </div>
+                    <div className="event-meta-row">
+                      <span>Tickets Left</span>
+                      <strong>{event.availableTickets}</strong>
+                    </div>
+                  </div>
                 </div>
               </div>
             ))}
+          </div>
+
+          <div className="mt-4">
+            <Link className="btn btn-outline-primary" to="/events">
+              Browse All Events
+            </Link>
           </div>
         </div>
       </section>
@@ -283,8 +352,8 @@ function HomePage() {
                 <span className="section-eyebrow">Booking Journey</span>
                 <h2 className="display-6 fw-semibold mb-3">Guide visitors from interest to action</h2>
                 <p className="text-muted mb-0">
-                  Phase 3 sets up the storytelling layer that future modules will plug into,
-                  making the next dashboard, events, and booking phases feel connected from day one.
+                  Earlier phases established the landing experience and dashboard, while Phase 5 now
+                  connects that journey to live event discovery before booking flows arrive next.
                 </p>
               </div>
               <div className="col-lg-7">
@@ -341,10 +410,10 @@ function HomePage() {
             <div>
               <span className="section-eyebrow text-white-50">Ready To Continue</span>
               <h2 className="display-6 fw-semibold text-white mb-2">
-                The landing page is ready for the next product modules
+                The events module is ready for the booking phase
               </h2>
               <p className="mb-0 text-white-50">
-                Continue into the user dashboard and event management phases with a stronger public-facing foundation.
+                Continue from live event discovery into the upcoming ticket booking workflow in Phase 6.
               </p>
             </div>
             <div className="cta-actions">

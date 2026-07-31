@@ -1,6 +1,5 @@
 import { NavLink, Outlet } from 'react-router-dom';
 import ThemeToggle from '../components/ThemeToggle';
-import brandMark from '../assets/brand-mark.svg';
 import useAuth from '../hooks/useAuth';
 
 function MainLayout() {
@@ -11,16 +10,9 @@ function MainLayout() {
       <header className="border-bottom border-subtle sticky-top app-header">
         <nav className="navbar navbar-expand-lg">
           <div className="container py-2 flex-wrap gap-3">
-            <NavLink className="navbar-brand d-flex align-items-center gap-3" to="/">
-              <img
-                className="brand-mark"
-                src={brandMark}
-                alt="eventify"
-                width="42"
-                height="42"
-              />
+            <NavLink className="navbar-brand d-flex align-items-center" to="/">
               <div>
-                <span className="brand-title d-block">eventify</span>
+                <span className="brand-title d-block">EVENTIFY</span>
                 <small className="brand-subtitle">Event booking platform</small>
               </div>
             </NavLink>
@@ -49,7 +41,6 @@ function MainLayout() {
                 ) : (
                   <>
                     <span className="d-none d-md-inline-flex text-muted small nav-user-pill">
-                      <i className="bi bi-person-circle me-2"></i>
                       {user?.name} ({user?.role})
                     </span>
                     {!isAdmin ? (
@@ -91,7 +82,7 @@ function MainLayout() {
 
       <footer className="border-top border-subtle py-4">
         <div className="container d-flex flex-column flex-md-row justify-content-between gap-2 text-muted small">
-          <span>eventify keeps event publishing, ticket booking, and account access in one workspace</span>
+          <span>EVENTIFY keeps event publishing, ticket booking, and account access in one workspace</span>
           <span>Admins manage platform quality while users manage their own events and bookings</span>
         </div>
       </footer>

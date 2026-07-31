@@ -18,22 +18,18 @@ function AuthLayout() {
                 </p>
                 <div className="auth-feature-list d-grid gap-3">
                   <div className="auth-feature-item">
-                    <i className="bi bi-person-check"></i>
                     <span>User registration and sign-in</span>
                   </div>
                   <div className="auth-feature-item">
-                    <i className="bi bi-shield-lock"></i>
                     <span>Protected sessions and route access</span>
                   </div>
                   <div className="auth-feature-item">
-                    <i className="bi bi-person-gear"></i>
                     <span>Dedicated admin access</span>
                   </div>
                 </div>
 
                 <div className="mt-4 pt-3 border-top border-subtle">
                   <Link className="text-primary fw-semibold" to="/">
-                    <i className="bi bi-arrow-left me-2"></i>
                     Back to home
                   </Link>
                 </div>

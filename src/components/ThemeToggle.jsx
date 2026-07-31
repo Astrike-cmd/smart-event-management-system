@@ -6,11 +6,10 @@ function ThemeToggle() {
   return (
     <button
       type="button"
-      className="btn btn-theme-toggle d-inline-flex align-items-center gap-2"
+      className="btn btn-theme-toggle d-inline-flex align-items-center"
       onClick={toggleTheme}
       aria-label="Toggle color theme"
     >
-      <i className={`bi ${isDarkMode ? 'bi-sun-fill' : 'bi-moon-stars-fill'}`}></i>
       <span>{isDarkMode ? 'Light Mode' : 'Dark Mode'}</span>
     </button>
   );

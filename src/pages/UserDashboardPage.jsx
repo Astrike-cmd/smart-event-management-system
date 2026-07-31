@@ -177,7 +177,6 @@ function UserDashboardPage() {
                 Explore Events Home
               </Link>
               <span className="auth-welcome-chip">
-                <i className="bi bi-envelope"></i>
                 {user?.email}
               </span>
             </div>
@@ -219,9 +218,6 @@ function UserDashboardPage() {
         {overviewCards.map((card) => (
           <div className="col-md-6 col-xl-3" key={card.label}>
             <div className="feature-card dashboard-stat-card p-4 h-100">
-              <div className="feature-icon mb-3">
-                <i className={`bi ${card.icon}`}></i>
-              </div>
               <span className="dashboard-stat-label">{card.label}</span>
               <h2 className="h5 mb-2">{card.value}</h2>
               <p className="text-muted mb-0 small">{card.description}</p>
@@ -239,9 +235,6 @@ function UserDashboardPage() {
               {workspaceCards.map((card) => (
                 <div className="col-md-4" key={card.title}>
                   <div className="dashboard-mini-card h-100">
-                    <div className="feature-icon mb-3">
-                      <i className={`bi ${card.icon}`}></i>
-                    </div>
                     <h3 className="h6 mb-2">{card.title}</h3>
                     <p className="text-muted mb-0 small">{card.description}</p>
                   </div>
@@ -258,7 +251,6 @@ function UserDashboardPage() {
             <div className="dashboard-checklist">
               {workspaceHighlights.map((item) => (
                 <div className="dashboard-check-item" key={item}>
-                  <i className="bi bi-check2-circle"></i>
                   <span>{item}</span>
                 </div>
               ))}
@@ -345,17 +337,12 @@ function UserDashboardPage() {
             <div className="d-grid gap-3">
               {quickActions.map((action) => (
                 <div className="dashboard-action-card" key={action.title}>
-                  <div className="d-flex gap-3 align-items-start">
-                    <div className="feature-icon">
-                      <i className={`bi ${action.icon}`}></i>
-                    </div>
-                    <div className="flex-grow-1">
-                      <h3 className="h6 mb-2">{action.title}</h3>
-                      <p className="text-muted mb-3 small">{action.description}</p>
-                      <Link className="btn btn-outline-primary" to={action.to}>
-                        {action.buttonLabel}
-                      </Link>
-                    </div>
+                  <div className="flex-grow-1">
+                    <h3 className="h6 mb-2">{action.title}</h3>
+                    <p className="text-muted mb-3 small">{action.description}</p>
+                    <Link className="btn btn-outline-primary" to={action.to}>
+                      {action.buttonLabel}
+                    </Link>
                   </div>
                 </div>
               ))}

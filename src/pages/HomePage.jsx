@@ -218,7 +218,7 @@ function HomePage() {
                   A cleaner way to publish, manage, and book events
                 </h1>
                 <p className="lead text-muted mb-4">
-                  eventify brings event discovery, account access, booking, and admin
+                  EVENTIFY brings event discovery, account access, booking, and admin
                   oversight together in one tighter, production-focused interface.
                 </p>
 
@@ -253,9 +253,6 @@ function HomePage() {
                 <div className="hero-highlight-list mt-4">
                   {heroHighlights.map((item) => (
                     <div className="hero-highlight-item" key={item.title}>
-                      <div className="feature-icon">
-                        <i className={`bi ${item.icon}`}></i>
-                      </div>
                       <div>
                         <h2 className="h6 mb-1">{item.title}</h2>
                         <p className="text-muted mb-0">{item.description}</p>
@@ -274,10 +271,7 @@ function HomePage() {
                       <span className="section-eyebrow">Platform Status</span>
                       <h2 className="h4 mb-1">System health and availability</h2>
                     </div>
-                    <span className="health-status-pill">
-                      <i className="bi bi-activity me-2"></i>
-                      {healthBadgeClass}
-                    </span>
+                    <span className="health-status-pill">{healthBadgeClass}</span>
                   </div>
 
                   <p className="text-muted mb-4">{health.status}</p>
@@ -298,9 +292,6 @@ function HomePage() {
                   <div className="status-list">
                     {platformFocus.map((item) => (
                       <div className="status-row" key={item.title}>
-                        <span className="status-step-icon">
-                          <i className="bi bi-arrow-right-short"></i>
-                        </span>
                         <div className="flex-grow-1">
                           <div className="d-flex justify-content-between gap-3 flex-wrap">
                             <strong>{item.title}</strong>
@@ -430,9 +421,6 @@ function HomePage() {
                     <div className="col-md-4" key={step.title}>
                       <div className="journey-step h-100">
                         <span className="journey-step-number">0{index + 1}</span>
-                        <div className="feature-icon mb-3">
-                          <i className={`bi ${step.icon}`}></i>
-                        </div>
                         <h3 className="h6 mb-2">{step.title}</h3>
                         <p className="text-muted mb-0 small">{step.description}</p>
                       </div>
@@ -457,7 +445,6 @@ function HomePage() {
                   <div className="d-grid gap-3">
                     {card.points.map((point) => (
                       <div className="auth-feature-item" key={point}>
-                        <i className="bi bi-check2-circle"></i>
                         <span>{point}</span>
                       </div>
                     ))}

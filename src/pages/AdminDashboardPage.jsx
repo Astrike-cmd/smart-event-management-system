@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
-import { deleteEvent, getManagedEvents } from '../services/events';
+import { deleteEvent, getManagedEvents, removeFeaturedEvent } from '../services/events';
 
 const formatDate = (value) => {
   const date = new Date(value);
@@ -24,11 +24,17 @@ const isPastEvent = (event) => {
   return !Number.isNaN(comparisonDate.getTime()) && comparisonDate.getTime() < Date.now();
 };
 
+const isFeatureActive = (event) => {
+  const featureEnd = new Date(event.featuredUntil);
+  return Boolean(event.featured) && !Number.isNaN(featureEnd.getTime()) && featureEnd.getTime() >= Date.now();
+};
+
 function AdminDashboardPage() {
   const { user } = useAuth();
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeDeleteId, setActiveDeleteId] = useState('');
+  const [activeFeatureDeleteId, setActiveFeatureDeleteId] = useState('');
   const [isInventoryCleared, setIsInventoryCleared] = useState(false);
   const [showCleanupOnly, setShowCleanupOnly] = useState(false);
   const [feedback, setFeedback] = useState({
@@ -99,6 +105,35 @@ function AdminDashboardPage() {
       });
     } finally {
       setActiveDeleteId('');
+    }
+  };
+
+  const handleRemoveHomepageFeature = async (eventId, eventTitle) => {
+    const confirmed = window.confirm(`Remove "${eventTitle}" from the homepage featured section?`);
+
+    if (!confirmed) {
+      return;
+    }
+
+    setActiveFeatureDeleteId(eventId);
+    setFeedback({ type: '', message: '' });
+
+    try {
+      const updatedEvent = await removeFeaturedEvent(eventId);
+      setEvents((currentEvents) =>
+        currentEvents.map((event) => (event._id === eventId ? updatedEvent : event))
+      );
+      setFeedback({
+        type: 'success',
+        message: 'The event was removed from homepage featured placement.'
+      });
+    } catch (error) {
+      setFeedback({
+        type: 'danger',
+        message: error.response?.data?.message || 'Unable to remove this homepage feature right now.'
+      });
+    } finally {
+      setActiveFeatureDeleteId('');
     }
   };
 
@@ -212,7 +247,7 @@ function AdminDashboardPage() {
                   <div className="d-flex gap-2 flex-wrap">
                     <span className="spotlight-tag">{event.status}</span>
                     {isPastEvent(event) ? <span className="event-price-chip">Needs Cleanup</span> : null}
-                    {event.featured ? <span className="event-price-chip">Featured</span> : null}
+                    {isFeatureActive(event) ? <span className="event-price-chip">Homepage Featured</span> : null}
                   </div>
                 </div>
                 <p className="text-muted small mb-3">{event.description}</p>
@@ -235,12 +270,30 @@ function AdminDashboardPage() {
                       {event.availableTickets} / {event.totalTickets}
                     </strong>
                   </div>
+                  {isFeatureActive(event) ? (
+                    <div className="event-meta-row">
+                      <span>Featured Until</span>
+                      <strong>{formatDate(event.featuredUntil)}</strong>
+                    </div>
+                  ) : null}
                 </div>
                 <div className="d-flex gap-2 flex-wrap mt-4">
                   {['published', 'sold_out'].includes(event.status) ? (
                     <Link className="btn btn-outline-primary" to={`/events/${event.slug}`}>
                       Open Event
                     </Link>
+                  ) : null}
+                  {isFeatureActive(event) ? (
+                    <button
+                      type="button"
+                      className="btn btn-nav-link"
+                      onClick={() => handleRemoveHomepageFeature(event._id, event.title)}
+                      disabled={activeFeatureDeleteId === event._id}
+                    >
+                      {activeFeatureDeleteId === event._id
+                        ? 'Removing Feature...'
+                        : 'Remove From Homepage'}
+                    </button>
                   ) : null}
                   <button
                     type="button"

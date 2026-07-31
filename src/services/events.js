@@ -50,6 +50,11 @@ export const updateEvent = async (eventId, payload) => {
   return data.event;
 };
 
+export const removeFeaturedEvent = async (eventId) => {
+  const { data } = await api.patch(`/events/${eventId}/featured`);
+  return data.event;
+};
+
 export const deleteEvent = async (eventId) => {
   const { data } = await api.delete(`/events/${eventId}`);
   return data;

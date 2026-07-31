@@ -76,6 +76,10 @@ const eventSchema = new mongoose.Schema(
       type: Boolean,
       default: false
     },
+    featuredUntil: {
+      type: Date,
+      default: null
+    },
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User'

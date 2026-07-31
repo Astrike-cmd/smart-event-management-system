@@ -1,6 +1,8 @@
 import Event from '../models/Event.js';
 import Booking from '../models/Booking.js';
 
+const MAX_FEATURED_HOURS = 24;
+
 const createSlug = (title) =>
   title
     .toLowerCase()
@@ -44,8 +46,21 @@ const normalizeEventPayload = (payload) => ({
       ? Number(payload.totalTickets)
       : Number(payload.availableTickets),
   status: payload.status || 'published',
-  featured: payload.featured === true || payload.featured === 'true'
+  featured: payload.featured === true || payload.featured === 'true',
+  featuredDurationHours:
+    payload.featuredDurationHours === undefined || payload.featuredDurationHours === ''
+      ? null
+      : Number.parseInt(payload.featuredDurationHours, 10)
 });
+
+const buildFeaturedWindow = (durationHours) =>
+  new Date(Date.now() + durationHours * 60 * 60 * 1000);
+
+const isFeatureActive = (event) =>
+  event.featured &&
+  event.featuredUntil &&
+  !Number.isNaN(new Date(event.featuredUntil).getTime()) &&
+  new Date(event.featuredUntil).getTime() >= Date.now();
 
 const validateEventPayload = (payload) => {
   const requiredFields = [
@@ -96,6 +111,20 @@ const validateEventPayload = (payload) => {
     return 'Event status is invalid.';
   }
 
+  if (payload.featured) {
+    if (payload.status !== 'published') {
+      return 'Only published events can be featured on the homepage.';
+    }
+
+    if (
+      !Number.isInteger(payload.featuredDurationHours) ||
+      payload.featuredDurationHours < 1 ||
+      payload.featuredDurationHours > MAX_FEATURED_HOURS
+    ) {
+      return 'Featured homepage duration must be between 1 and 24 hours.';
+    }
+  }
+
   return null;
 };
 
@@ -118,6 +147,7 @@ export const getPublishedEvents = async (req, res, next) => {
 
     if (req.query.featured === 'true') {
       query.featured = true;
+      query.featuredUntil = { $gte: new Date() };
     }
 
     if (req.query.category) {
@@ -214,6 +244,7 @@ export const createEvent = async (req, res, next) => {
     const slug = await ensureUniqueSlug(payload.title);
     const event = await Event.create({
       ...payload,
+      featuredUntil: payload.featured ? buildFeaturedWindow(payload.featuredDurationHours) : null,
       slug,
       createdBy: req.user._id
     });
@@ -270,12 +301,44 @@ export const updateEvent = async (req, res, next) => {
     existingEvent.availableTickets = payload.availableTickets;
     existingEvent.status = payload.status;
     existingEvent.featured = payload.featured;
+    existingEvent.featuredUntil = payload.featured
+      ? buildFeaturedWindow(payload.featuredDurationHours)
+      : null;
 
     await existingEvent.save();
 
     res.status(200).json({
       success: true,
       message: 'Event updated successfully.',
+      event: existingEvent
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const removeFeaturedEvent = async (req, res, next) => {
+  try {
+    const existingEvent = await Event.findById(req.params.id);
+
+    if (!existingEvent) {
+      res.status(404);
+      next(new Error('Event not found.'));
+      return;
+    }
+
+    const wasFeatured = isFeatureActive(existingEvent);
+
+    existingEvent.featured = false;
+    existingEvent.featuredUntil = null;
+
+    await existingEvent.save();
+
+    res.status(200).json({
+      success: true,
+      message: wasFeatured
+        ? 'Event removed from homepage feature placement.'
+        : 'Homepage feature flag cleared.',
       event: existingEvent
     });
   } catch (error) {

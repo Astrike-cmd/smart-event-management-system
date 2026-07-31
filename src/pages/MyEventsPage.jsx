@@ -15,7 +15,9 @@ const createInitialFormState = (user) => ({
   totalTickets: '',
   availableTickets: '',
   status: 'published',
-  description: ''
+  description: '',
+  featured: false,
+  featuredDurationHours: '24'
 });
 
 const formatDate = (value) => {
@@ -44,6 +46,20 @@ const formatDateTimeLocal = (value) => {
   const offset = date.getTimezoneOffset();
   const normalizedDate = new Date(date.getTime() - offset * 60 * 1000);
   return normalizedDate.toISOString().slice(0, 16);
+};
+
+const isFeatureActive = (event) => {
+  const featureEnd = new Date(event.featuredUntil);
+  return Boolean(event.featured) && !Number.isNaN(featureEnd.getTime()) && featureEnd.getTime() >= Date.now();
+};
+
+const getRemainingFeaturedHours = (event) => {
+  if (!isFeatureActive(event)) {
+    return '24';
+  }
+
+  const remainingMs = new Date(event.featuredUntil).getTime() - Date.now();
+  return String(Math.min(24, Math.max(1, Math.ceil(remainingMs / (60 * 60 * 1000)))));
 };
 
 function MyEventsPage() {
@@ -103,11 +119,11 @@ function MyEventsPage() {
   };
 
   const handleChange = (event) => {
-    const { name, value } = event.target;
+    const { name, type, value, checked } = event.target;
 
     setFormState((currentState) => ({
       ...currentState,
-      [name]: value
+      [name]: type === 'checkbox' ? checked : value
     }));
   };
 
@@ -125,7 +141,9 @@ function MyEventsPage() {
       totalTickets: String(eventItem.totalTickets ?? ''),
       availableTickets: String(eventItem.availableTickets ?? ''),
       status: eventItem.status,
-      description: eventItem.description
+      description: eventItem.description,
+      featured: isFeatureActive(eventItem),
+      featuredDurationHours: getRemainingFeaturedHours(eventItem)
     });
     setFeedback({
       type: 'primary',
@@ -145,7 +163,8 @@ function MyEventsPage() {
         price: Number(formState.price),
         totalTickets: Number(formState.totalTickets),
         availableTickets:
-          formState.availableTickets === '' ? '' : Number(formState.availableTickets)
+            formState.availableTickets === '' ? '' : Number(formState.availableTickets),
+          featuredDurationHours: formState.featured ? Number(formState.featuredDurationHours) : ''
       };
 
       if (editingEventId) {
@@ -470,6 +489,47 @@ function MyEventsPage() {
                 />
               </div>
               <div className="col-12">
+                <div className="dashboard-check-item">
+                  <input
+                    id="featured"
+                    name="featured"
+                    type="checkbox"
+                    className="form-check-input mt-1"
+                    checked={formState.featured}
+                    onChange={handleChange}
+                  />
+                  <div>
+                    <label className="form-label mb-1" htmlFor="featured">
+                      Feature this event on the homepage
+                    </label>
+                    <p className="text-muted small mb-0">
+                      Opt in to homepage placement for a limited window of up to 24 hours.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              {formState.featured ? (
+                <div className="col-md-6">
+                  <label className="form-label" htmlFor="featuredDurationHours">
+                    Homepage feature duration
+                  </label>
+                  <input
+                    id="featuredDurationHours"
+                    name="featuredDurationHours"
+                    type="number"
+                    min="1"
+                    max="24"
+                    className="form-control auth-input"
+                    value={formState.featuredDurationHours}
+                    onChange={handleChange}
+                    required
+                  />
+                  <p className="text-muted small mt-2 mb-0">
+                    Choose any whole number from 1 to 24 hours.
+                  </p>
+                </div>
+              ) : null}
+              <div className="col-12">
                 <button className="btn btn-primary" type="submit" disabled={isSubmitting}>
                   {isSubmitting
                     ? editingEventId
@@ -510,6 +570,9 @@ function MyEventsPage() {
                       </div>
                       <div className="d-flex gap-2 flex-wrap">
                         <span className="spotlight-tag">{eventItem.status}</span>
+                        {isFeatureActive(eventItem) ? (
+                          <span className="event-price-chip">Homepage Featured</span>
+                        ) : null}
                       </div>
                     </div>
                     <p className="text-muted small mb-3">{eventItem.description}</p>
@@ -528,6 +591,12 @@ function MyEventsPage() {
                           {eventItem.availableTickets} / {eventItem.totalTickets}
                         </strong>
                       </div>
+                      {isFeatureActive(eventItem) ? (
+                        <div className="event-meta-row">
+                          <span>Featured Until</span>
+                          <strong>{formatDate(eventItem.featuredUntil)}</strong>
+                        </div>
+                      ) : null}
                     </div>
                     <div className="d-flex gap-2 flex-wrap mt-4">
                       <button

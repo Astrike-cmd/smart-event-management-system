@@ -6,6 +6,7 @@ import {
   getEventBySlug,
   getManagedEvents,
   getPublishedEvents,
+  removeFeaturedEvent,
   updateEvent
 } from '../controllers/eventController.js';
 import { authorize, protect } from '../middleware/authMiddleware.js';
@@ -16,6 +17,7 @@ router.get('/', getPublishedEvents);
 router.get('/admin/list', protect, authorize('admin'), getAdminEvents);
 router.get('/manage/list', protect, authorize('user', 'admin'), getManagedEvents);
 router.post('/', protect, authorize('user'), createEvent);
+router.patch('/:id/featured', protect, authorize('admin'), removeFeaturedEvent);
 router.put('/:id', protect, authorize('user', 'admin'), updateEvent);
 router.delete('/:id', protect, authorize('user', 'admin'), deleteEvent);
 router.get('/:slug', getEventBySlug);

@@ -10,7 +10,7 @@ function MainLayout() {
       <header className="border-bottom border-subtle sticky-top app-header">
         <nav className="navbar navbar-expand-lg">
           <div className="container py-2 gap-3">
-            <div className="d-flex align-items-center justify-content-between gap-3 w-100">
+            <div className="d-flex align-items-center justify-content-between gap-3 app-header-brand-row">
               <NavLink className="navbar-brand d-flex align-items-center" to="/">
                 <div>
                   <span className="brand-title d-block">EVENTIFY</span>

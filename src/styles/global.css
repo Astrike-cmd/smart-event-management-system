@@ -220,6 +220,11 @@ body[data-theme='dark'] .btn-nav-link.active {
   flex-shrink: 0;
 }
 
+.app-header-brand-row {
+  width: 100%;
+  flex: 1 0 100%;
+}
+
 .app-navbar-toggler {
   border: 1px solid var(--border-color);
   border-radius: 16px;
@@ -999,6 +1004,13 @@ body[data-theme='dark'] .alert {
 
 .auth-form-fields > * + * {
   margin-top: 0;
+}
+
+@media (min-width: 992px) {
+  .app-header-brand-row {
+    width: auto;
+    flex: 0 0 auto;
+  }
 }
 
 @media (max-width: 991.98px) {

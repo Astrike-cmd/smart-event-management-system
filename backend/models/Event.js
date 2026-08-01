@@ -44,6 +44,10 @@ const eventSchema = new mongoose.Schema(
       trim: true,
       maxlength: [80, 'Organizer name cannot exceed 80 characters.']
     },
+    imageData: {
+      type: String,
+      default: ''
+    },
     startDate: {
       type: Date,
       required: [true, 'Event start date is required.']

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import EventImage from '../components/EventImage';
 import api from '../services/api';
 import { getMyBookings } from '../services/bookings';
 import { getFeaturedEvents } from '../services/events';
@@ -332,6 +333,7 @@ function HomePage() {
               {featuredEvents.map((event) => (
                 <div className="col-md-4" key={event._id || event.slug}>
                   <div className="feature-card spotlight-card h-100 p-4">
+                    <EventImage src={event.imageData} alt={event.title} variant="card" />
                     <div className="d-flex justify-content-between align-items-center gap-3 mb-4">
                       <span className="spotlight-tag">{event.category}</span>
                       <span className="event-price-chip">

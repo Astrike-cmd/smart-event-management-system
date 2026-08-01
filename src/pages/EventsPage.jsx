@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import EventImage from '../components/EventImage';
 import { getEvents } from '../services/events';
 
 const formatEventDate = (value) => {
@@ -105,6 +106,7 @@ function EventsPage() {
           {filteredEvents.map((event) => (
             <div className="col-lg-4 col-md-6" key={event._id}>
               <article className="feature-card event-card p-4 h-100">
+                <EventImage src={event.imageData} alt={event.title} variant="card" />
                 <div className="d-flex justify-content-between align-items-start gap-3 mb-3">
                   <span className="spotlight-tag">{event.category}</span>
                   <span className="event-price-chip">

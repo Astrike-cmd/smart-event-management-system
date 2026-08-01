@@ -2,6 +2,8 @@ import Event from '../models/Event.js';
 import Booking from '../models/Booking.js';
 
 const MAX_FEATURED_HOURS = 24;
+const MAX_EVENT_IMAGE_LENGTH = 2_100_000;
+const EVENT_IMAGE_PATTERN = /^data:image\/(png|jpeg|jpg|webp);base64,/;
 
 const createSlug = (title) =>
   title
@@ -37,6 +39,7 @@ const normalizeEventPayload = (payload) => ({
   venue: payload.venue?.trim(),
   city: payload.city?.trim(),
   organizerName: payload.organizerName?.trim(),
+  imageData: typeof payload.imageData === 'string' ? payload.imageData.trim() : '',
   startDate: payload.startDate,
   endDate: payload.endDate,
   price: Number(payload.price),
@@ -109,6 +112,16 @@ const validateEventPayload = (payload) => {
 
   if (!['draft', 'published', 'sold_out', 'cancelled'].includes(payload.status)) {
     return 'Event status is invalid.';
+  }
+
+  if (payload.imageData) {
+    if (!EVENT_IMAGE_PATTERN.test(payload.imageData)) {
+      return 'Event image must be a PNG, JPG, JPEG, or WEBP upload.';
+    }
+
+    if (payload.imageData.length > MAX_EVENT_IMAGE_LENGTH) {
+      return 'Event image is too large. Please upload a smaller file.';
+    }
   }
 
   if (payload.featured) {
@@ -294,6 +307,7 @@ export const updateEvent = async (req, res, next) => {
     existingEvent.venue = payload.venue;
     existingEvent.city = payload.city;
     existingEvent.organizerName = payload.organizerName;
+    existingEvent.imageData = payload.imageData;
     existingEvent.startDate = payload.startDate;
     existingEvent.endDate = payload.endDate;
     existingEvent.price = payload.price;

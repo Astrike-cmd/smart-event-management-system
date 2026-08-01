@@ -1,7 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import EventImage from '../components/EventImage';
 import useAuth from '../hooks/useAuth';
 import { createEvent, deleteEvent, getManagedEvents, updateEvent } from '../services/events';
+
+const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+const MAX_EVENT_IMAGE_SIZE = 1.5 * 1024 * 1024;
 
 const createInitialFormState = (user) => ({
   title: '',
@@ -9,6 +13,7 @@ const createInitialFormState = (user) => ({
   city: '',
   venue: '',
   organizerName: user?.name || '',
+  imageData: '',
   startDate: '',
   endDate: '',
   price: '',
@@ -61,6 +66,15 @@ const getRemainingFeaturedHours = (event) => {
   const remainingMs = new Date(event.featuredUntil).getTime() - Date.now();
   return String(Math.min(24, Math.max(1, Math.ceil(remainingMs / (60 * 60 * 1000)))));
 };
+
+const readFileAsDataUrl = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(new Error('Unable to read the selected image.'));
+    reader.readAsDataURL(file);
+  });
 
 function MyEventsPage() {
   const { user } = useAuth();
@@ -127,6 +141,58 @@ function MyEventsPage() {
     }));
   };
 
+  const clearImageSelection = () => {
+    setFormState((currentState) => ({
+      ...currentState,
+      imageData: ''
+    }));
+  };
+
+  const handleImageChange = async (event) => {
+    const [file] = event.target.files || [];
+
+    if (!file) {
+      return;
+    }
+
+    if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+      setFeedback({
+        type: 'danger',
+        message: 'Upload a PNG, JPG, JPEG, or WEBP image for the event.'
+      });
+      event.target.value = '';
+      return;
+    }
+
+    if (file.size > MAX_EVENT_IMAGE_SIZE) {
+      setFeedback({
+        type: 'danger',
+        message: 'Event images must be 1.5 MB or smaller.'
+      });
+      event.target.value = '';
+      return;
+    }
+
+    try {
+      const imageData = await readFileAsDataUrl(file);
+      setFormState((currentState) => ({
+        ...currentState,
+        imageData
+      }));
+      setFeedback({
+        type: 'primary',
+        message: `"${file.name}" is ready to publish with your event.`
+      });
+    } catch (error) {
+      setFeedback({
+        type: 'danger',
+        message: error.message || 'Unable to load the selected image.'
+      });
+    } finally {
+      event.target.value = '';
+    }
+  };
+
   const handleEdit = (eventItem) => {
     setEditingEventId(eventItem._id);
     setFormState({
@@ -135,6 +201,7 @@ function MyEventsPage() {
       city: eventItem.city,
       venue: eventItem.venue,
       organizerName: eventItem.organizerName,
+      imageData: eventItem.imageData || '',
       startDate: formatDateTimeLocal(eventItem.startDate),
       endDate: formatDateTimeLocal(eventItem.endDate),
       price: String(eventItem.price ?? ''),
@@ -403,6 +470,41 @@ function MyEventsPage() {
                   required
                 />
               </div>
+              <div className="col-12">
+                <label className="form-label" htmlFor="eventImage">
+                  Event Image
+                </label>
+                <input
+                  id="eventImage"
+                  name="eventImage"
+                  type="file"
+                  accept="image/png,image/jpeg,image/jpg,image/webp"
+                  className="form-control auth-input"
+                  onChange={handleImageChange}
+                />
+                <div className="d-flex justify-content-between align-items-center gap-3 flex-wrap mt-2">
+                  <p className="text-muted small mb-0">
+                    Optional. Upload a PNG, JPG, JPEG, or WEBP image up to 1.5 MB.
+                  </p>
+                  {formState.imageData ? (
+                    <button
+                      type="button"
+                      className="btn btn-nav-link"
+                      onClick={clearImageSelection}
+                    >
+                      Remove Image
+                    </button>
+                  ) : null}
+                </div>
+              </div>
+              <div className="col-12">
+                <EventImage
+                  src={formState.imageData}
+                  alt={formState.title ? `${formState.title} preview` : 'Event preview'}
+                  variant="form"
+                  placeholder="Upload an event image to preview it here"
+                />
+              </div>
               <div className="col-md-6">
                 <label className="form-label" htmlFor="price">
                   Ticket Price
@@ -560,69 +662,75 @@ function MyEventsPage() {
             {!loading && events.length > 0 ? (
               <div className="scroll-panel">
                 <div className="event-admin-list">
-                {events.map((eventItem) => (
-                  <article className="dashboard-action-card" key={eventItem._id}>
-                    <div className="d-flex justify-content-between gap-3 flex-wrap mb-2">
-                      <div>
-                        <h3 className="h6 mb-1">{eventItem.title}</h3>
-                        <p className="text-muted small mb-0">
-                          {eventItem.category} | {eventItem.city} | {eventItem.venue}
-                        </p>
+                  {events.map((eventItem) => (
+                    <article className="dashboard-action-card" key={eventItem._id}>
+                      <EventImage
+                        src={eventItem.imageData}
+                        alt={eventItem.title}
+                        variant="admin"
+                        showPlaceholder={false}
+                      />
+                      <div className="d-flex justify-content-between gap-3 flex-wrap mb-2">
+                        <div>
+                          <h3 className="h6 mb-1">{eventItem.title}</h3>
+                          <p className="text-muted small mb-0">
+                            {eventItem.category} | {eventItem.city} | {eventItem.venue}
+                          </p>
+                        </div>
+                        <div className="d-flex gap-2 flex-wrap">
+                          <span className="spotlight-tag">{eventItem.status}</span>
+                          {isFeatureActive(eventItem) ? (
+                            <span className="event-price-chip">Homepage Featured</span>
+                          ) : null}
+                        </div>
                       </div>
-                      <div className="d-flex gap-2 flex-wrap">
-                        <span className="spotlight-tag">{eventItem.status}</span>
+                      <p className="text-muted small mb-3">{eventItem.description}</p>
+                      <div className="event-meta-list">
+                        <div className="event-meta-row">
+                          <span>Date</span>
+                          <strong>{formatDate(eventItem.startDate)}</strong>
+                        </div>
+                        <div className="event-meta-row">
+                          <span>Price</span>
+                          <strong>Rs. {eventItem.price}</strong>
+                        </div>
+                        <div className="event-meta-row">
+                          <span>Tickets</span>
+                          <strong>
+                            {eventItem.availableTickets} / {eventItem.totalTickets}
+                          </strong>
+                        </div>
                         {isFeatureActive(eventItem) ? (
-                          <span className="event-price-chip">Homepage Featured</span>
+                          <div className="event-meta-row">
+                            <span>Featured Until</span>
+                            <strong>{formatDate(eventItem.featuredUntil)}</strong>
+                          </div>
                         ) : null}
                       </div>
-                    </div>
-                    <p className="text-muted small mb-3">{eventItem.description}</p>
-                    <div className="event-meta-list">
-                      <div className="event-meta-row">
-                        <span>Date</span>
-                        <strong>{formatDate(eventItem.startDate)}</strong>
+                      <div className="d-flex gap-2 flex-wrap mt-4">
+                        <button
+                          type="button"
+                          className="btn btn-outline-primary"
+                          onClick={() => handleEdit(eventItem)}
+                        >
+                          Edit Event
+                        </button>
+                        <button
+                          type="button"
+                          className="btn btn-outline-danger"
+                          onClick={() => handleDelete(eventItem._id, eventItem.title)}
+                          disabled={activeDeleteId === eventItem._id}
+                        >
+                          {activeDeleteId === eventItem._id ? 'Deleting...' : 'Delete Event'}
+                        </button>
+                        {['published', 'sold_out'].includes(eventItem.status) ? (
+                          <Link className="btn btn-nav-link" to={`/events/${eventItem.slug}`}>
+                            View Public Page
+                          </Link>
+                        ) : null}
                       </div>
-                      <div className="event-meta-row">
-                        <span>Price</span>
-                        <strong>Rs. {eventItem.price}</strong>
-                      </div>
-                      <div className="event-meta-row">
-                        <span>Tickets</span>
-                        <strong>
-                          {eventItem.availableTickets} / {eventItem.totalTickets}
-                        </strong>
-                      </div>
-                      {isFeatureActive(eventItem) ? (
-                        <div className="event-meta-row">
-                          <span>Featured Until</span>
-                          <strong>{formatDate(eventItem.featuredUntil)}</strong>
-                        </div>
-                      ) : null}
-                    </div>
-                    <div className="d-flex gap-2 flex-wrap mt-4">
-                      <button
-                        type="button"
-                        className="btn btn-outline-primary"
-                        onClick={() => handleEdit(eventItem)}
-                      >
-                        Edit Event
-                      </button>
-                      <button
-                        type="button"
-                        className="btn btn-outline-danger"
-                        onClick={() => handleDelete(eventItem._id, eventItem.title)}
-                        disabled={activeDeleteId === eventItem._id}
-                      >
-                        {activeDeleteId === eventItem._id ? 'Deleting...' : 'Delete Event'}
-                      </button>
-                      {['published', 'sold_out'].includes(eventItem.status) ? (
-                        <Link className="btn btn-nav-link" to={`/events/${eventItem.slug}`}>
-                          View Public Page
-                        </Link>
-                      ) : null}
-                    </div>
-                  </article>
-                ))}
+                    </article>
+                  ))}
                 </div>
               </div>
             ) : null}

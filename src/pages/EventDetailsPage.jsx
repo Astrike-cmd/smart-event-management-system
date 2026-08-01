@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import EventImage from '../components/EventImage';
 import useAuth from '../hooks/useAuth';
 import { createBooking } from '../services/bookings';
 import { getEventBySlug } from '../services/events';
@@ -136,6 +137,8 @@ function EventDetailsPage() {
                   {event.price === 0 ? 'Free Entry' : `Rs. ${event.price} / ticket`}
                 </span>
               </div>
+
+              <EventImage src={event.imageData} alt={event.title} variant="detail" />
 
               <div className="booking-detail-grid">
                 <div className="dashboard-mini-card p-4">

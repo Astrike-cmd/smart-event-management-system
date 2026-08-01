@@ -206,7 +206,7 @@ function HomePage() {
   };
 
   return (
-    <div className="home-page">
+    <div className="home-page page-shell page-shell--home">
       <section className="hero-section">
         <div className="container py-5">
           <div className="row align-items-center g-4 py-lg-5">

@@ -54,7 +54,7 @@ function EventsPage() {
   }, [events, selectedCategory]);
 
   return (
-    <section className="container py-5">
+    <section className="container py-5 page-shell page-shell--events">
       <div className="glass-panel p-4 p-md-5 mb-4">
         <div className="d-flex justify-content-between gap-4 flex-wrap align-items-end">
           <div>

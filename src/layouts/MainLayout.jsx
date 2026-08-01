@@ -96,7 +96,7 @@ function MainLayout() {
         </nav>
       </header>
 
-      <main className="flex-grow-1">
+      <main className="flex-grow-1 app-main">
         <Outlet />
       </main>
 

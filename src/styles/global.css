@@ -14,6 +14,9 @@
   --bs-link-color: #111111;
   --bs-link-hover-color: #000000;
   --bs-border-color: var(--border-color);
+  --site-scene-primary: url("https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=premium%20modern%20event%20booking%20background%2C%20mixed%20conference%20and%20live%20music%20venue%2C%20soft%20crowd%20silhouettes%2C%20ambient%20lighting%2C%20large%20digital%20signage%2C%20photorealistic%2C%20cinematic%20wide%20shot%2C%20clean%20negative%20space&image_size=landscape_16_9");
+  --site-scene-secondary: url("https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=stylish%20conference%20networking%20hall%20with%20registration%20desks%2C%20glass%20architecture%2C%20guests%20walking%2C%20premium%20website%20background%2C%20photorealistic%2C%20soft%20daylight%2C%20wide%20composition&image_size=landscape_16_9");
+  --site-scene-tertiary: url("https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=upscale%20night%20festival%20rooftop%20with%20elegant%20lighting%2C%20stage%20glow%2C%20stylish%20guests%2C%20premium%20event%20atmosphere%2C%20photorealistic%2C%20wide%20composition&image_size=landscape_16_9");
 }
 
 body[data-theme='dark'] {
@@ -85,7 +88,96 @@ svg {
 }
 
 .app-shell {
+  position: relative;
   color: var(--text-primary);
+  isolation: isolate;
+}
+
+.app-main {
+  position: relative;
+  overflow: hidden;
+}
+
+.app-main::before,
+.app-main::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+.app-main::before {
+  z-index: -2;
+  background:
+    linear-gradient(180deg, rgba(244, 243, 239, 0.84), rgba(244, 243, 239, 0.94)),
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.48), transparent 24%),
+    var(--site-scene-primary) center top / cover no-repeat;
+  filter: saturate(0.9);
+}
+
+.app-main::after {
+  z-index: -1;
+  background:
+    var(--site-scene-secondary) left -8rem top 8rem / min(34rem, 46vw) auto no-repeat,
+    var(--site-scene-tertiary) right -6rem bottom 4rem / min(32rem, 44vw) auto no-repeat;
+  opacity: 0.2;
+}
+
+body[data-theme='dark'] .app-main::before {
+  background:
+    linear-gradient(180deg, rgba(9, 9, 9, 0.82), rgba(9, 9, 9, 0.95)),
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.06), transparent 20%),
+    var(--site-scene-primary) center top / cover no-repeat;
+  filter: saturate(0.74) brightness(0.72);
+}
+
+body[data-theme='dark'] .app-main::after {
+  opacity: 0.14;
+  filter: saturate(0.72) brightness(0.72);
+}
+
+.page-shell {
+  position: relative;
+  isolation: isolate;
+}
+
+.page-shell::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: min(24rem, 48vw);
+  border-radius: 32px;
+  pointer-events: none;
+  opacity: 0.18;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.08)),
+    var(--page-scene) center / cover no-repeat;
+  filter: saturate(0.92);
+}
+
+.page-shell > * {
+  position: relative;
+  z-index: 1;
+}
+
+.page-shell--home {
+  --page-scene: var(--site-scene-primary);
+}
+
+.page-shell--events {
+  --page-scene: var(--site-scene-secondary);
+}
+
+.page-shell--details {
+  --page-scene: var(--site-scene-tertiary);
+}
+
+body[data-theme='dark'] .page-shell::before {
+  opacity: 0.22;
+  background:
+    linear-gradient(135deg, rgba(9, 9, 9, 0.24), rgba(9, 9, 9, 0.74)),
+    var(--page-scene) center / cover no-repeat;
+  filter: saturate(0.7) brightness(0.74);
 }
 
 .app-header,
@@ -1014,6 +1106,18 @@ body[data-theme='dark'] .alert {
 }
 
 @media (max-width: 991.98px) {
+  .app-main::after {
+    background:
+      var(--site-scene-secondary) left -6rem top 7rem / min(22rem, 72vw) auto no-repeat,
+      var(--site-scene-tertiary) right -5rem bottom 4rem / min(20rem, 68vw) auto no-repeat;
+    opacity: 0.14;
+  }
+
+  .page-shell::before {
+    height: min(18rem, 58vw);
+    opacity: 0.12;
+  }
+
   .glass-panel,
   .feature-card {
     border-radius: 24px;

@@ -110,7 +110,7 @@ function EventDetailsPage() {
   };
 
   return (
-    <section className="container py-5">
+    <section className="container py-5 page-shell page-shell--details">
       {loading ? (
         <div className="glass-panel p-4">
           <p className="text-muted mb-0">Loading event details...</p>

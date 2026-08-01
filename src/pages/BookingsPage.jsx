@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import BookingTicket from '../components/BookingTicket';
 import { cancelBooking, getMyBookings } from '../services/bookings';
 
 const HOMEPAGE_BOOKINGS_PREFERENCE_KEY = 'smart-event-homepage-bookings';
@@ -20,8 +21,18 @@ const formatDate = (value) => {
   }).format(date);
 };
 
+const buildPdfFileName = (booking) => {
+  const safeEventTitle = booking.eventTitle
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
+  return `${safeEventTitle || 'event-ticket'}-${booking.bookingReference.toLowerCase()}.pdf`;
+};
+
 function BookingsPage() {
   const location = useLocation();
+  const ticketRefs = useRef({});
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [feedback, setFeedback] = useState({
@@ -29,6 +40,7 @@ function BookingsPage() {
     message: location.state?.successMessage || ''
   });
   const [activeBookingId, setActiveBookingId] = useState('');
+  const [downloadingBookingId, setDownloadingBookingId] = useState('');
   const [showOnHome, setShowOnHome] = useState(() => {
     const storedPreference = window.localStorage.getItem(HOMEPAGE_BOOKINGS_PREFERENCE_KEY);
     return storedPreference !== 'false';
@@ -93,6 +105,66 @@ function BookingsPage() {
     const nextValue = !showOnHome;
     setShowOnHome(nextValue);
     window.localStorage.setItem(HOMEPAGE_BOOKINGS_PREFERENCE_KEY, String(nextValue));
+  };
+
+  const setTicketRef = (bookingId) => (element) => {
+    if (element) {
+      ticketRefs.current[bookingId] = element;
+      return;
+    }
+
+    delete ticketRefs.current[bookingId];
+  };
+
+  const handleDownloadTicketPdf = async (booking) => {
+    const ticketElement = ticketRefs.current[booking._id];
+
+    if (!ticketElement) {
+      setFeedback({
+        type: 'danger',
+        message: 'Unable to find the ticket layout for this booking right now.'
+      });
+      return;
+    }
+
+    setDownloadingBookingId(booking._id);
+    setFeedback({ type: '', message: '' });
+
+    try {
+      const [{ default: html2canvas }, { jsPDF }] = await Promise.all([
+        import('html2canvas'),
+        import('jspdf')
+      ]);
+
+      const canvas = await html2canvas(ticketElement, {
+        backgroundColor: '#ffffff',
+        scale: 2,
+        useCORS: true,
+        logging: false
+      });
+
+      const imageData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF({
+        orientation: canvas.width >= canvas.height ? 'landscape' : 'portrait',
+        unit: 'px',
+        format: [canvas.width, canvas.height]
+      });
+
+      pdf.addImage(imageData, 'PNG', 0, 0, canvas.width, canvas.height, undefined, 'FAST');
+      pdf.save(buildPdfFileName(booking));
+
+      setFeedback({
+        type: 'success',
+        message: `Ticket PDF downloaded for ${booking.eventTitle}.`
+      });
+    } catch (error) {
+      setFeedback({
+        type: 'danger',
+        message: 'Unable to generate the ticket PDF right now. Please try again.'
+      });
+    } finally {
+      setDownloadingBookingId('');
+    }
   };
 
   return (
@@ -176,50 +248,16 @@ function BookingsPage() {
         {!loading && bookings.length > 0 ? (
           <div className="booking-list">
             {bookings.map((booking) => (
-              <article className="dashboard-action-card booking-card" key={booking._id}>
-                <div className="d-flex justify-content-between gap-3 flex-wrap mb-3">
-                  <div>
-                    <div className="d-flex align-items-center gap-2 flex-wrap mb-2">
-                      <span className="spotlight-tag">{booking.bookingReference}</span>
-                      <span className="event-price-chip">{booking.bookingStatus}</span>
-                    </div>
-                    <h3 className="h5 mb-1">{booking.eventTitle}</h3>
-                    <p className="text-muted small mb-0">
-                      Booked on {formatDate(booking.createdAt)} | Payment {booking.paymentStatus}
-                    </p>
-                  </div>
-                  <div className="text-end">
-                    <div className="h5 mb-1">Rs. {booking.totalAmount}</div>
-                    <small className="text-muted">{booking.quantity} ticket(s)</small>
-                  </div>
-                </div>
+              <div key={booking._id}>
+                <BookingTicket
+                  booking={booking}
+                  formatDate={formatDate}
+                  onDownloadPdf={handleDownloadTicketPdf}
+                  isDownloading={downloadingBookingId === booking._id}
+                  ref={setTicketRef(booking._id)}
+                />
 
-                <div className="event-meta-list">
-                  <div className="event-meta-row">
-                    <span>Event Date</span>
-                    <strong>{formatDate(booking.eventStartDate)}</strong>
-                  </div>
-                  <div className="event-meta-row">
-                    <span>Venue</span>
-                    <strong>
-                      {booking.venue}, {booking.city}
-                    </strong>
-                  </div>
-                  <div className="event-meta-row">
-                    <span>Status</span>
-                    <strong>
-                      {!booking.event
-                        ? 'Event Removed'
-                        : booking.event.status === 'sold_out'
-                          ? 'Sold Out Event'
-                          : booking.bookingStatus === 'cancelled'
-                            ? 'Cancelled Booking'
-                            : 'Scheduled'}
-                    </strong>
-                  </div>
-                </div>
-
-                <div className="d-flex gap-2 flex-wrap mt-4">
+                <div className="d-flex gap-2 flex-wrap mt-3">
                   {booking.event ? (
                     <Link className="btn btn-outline-primary" to={`/events/${booking.eventSlug}`}>
                       View Event
@@ -236,7 +274,7 @@ function BookingsPage() {
                     </button>
                   ) : null}
                 </div>
-              </article>
+              </div>
             ))}
           </div>
         ) : null}

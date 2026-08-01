@@ -27,7 +27,10 @@ const normalizeQuantity = (value) => Number.parseInt(value, 10);
 const populateBookingQuery = (query) =>
   query
     .populate('user', 'name email role')
-    .populate('event', 'title slug category startDate endDate venue city price status organizerName');
+    .populate(
+      'event',
+      'title slug category startDate endDate venue city price status organizerName imageData'
+    );
 
 const getPopulatedBookingById = async (bookingId) =>
   populateBookingQuery(Booking.findById(bookingId)).lean();

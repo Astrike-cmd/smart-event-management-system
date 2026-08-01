@@ -594,6 +594,13 @@ body[data-theme='dark'] .event-price-chip {
   border-radius: 18px;
 }
 
+.event-image-frame-ticket {
+  aspect-ratio: 16 / 11;
+  height: 100%;
+  margin-bottom: 0;
+  border-radius: 26px;
+}
+
 .event-image {
   display: block;
   width: 100%;
@@ -927,6 +934,241 @@ body[data-theme='dark'] .booking-card {
 
 .booking-card {
   padding: 1.25rem;
+}
+
+.ticket-pass {
+  position: relative;
+  overflow: hidden;
+  padding: 1rem;
+  border-radius: 28px;
+}
+
+.ticket-pass::before,
+.ticket-pass::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--bg-primary);
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+.ticket-pass::before {
+  left: -14px;
+}
+
+.ticket-pass::after {
+  right: -14px;
+}
+
+.ticket-pass-accent {
+  background:
+    radial-gradient(circle at top left, rgba(99, 102, 241, 0.14), transparent 30%),
+    rgba(255, 255, 255, 0.82);
+}
+
+.ticket-pass-muted {
+  background:
+    radial-gradient(circle at top left, rgba(17, 17, 17, 0.08), transparent 30%),
+    rgba(255, 255, 255, 0.78);
+}
+
+.ticket-pass-neutral {
+  background:
+    radial-gradient(circle at top left, rgba(14, 165, 233, 0.12), transparent 30%),
+    rgba(255, 255, 255, 0.8);
+}
+
+body[data-theme='dark'] .ticket-pass-accent,
+body[data-theme='dark'] .ticket-pass-muted,
+body[data-theme='dark'] .ticket-pass-neutral {
+  background:
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.08), transparent 30%),
+    rgba(20, 20, 20, 0.92);
+}
+
+.ticket-pass-shell {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  gap: 1.4rem;
+  padding: 1.25rem;
+  border: 1px dashed rgba(17, 17, 17, 0.16);
+  border-radius: 24px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(248, 248, 248, 0.94));
+}
+
+body[data-theme='dark'] .ticket-pass-shell {
+  border-color: rgba(255, 255, 255, 0.16);
+  background: linear-gradient(135deg, rgba(26, 26, 26, 0.98), rgba(18, 18, 18, 0.96));
+}
+
+.ticket-pass-topline {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.ticket-pass-brand {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 0.45rem 0.8rem;
+  background: var(--text-primary);
+  color: var(--bg-primary);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ticket-pass-cutline {
+  flex: 1;
+  height: 1px;
+  border-top: 1px dashed rgba(17, 17, 17, 0.18);
+}
+
+body[data-theme='dark'] .ticket-pass-cutline {
+  border-top-color: rgba(255, 255, 255, 0.18);
+}
+
+.ticket-pass-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 1rem;
+}
+
+.ticket-pass-price {
+  min-width: 135px;
+  text-align: right;
+}
+
+.ticket-pass-status {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 0.45rem 0.8rem;
+  background: rgba(99, 102, 241, 0.12);
+  color: var(--text-primary);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+body[data-theme='dark'] .ticket-pass-status {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.ticket-pass-body {
+  display: grid;
+  grid-template-columns: minmax(240px, 0.92fr) minmax(0, 1.35fr);
+  gap: 1.25rem;
+  align-items: stretch;
+}
+
+.ticket-pass-visual {
+  min-height: 100%;
+}
+
+.ticket-pass-details {
+  display: grid;
+  gap: 1rem;
+}
+
+.ticket-pass-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.ticket-pass-detail {
+  padding: 0.95rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.68);
+}
+
+body[data-theme='dark'] .ticket-pass-detail {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.ticket-pass-detail span {
+  display: block;
+  margin-bottom: 0.4rem;
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.ticket-pass-detail strong {
+  display: block;
+  line-height: 1.4;
+}
+
+.ticket-pass-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 1rem;
+  padding-top: 0.25rem;
+}
+
+.ticket-pass-note {
+  max-width: 420px;
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+.ticket-pass-qr {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  min-width: 146px;
+  padding: 0.9rem;
+  border: 1px solid var(--border-color);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.8);
+}
+
+body[data-theme='dark'] .ticket-pass-qr {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.ticket-pass-qr img,
+.ticket-pass-qr-placeholder {
+  width: 118px;
+  height: 118px;
+  border-radius: 16px;
+  background: #ffffff;
+}
+
+.ticket-pass-qr img {
+  display: block;
+  padding: 0.4rem;
+}
+
+.ticket-pass-qr-placeholder {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #111111;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.ticket-pass-qr span {
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
 .auth-feature-item i {
@@ -1270,6 +1512,29 @@ body[data-theme='dark'] .alert {
   .booking-card,
   .home-booking-card {
     padding: 1rem;
+  }
+
+  .ticket-pass-body,
+  .ticket-pass-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ticket-pass-head,
+  .ticket-pass-footer {
+    flex-direction: column;
+  }
+
+  .ticket-pass-price {
+    min-width: 0;
+    text-align: left;
+  }
+
+  .ticket-pass-note {
+    max-width: none;
+  }
+
+  .ticket-pass-qr {
+    width: 100%;
   }
 
   .booking-card .text-end {

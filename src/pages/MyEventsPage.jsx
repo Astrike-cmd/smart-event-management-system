@@ -249,7 +249,7 @@ function MyEventsPage() {
               date from one user workspace.
             </p>
           </div>
-          <div className="d-flex gap-2 flex-wrap">
+          <div className="d-flex gap-2 flex-wrap section-action-group">
             <Link className="btn btn-outline-primary" to="/events">
               Browse Public Events
             </Link>

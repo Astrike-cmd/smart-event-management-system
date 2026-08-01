@@ -222,7 +222,7 @@ function HomePage() {
                   oversight together in one tighter, production-focused interface.
                 </p>
 
-                <div className="d-flex flex-wrap gap-3 mt-4">
+                <div className="d-flex flex-wrap gap-3 mt-4 hero-actions">
                   {!isAuthenticated ? (
                     <>
                       <Link className="btn btn-primary btn-lg px-4" to="/register">
@@ -465,7 +465,7 @@ function HomePage() {
                   <span className="section-eyebrow">Home Bookings</span>
                   <h2 className="h3 mb-0">Recent bookings on your home page</h2>
                 </div>
-                <div className="d-flex gap-2 flex-wrap">
+                <div className="d-flex gap-2 flex-wrap section-action-group">
                   <button
                     type="button"
                     className="btn btn-outline-primary"

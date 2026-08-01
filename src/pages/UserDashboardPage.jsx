@@ -265,12 +265,14 @@ function UserDashboardPage() {
             <span className="section-eyebrow">Upcoming Events</span>
             <h2 className="h3 mb-0">What users can explore next</h2>
           </div>
-          <Link className="btn btn-outline-primary" to="/events">
-            Open Events Module
-          </Link>
-          <Link className="btn btn-primary" to="/my-events">
-            Manage My Events
-          </Link>
+          <div className="section-action-group">
+            <Link className="btn btn-outline-primary" to="/events">
+              Open Events Module
+            </Link>
+            <Link className="btn btn-primary" to="/my-events">
+              Manage My Events
+            </Link>
+          </div>
         </div>
 
         {eventsLoading ? <p className="text-muted mb-0">Loading upcoming events...</p> : null}

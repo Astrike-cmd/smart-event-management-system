@@ -218,7 +218,7 @@ function AdminBookingsPage() {
               cancel bookings when needed from one cleaner operations screen.
             </p>
           </div>
-          <div className="d-flex gap-2 flex-wrap">
+          <div className="d-flex gap-2 flex-wrap section-action-group">
             <Link className="btn btn-outline-primary" to="/admin/dashboard">
               Back To Admin Dashboard
             </Link>
@@ -348,7 +348,7 @@ function AdminBookingsPage() {
                 <span className="section-eyebrow">Booking Records</span>
                 <h2 className="h3 mb-0">Admin booking feed</h2>
               </div>
-              <div className="d-flex gap-2 flex-wrap">
+              <div className="d-flex gap-2 flex-wrap section-action-group">
                 <span className="text-muted small align-self-center">
                   {bookings.length} record{bookings.length === 1 ? '' : 's'}
                 </span>

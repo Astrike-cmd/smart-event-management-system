@@ -14,9 +14,10 @@
   --bs-link-color: #111111;
   --bs-link-hover-color: #000000;
   --bs-border-color: var(--border-color);
-  --site-scene-primary: url("https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=premium%20modern%20event%20booking%20background%2C%20mixed%20conference%20and%20live%20music%20venue%2C%20soft%20crowd%20silhouettes%2C%20ambient%20lighting%2C%20large%20digital%20signage%2C%20photorealistic%2C%20cinematic%20wide%20shot%2C%20clean%20negative%20space&image_size=landscape_16_9");
-  --site-scene-secondary: url("https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=stylish%20conference%20networking%20hall%20with%20registration%20desks%2C%20glass%20architecture%2C%20guests%20walking%2C%20premium%20website%20background%2C%20photorealistic%2C%20soft%20daylight%2C%20wide%20composition&image_size=landscape_16_9");
-  --site-scene-tertiary: url("https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=upscale%20night%20festival%20rooftop%20with%20elegant%20lighting%2C%20stage%20glow%2C%20stylish%20guests%2C%20premium%20event%20atmosphere%2C%20photorealistic%2C%20wide%20composition&image_size=landscape_16_9");
+  --scene-glow-primary: rgba(96, 112, 255, 0.18);
+  --scene-glow-secondary: rgba(255, 120, 76, 0.14);
+  --scene-glow-tertiary: rgba(47, 191, 156, 0.12);
+  --scene-grid-line: rgba(17, 17, 17, 0.05);
 }
 
 body[data-theme='dark'] {
@@ -34,6 +35,10 @@ body[data-theme='dark'] {
   --bs-primary-rgb: 246, 246, 244;
   --bs-link-color: #f6f6f4;
   --bs-link-hover-color: #ffffff;
+  --scene-glow-primary: rgba(110, 128, 255, 0.16);
+  --scene-glow-secondary: rgba(255, 126, 81, 0.14);
+  --scene-glow-tertiary: rgba(62, 201, 169, 0.12);
+  --scene-grid-line: rgba(255, 255, 255, 0.06);
 }
 
 * {
@@ -109,31 +114,34 @@ svg {
 .app-main::before {
   z-index: -2;
   background:
-    linear-gradient(180deg, rgba(244, 243, 239, 0.84), rgba(244, 243, 239, 0.94)),
-    radial-gradient(circle at top left, rgba(255, 255, 255, 0.48), transparent 24%),
-    var(--site-scene-primary) center top / cover no-repeat;
-  filter: saturate(0.9);
+    radial-gradient(circle at 12% 14%, var(--scene-glow-primary), transparent 24%),
+    radial-gradient(circle at 84% 18%, var(--scene-glow-secondary), transparent 22%),
+    radial-gradient(circle at 50% 85%, var(--scene-glow-tertiary), transparent 28%),
+    linear-gradient(180deg, rgba(244, 243, 239, 0.86), rgba(244, 243, 239, 0.95)),
+    var(--bg-primary);
 }
 
 .app-main::after {
   z-index: -1;
   background:
-    var(--site-scene-secondary) left -8rem top 8rem / min(34rem, 46vw) auto no-repeat,
-    var(--site-scene-tertiary) right -6rem bottom 4rem / min(32rem, 44vw) auto no-repeat;
-  opacity: 0.2;
+    linear-gradient(var(--scene-grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--scene-grid-line) 1px, transparent 1px);
+  background-size: 34px 34px;
+  opacity: 0.55;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.42), rgba(0, 0, 0, 0.08));
 }
 
 body[data-theme='dark'] .app-main::before {
   background:
-    linear-gradient(180deg, rgba(9, 9, 9, 0.82), rgba(9, 9, 9, 0.95)),
-    radial-gradient(circle at top left, rgba(255, 255, 255, 0.06), transparent 20%),
-    var(--site-scene-primary) center top / cover no-repeat;
-  filter: saturate(0.74) brightness(0.72);
+    radial-gradient(circle at 12% 14%, var(--scene-glow-primary), transparent 24%),
+    radial-gradient(circle at 84% 18%, var(--scene-glow-secondary), transparent 22%),
+    radial-gradient(circle at 50% 85%, var(--scene-glow-tertiary), transparent 28%),
+    linear-gradient(180deg, rgba(9, 9, 9, 0.84), rgba(9, 9, 9, 0.96)),
+    var(--bg-primary);
 }
 
 body[data-theme='dark'] .app-main::after {
-  opacity: 0.14;
-  filter: saturate(0.72) brightness(0.72);
+  opacity: 0.42;
 }
 
 .page-shell {
@@ -148,11 +156,14 @@ body[data-theme='dark'] .app-main::after {
   height: min(24rem, 48vw);
   border-radius: 32px;
   pointer-events: none;
-  opacity: 0.18;
+  opacity: 0.9;
   background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.08)),
-    var(--page-scene) center / cover no-repeat;
-  filter: saturate(0.92);
+    radial-gradient(circle at 12% 26%, var(--page-accent-a), transparent 30%),
+    radial-gradient(circle at 84% 18%, var(--page-accent-b), transparent 26%),
+    radial-gradient(circle at 50% 100%, var(--page-accent-c), transparent 36%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.52), rgba(255, 255, 255, 0.04));
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  filter: blur(2px);
 }
 
 .page-shell > * {
@@ -161,23 +172,31 @@ body[data-theme='dark'] .app-main::after {
 }
 
 .page-shell--home {
-  --page-scene: var(--site-scene-primary);
+  --page-accent-a: rgba(99, 118, 255, 0.24);
+  --page-accent-b: rgba(255, 127, 83, 0.18);
+  --page-accent-c: rgba(58, 193, 162, 0.16);
 }
 
 .page-shell--events {
-  --page-scene: var(--site-scene-secondary);
+  --page-accent-a: rgba(80, 142, 255, 0.2);
+  --page-accent-b: rgba(255, 167, 70, 0.18);
+  --page-accent-c: rgba(53, 188, 203, 0.14);
 }
 
 .page-shell--details {
-  --page-scene: var(--site-scene-tertiary);
+  --page-accent-a: rgba(129, 84, 255, 0.2);
+  --page-accent-b: rgba(255, 110, 110, 0.16);
+  --page-accent-c: rgba(59, 204, 169, 0.14);
 }
 
 body[data-theme='dark'] .page-shell::before {
-  opacity: 0.22;
+  opacity: 0.88;
   background:
-    linear-gradient(135deg, rgba(9, 9, 9, 0.24), rgba(9, 9, 9, 0.74)),
-    var(--page-scene) center / cover no-repeat;
-  filter: saturate(0.7) brightness(0.74);
+    radial-gradient(circle at 12% 26%, var(--page-accent-a), transparent 30%),
+    radial-gradient(circle at 84% 18%, var(--page-accent-b), transparent 26%),
+    radial-gradient(circle at 50% 100%, var(--page-accent-c), transparent 36%),
+    linear-gradient(135deg, rgba(9, 9, 9, 0.18), rgba(9, 9, 9, 0.72));
+  border-color: rgba(255, 255, 255, 0.08);
 }
 
 .app-header,
@@ -1107,15 +1126,13 @@ body[data-theme='dark'] .alert {
 
 @media (max-width: 991.98px) {
   .app-main::after {
-    background:
-      var(--site-scene-secondary) left -6rem top 7rem / min(22rem, 72vw) auto no-repeat,
-      var(--site-scene-tertiary) right -5rem bottom 4rem / min(20rem, 68vw) auto no-repeat;
-    opacity: 0.14;
+    background-size: 26px 26px;
+    opacity: 0.34;
   }
 
   .page-shell::before {
     height: min(18rem, 58vw);
-    opacity: 0.12;
+    opacity: 0.78;
   }
 
   .glass-panel,

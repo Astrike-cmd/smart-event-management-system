@@ -10,6 +10,7 @@ import authRoutes from './routes/authRoutes.js';
 import bookingRoutes from './routes/bookingRoutes.js';
 import eventRoutes from './routes/eventRoutes.js';
 import healthRoutes from './routes/healthRoutes.js';
+import paymentRoutes from './routes/paymentRoutes.js';
 
 dotenv.config();
 
@@ -34,13 +35,14 @@ app.use(morgan('dev'));
 app.get('/', (req, res) => {
   res.status(200).json({
     success: true,
-    message: 'Smart Event Management backend is ready.'
+    message: 'Eventify backend is ready.'
   });
 });
 
 app.use('/api/auth', authRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/events', eventRoutes);
+app.use('/api/payments', paymentRoutes);
 app.use('/api/health', healthRoutes);
 
 app.use(notFoundMiddleware);

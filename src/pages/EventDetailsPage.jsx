@@ -4,6 +4,7 @@ import EventImage from '../components/EventImage';
 import useAuth from '../hooks/useAuth';
 import { createBooking } from '../services/bookings';
 import { getEventBySlug } from '../services/events';
+import { createPaymentOrder, openPaymentCheckout, verifyPayment } from '../services/payments';
 
 const formatDate = (value) => {
   const date = new Date(value);
@@ -89,10 +90,19 @@ function EventDetailsPage() {
     setFeedback({ type: '', message: '' });
 
     try {
-      const booking = await createBooking({
-        eventId: event._id,
-        quantity
-      });
+      let booking;
+
+      if (event.price === 0) {
+        booking = await createBooking({ eventId: event._id, quantity });
+      } else {
+        const order = await createPaymentOrder({ eventId: event._id, quantity });
+        const paymentResult = await openPaymentCheckout(order);
+        booking = await verifyPayment({
+          eventId: event._id,
+          quantity,
+          ...paymentResult
+        });
+      }
 
       navigate('/bookings', {
         state: {
@@ -102,7 +112,7 @@ function EventDetailsPage() {
     } catch (error) {
       setFeedback({
         type: 'danger',
-        message: error.response?.data?.message || 'Unable to complete the booking right now.'
+        message: error.response?.data?.message || error.message || 'Unable to complete the booking right now.'
       });
     } finally {
       setSubmitting(false);
@@ -252,7 +262,7 @@ function EventDetailsPage() {
                   </div>
                 ) : (
                   <button className="btn btn-primary w-100" type="submit" disabled={submitting || isSoldOut}>
-                    {submitting ? 'Confirming Booking...' : isSoldOut ? 'Sold Out' : 'Confirm Booking'}
+                    {submitting ? (event.price === 0 ? 'Confirming Booking...' : 'Opening Payment...') : isSoldOut ? 'Sold Out' : event.price === 0 ? 'Confirm Free Booking' : 'Pay & Confirm Booking'}
                   </button>
                 )}
               </form>

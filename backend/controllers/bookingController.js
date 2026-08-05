@@ -19,7 +19,9 @@ const buildBookingPayload = (event, userId, quantity) => ({
   city: event.city,
   quantity,
   unitPrice: event.price,
-  totalAmount: event.price * quantity
+  totalAmount: event.price * quantity,
+  paymentStatus: event.price === 0 ? 'not_required' : 'paid',
+  paymentProvider: event.price === 0 ? 'free' : 'manual'
 });
 
 const normalizeQuantity = (value) => Number.parseInt(value, 10);
@@ -136,6 +138,13 @@ export const createBooking = async (req, res, next) => {
       return;
     }
 
+    const event = await Event.findById(eventId).select('price');
+
+    if (event && event.price > 0) {
+      res.status(400);
+      next(new Error('Please complete payment before confirming this booking.'));
+      return;
+    }
     const booking = await createBookingForUser({
       eventId,
       quantity,

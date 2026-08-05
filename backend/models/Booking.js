@@ -64,8 +64,21 @@ const bookingSchema = new mongoose.Schema(
     },
     paymentStatus: {
       type: String,
-      enum: ['paid', 'refunded'],
+      enum: ['pending', 'paid', 'refunded', 'not_required'],
       default: 'paid'
+    },
+    paymentProvider: {
+      type: String,
+      enum: ['razorpay', 'free', 'manual'],
+      default: 'manual'
+    },
+    paymentId: {
+      type: String,
+      trim: true
+    },
+    paymentOrderId: {
+      type: String,
+      trim: true
     }
   },
   {

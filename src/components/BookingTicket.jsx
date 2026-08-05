@@ -31,7 +31,7 @@ const getTicketTone = (booking) => {
 
 const buildQrPayload = (booking, attendeeName, formattedEventDate) =>
   [
-    'Smart Event Ticket',
+    'Eventify Ticket',
     `Reference: ${booking.bookingReference}`,
     `Event: ${booking.eventTitle}`,
     `Attendee: ${attendeeName}`,
@@ -94,7 +94,7 @@ const BookingTicket = forwardRef(function BookingTicket(
     <article className={`booking-card ticket-pass ticket-pass-${ticketTone}`}>
       <div className="ticket-pass-shell" ref={ref}>
         <div className="ticket-pass-topline">
-          <span className="ticket-pass-brand">Smart Event Ticket</span>
+          <span className="ticket-pass-brand">Eventify Ticket</span>
           <span className="ticket-pass-cutline" aria-hidden="true" />
         </div>
 

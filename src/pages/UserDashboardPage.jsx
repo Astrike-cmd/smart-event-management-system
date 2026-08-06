@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+﻿import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getEvents } from '../services/events';
 import useAuth from '../hooks/useAuth';
@@ -158,7 +158,7 @@ function UserDashboardPage() {
   }, []);
 
   return (
-    <section className="container py-5">
+    <section className="container py-5 user-dashboard-page">
       <div className="glass-panel p-4 p-md-5 mb-4">
         <div className="dashboard-hero-grid">
           <div>

@@ -225,12 +225,36 @@ function UserDashboardPage() {
               to booking and event tools into one place.
             </p>
             <div className="d-flex flex-wrap gap-3">
-              <Link className="btn btn-primary btn-lg px-4" to="/">
-                Explore Events Home
-              </Link>
+              <Link className="btn btn-primary dashboard-explore-button" to="/events">`r`n                <i className="bi bi-calendar-event" aria-hidden="true" />`r`n                Explore events`r`n              </Link>
               <span className="auth-welcome-chip">
                 {user?.email}
               </span>
+            </div>
+            <div className="dashboard-tickets-card">
+              <div className="dashboard-tickets-heading">
+                <div>
+                  <span className="section-eyebrow">Your tickets</span>
+                  <h2>Upcoming bookings</h2>
+                </div>
+                <Link to="/bookings" aria-label="View all bookings"><i className="bi bi-arrow-up-right" aria-hidden="true" /></Link>
+              </div>
+
+              {bookingsLoading ? <p className="dashboard-tickets-empty">Loading tickets…</p> : null}
+              {!bookingsLoading && recentBookings.length > 0 ? (
+                <div className="dashboard-ticket-list">
+                  {recentBookings.map((booking) => (
+                    <Link className="dashboard-ticket-row" to="/bookings" key={booking._id}>
+                      <span className="dashboard-ticket-icon"><i className="bi bi-ticket-perforated" aria-hidden="true" /></span>
+                      <span>
+                        <strong>{booking.eventTitle}</strong>
+                        <small>{formatDate(booking.eventStartDate, { day: 'numeric', month: 'short', year: 'numeric' })}</small>
+                      </span>
+                      <i className="bi bi-chevron-right" aria-hidden="true" />
+                    </Link>
+                  ))}
+                </div>
+              ) : null}
+              {!bookingsLoading && recentBookings.length === 0 ? <p className="dashboard-tickets-empty">No tickets yet. Find an event to get started.</p> : null}
             </div>
           </div>
 
@@ -284,32 +308,7 @@ function UserDashboardPage() {
               </div>
             </div>
 
-            <div className="dashboard-tickets-card">
-              <div className="dashboard-tickets-heading">
-                <div>
-                  <span className="section-eyebrow">Your tickets</span>
-                  <h2>Upcoming bookings</h2>
-                </div>
-                <Link to="/bookings" aria-label="View all bookings"><i className="bi bi-arrow-up-right" aria-hidden="true" /></Link>
-              </div>
-
-              {bookingsLoading ? <p className="dashboard-tickets-empty">Loading tickets…</p> : null}
-              {!bookingsLoading && recentBookings.length > 0 ? (
-                <div className="dashboard-ticket-list">
-                  {recentBookings.map((booking) => (
-                    <Link className="dashboard-ticket-row" to="/bookings" key={booking._id}>
-                      <span className="dashboard-ticket-icon"><i className="bi bi-ticket-perforated" aria-hidden="true" /></span>
-                      <span>
-                        <strong>{booking.eventTitle}</strong>
-                        <small>{formatDate(booking.eventStartDate, { day: 'numeric', month: 'short', year: 'numeric' })}</small>
-                      </span>
-                      <i className="bi bi-chevron-right" aria-hidden="true" />
-                    </Link>
-                  ))}
-                </div>
-              ) : null}
-              {!bookingsLoading && recentBookings.length === 0 ? <p className="dashboard-tickets-empty">No tickets yet. Find an event to get started.</p> : null}
-            </div>          </div>
+          </div>
         </div>
       </div>
 

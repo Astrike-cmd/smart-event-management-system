@@ -1,4 +1,5 @@
-import { NavLink, Outlet } from 'react-router-dom';
+﻿import { NavLink, Outlet } from 'react-router-dom';
+import BrandLogo from '../components/BrandLogo';
 import ThemeToggle from '../components/ThemeToggle';
 import useAuth from '../hooks/useAuth';
 
@@ -11,11 +12,8 @@ function MainLayout() {
         <nav className="navbar navbar-expand-lg">
           <div className="container py-2 gap-3">
             <div className="d-flex align-items-center justify-content-between gap-3 app-header-brand-row">
-              <NavLink className="navbar-brand d-flex align-items-center" to="/">
-                <div>
-                  <span className="brand-title d-block">EVENTIFY</span>
-                  <small className="brand-subtitle">Event booking platform</small>
-                </div>
+              <NavLink className="navbar-brand d-flex align-items-center" to="/" aria-label="Eventify home">
+                <BrandLogo />
               </NavLink>
 
               <div className="d-flex align-items-center gap-2 app-header-controls">
@@ -44,22 +42,22 @@ function MainLayout() {
 
                 <div className="app-nav-scroll">
                   <NavLink className="btn btn-nav-link" to="/">
-                    Home
+                    <i className="bi bi-house-door" aria-hidden="true" /> Home
                   </NavLink>
                   <NavLink className="btn btn-nav-link" to="/events">
-                    Events
+                    <i className="bi bi-calendar-event" aria-hidden="true" /> Events
                   </NavLink>
 
                   {!isAuthenticated ? (
                     <>
                       <NavLink className="btn btn-nav-link" to="/login">
-                        User Login
+                        <i className="bi bi-person" aria-hidden="true" /> User Login
                       </NavLink>
                       <NavLink className="btn btn-nav-link" to="/register">
-                        Register
+                        <i className="bi bi-person-plus" aria-hidden="true" /> Register
                       </NavLink>
                       <NavLink className="btn btn-nav-link" to="/admin/login">
-                        Admin Login
+                        <i className="bi bi-shield-lock" aria-hidden="true" /> Admin Login
                       </NavLink>
                     </>
                   ) : (
@@ -67,15 +65,15 @@ function MainLayout() {
                       {!isAdmin ? (
                         <>
                           <NavLink className="btn btn-nav-link" to="/my-events">
-                            My Events
+                            <i className="bi bi-calendar-plus" aria-hidden="true" /> My Events
                           </NavLink>
                           <NavLink className="btn btn-nav-link" to="/bookings">
-                            My Bookings
+                            <i className="bi bi-ticket-perforated" aria-hidden="true" /> My Bookings
                           </NavLink>
                         </>
                       ) : (
                         <NavLink className="btn btn-nav-link" to="/admin/bookings">
-                          Admin Bookings
+                          <i className="bi bi-clipboard-check" aria-hidden="true" /> Admin Bookings
                         </NavLink>
                       )}
                       <NavLink
@@ -85,7 +83,7 @@ function MainLayout() {
                         {isAdmin ? 'Admin Dashboard' : 'Dashboard'}
                       </NavLink>
                       <button type="button" className="btn btn-nav-link" onClick={logout}>
-                        Logout
+                        <i className="bi bi-box-arrow-right" aria-hidden="true" /> Logout
                       </button>
                     </>
                   )}

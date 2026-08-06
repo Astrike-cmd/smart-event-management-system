@@ -1684,3 +1684,18 @@ body, .app-main { background: var(--bg-primary); }
 .page-shell::before { display: none; }
 .home-hero { background: var(--bg-primary); }
 body[data-theme=dark] .home-hero { background: var(--bg-primary); }
+
+/* Brand assets and concise navigation iconography */
+.brand-logo { position: relative; display: inline-block; width: 172px; height: 58px; overflow: hidden; flex: 0 0 auto; }
+.brand-logo img { position: absolute; top: -51px; left: -63px; display: block; width: 294px; max-width: none; height: auto; }
+.brand-logo-dark { display: none !important; }
+body[data-theme=dark] .brand-logo-light { display: none !important; }
+body[data-theme=dark] .brand-logo-dark { display: block !important; }
+.navbar-brand { gap: 0; }
+.btn-nav-link { display: inline-flex; align-items: center; gap: .42rem; }
+.btn-nav-link i { font-size: .9rem; line-height: 1; }
+.auth-brand-link .brand-logo { width: 154px; height: 52px; }
+.auth-brand-link .brand-logo img { width: 263px; top: -45px; left: -56px; }
+.auth-brand-link { gap: 0; }
+.auth-back-link { display: inline-flex; align-items: center; gap: .4rem; }
+@media(max-width:575.98px) { .brand-logo { width: 148px; height: 50px; }.brand-logo img { width: 252px; top: -43px; left: -54px; } }

@@ -1,6 +1,7 @@
 ﻿import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getEvents } from '../services/events';
+import { getMyBookings } from '../services/bookings';
 import useAuth from '../hooks/useAuth';
 
 const formatDate = (value, options) => {
@@ -20,7 +21,9 @@ const formatDate = (value, options) => {
 function UserDashboardPage() {
   const { user, updateProfilePhoto } = useAuth();
   const [upcomingEvents, setUpcomingEvents] = useState([]);
-  const [eventsLoading, setEventsLoading] = useState(true);  const [photoError, setPhotoError] = useState('');
+  const [eventsLoading, setEventsLoading] = useState(true);
+  const [recentBookings, setRecentBookings] = useState([]);
+  const [bookingsLoading, setBookingsLoading] = useState(true);  const [photoError, setPhotoError] = useState('');
   const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
 
   const handleProfilePhotoChange = async (event) => {
@@ -178,7 +181,20 @@ function UserDashboardPage() {
     }
   ];
 
+
   useEffect(() => {
+    const loadRecentBookings = async () => {
+      try {
+        setRecentBookings((await getMyBookings()).slice(0, 3));
+      } catch {
+        setRecentBookings([]);
+      } finally {
+        setBookingsLoading(false);
+      }
+    };
+
+    loadRecentBookings();
+  }, []);  useEffect(() => {
     const loadVisibleEvents = async () => {
       try {
         const events = await getEvents({ limit: 3, upcoming: true });
@@ -267,7 +283,33 @@ function UserDashboardPage() {
                 <strong>{accountSummary.lastUpdated}</strong>
               </div>
             </div>
-          </div>
+
+            <div className="dashboard-tickets-card">
+              <div className="dashboard-tickets-heading">
+                <div>
+                  <span className="section-eyebrow">Your tickets</span>
+                  <h2>Upcoming bookings</h2>
+                </div>
+                <Link to="/bookings" aria-label="View all bookings"><i className="bi bi-arrow-up-right" aria-hidden="true" /></Link>
+              </div>
+
+              {bookingsLoading ? <p className="dashboard-tickets-empty">Loading tickets…</p> : null}
+              {!bookingsLoading && recentBookings.length > 0 ? (
+                <div className="dashboard-ticket-list">
+                  {recentBookings.map((booking) => (
+                    <Link className="dashboard-ticket-row" to="/bookings" key={booking._id}>
+                      <span className="dashboard-ticket-icon"><i className="bi bi-ticket-perforated" aria-hidden="true" /></span>
+                      <span>
+                        <strong>{booking.eventTitle}</strong>
+                        <small>{formatDate(booking.eventStartDate, { day: 'numeric', month: 'short', year: 'numeric' })}</small>
+                      </span>
+                      <i className="bi bi-chevron-right" aria-hidden="true" />
+                    </Link>
+                  ))}
+                </div>
+              ) : null}
+              {!bookingsLoading && recentBookings.length === 0 ? <p className="dashboard-tickets-empty">No tickets yet. Find an event to get started.</p> : null}
+            </div>          </div>
         </div>
       </div>
 

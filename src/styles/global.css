@@ -1714,3 +1714,23 @@ body[data-theme=dark] .brand-logo-dark { display: block !important; }
 .profile-photo-button:has(+ input:disabled) { cursor: wait; opacity: .7; }
 .profile-photo-error { margin: 0; color: var(--danger); font-size: .78rem; font-weight: 600; }
 body[data-theme=dark] .profile-photo-button:hover { background: rgba(37,99,235,.15); color: #93c5fd; }
+
+/* Dashboard actions and live ticket preview */
+body[data-theme=dark] .btn-primary,
+body[data-theme=dark] .btn-primary:hover,
+body[data-theme=dark] .btn-primary:focus,
+body[data-theme=dark] .btn-primary:active { background: #2563eb !important; border-color: #2563eb !important; color: #ffffff !important; }
+body[data-theme=dark] .btn-primary:hover { background: #1d4ed8 !important; border-color: #1d4ed8 !important; }
+.dashboard-tickets-card { margin-top: .5rem; padding-top: 1rem; border-top: 1px solid var(--border-color); }
+.dashboard-tickets-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: .75rem; }
+.dashboard-tickets-heading h2 { margin: .2rem 0 0; font-size: .95rem; font-weight: 700; letter-spacing: -.025em; }
+.dashboard-tickets-heading > a { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 8px; background: var(--accent-soft); color: var(--primary); }
+.dashboard-ticket-list { display: grid; gap: .35rem; }
+.dashboard-ticket-row { display: grid; grid-template-columns: 28px minmax(0, 1fr) 14px; align-items: center; gap: .6rem; min-height: 46px; padding: .38rem .3rem; border-radius: 8px; color: var(--text-primary); }
+.dashboard-ticket-row:hover { background: var(--accent-soft); color: var(--primary); }
+.dashboard-ticket-icon { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 7px; background: #eff6ff; color: #2563eb; font-size: .76rem; }
+.dashboard-ticket-row strong, .dashboard-ticket-row small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dashboard-ticket-row strong { font-size: .8rem; font-weight: 650; }.dashboard-ticket-row small { margin-top: .05rem; color: var(--text-secondary); font-size: .7rem; }
+.dashboard-ticket-row > i { color: var(--text-secondary); font-size: .72rem; }
+.dashboard-tickets-empty { margin: 0; padding: .65rem 0; color: var(--text-secondary); font-size: .78rem; line-height: 1.5; }
+body[data-theme=dark] .dashboard-ticket-icon { background: rgba(37,99,235,.16); color: #93c5fd; }

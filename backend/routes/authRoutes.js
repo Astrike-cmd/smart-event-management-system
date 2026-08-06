@@ -1,10 +1,11 @@
-import express from 'express';
+﻿import express from 'express';
 import {
   getAdminUsers,
   getCurrentUser,
   loginAdmin,
   loginUser,
-  registerUser
+  registerUser,
+  updateProfilePhoto
 } from '../controllers/authController.js';
 import { authorize, protect } from '../middleware/authMiddleware.js';
 
@@ -14,6 +15,7 @@ router.post('/register', registerUser);
 router.post('/login', loginUser);
 router.post('/admin/login', loginAdmin);
 router.get('/me', protect, getCurrentUser);
+router.put('/profile-photo', protect, updateProfilePhoto);
 router.get('/admin/users', protect, authorize('admin'), getAdminUsers);
 
 export default router;

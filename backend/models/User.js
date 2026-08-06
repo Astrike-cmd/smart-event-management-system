@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+﻿import bcrypt from 'bcrypt';
 import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema(
@@ -27,6 +27,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       enum: ['user', 'admin'],
       default: 'user'
+    },
+    profileImage: {
+      type: String,
+      default: ''
     }
   },
   {
@@ -55,6 +59,7 @@ userSchema.methods.toSafeObject = function toSafeObject() {
     name: this.name,
     email: this.email,
     role: this.role,
+    profileImage: this.profileImage,
     createdAt: this.createdAt,
     updatedAt: this.updatedAt
   };

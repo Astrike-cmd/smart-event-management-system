@@ -1,4 +1,4 @@
-import User from '../models/User.js';
+﻿import User from '../models/User.js';
 import generateToken from '../utils/generateToken.js';
 
 const getAuthPayload = (user) => ({
@@ -167,6 +167,34 @@ export const getCurrentUser = async (req, res) => {
   });
 };
 
+
+export const updateProfilePhoto = async (req, res, next) => {
+  try {
+    const { imageData } = req.body;
+
+    if (typeof imageData !== 'string' || !/^data:image\/(png|jpeg|webp);base64,/i.test(imageData)) {
+      res.status(400);
+      next(new Error('Choose a PNG, JPG, or WebP image.'));
+      return;
+    }
+
+    if (imageData.length > 1_500_000) {
+      res.status(400);
+      next(new Error('Profile photo must be smaller than 1 MB.'));
+      return;
+    }
+
+    req.user.profileImage = imageData;
+    await req.user.save();
+
+    res.status(200).json({
+      success: true,
+      user: req.user.toSafeObject()
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 export const getAdminUsers = async (req, res, next) => {
   try {
     const users = await User.find({ role: 'user' })

@@ -1705,3 +1705,12 @@ body[data-theme=dark] .brand-logo-dark { display: block !important; }
 .brand-logo img { position: absolute; inset: 0; width: 100%; max-width: 100%; height: 100%; object-fit: contain; }
 .auth-brand-link .brand-logo { width: 168px; height: 48px; }
 @media(max-width:575.98px) { .brand-logo { width: 158px; height: 46px; } }
+/* Account profile photo */
+.profile-photo-control { display: flex; align-items: center; gap: .85rem; }
+.dashboard-avatar--photo { overflow: hidden; background: var(--primary-gradient); }
+.dashboard-avatar--photo img { width: 100%; height: 100%; object-fit: cover; }
+.profile-photo-button { display: inline-flex; align-items: center; gap: .4rem; min-height: 32px; padding: .38rem .62rem; border: 1px solid var(--border-color); border-radius: var(--radius-sm); background: var(--surface-strong); color: var(--text-secondary); cursor: pointer; font-size: .76rem; font-weight: 650; transition: color .15s ease, border-color .15s ease, background-color .15s ease; }
+.profile-photo-button:hover { border-color: #93c5fd; background: #eff6ff; color: #2563eb; }
+.profile-photo-button:has(+ input:disabled) { cursor: wait; opacity: .7; }
+.profile-photo-error { margin: 0; color: var(--danger); font-size: .78rem; font-weight: 600; }
+body[data-theme=dark] .profile-photo-button:hover { background: rgba(37,99,235,.15); color: #93c5fd; }

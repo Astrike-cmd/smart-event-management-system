@@ -1,5 +1,6 @@
-import { createContext, useEffect, useMemo, useState } from 'react';
+﻿import { createContext, useEffect, useMemo, useState } from 'react';
 import api, { setApiAuthToken } from '../services/api';
+import { updateProfilePhoto as saveProfilePhoto } from '../services/auth';
 import { clearStoredAuth, getStoredAuth, setStoredAuth } from '../utils/auth';
 
 export const AuthContext = createContext(null);
@@ -80,6 +81,18 @@ export function AuthProvider({ children }) {
     return data;
   };
 
+  const updateProfilePhoto = async (imageData) => {
+    const user = await saveProfilePhoto(imageData);
+    const nextAuthState = {
+      user,
+      token: authState.token,
+      isLoading: false
+    };
+
+    setStoredAuth({ token: authState.token, user });
+    setAuthState(nextAuthState);
+    return user;
+  };
   const logout = () => {
     setApiAuthToken(null);
     clearStoredAuth();
@@ -100,6 +113,7 @@ export function AuthProvider({ children }) {
       login,
       loginAdmin,
       register,
+      updateProfilePhoto,
       logout
     }),
     [authState]

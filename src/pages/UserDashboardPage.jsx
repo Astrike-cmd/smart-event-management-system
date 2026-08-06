@@ -18,9 +18,45 @@ const formatDate = (value, options) => {
 };
 
 function UserDashboardPage() {
-  const { user } = useAuth();
+  const { user, updateProfilePhoto } = useAuth();
   const [upcomingEvents, setUpcomingEvents] = useState([]);
-  const [eventsLoading, setEventsLoading] = useState(true);
+  const [eventsLoading, setEventsLoading] = useState(true);  const [photoError, setPhotoError] = useState('');
+  const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
+
+  const handleProfilePhotoChange = async (event) => {
+    const file = event.target.files?.[0];
+    event.target.value = '';
+
+    if (!file) return;
+
+    if (!['image/png', 'image/jpeg', 'image/webp'].includes(file.type)) {
+      setPhotoError('Choose a PNG, JPG, or WebP image.');
+      return;
+    }
+
+    if (file.size > 1_000_000) {
+      setPhotoError('Choose an image smaller than 1 MB.');
+      return;
+    }
+
+    setPhotoError('');
+    setIsUploadingPhoto(true);
+
+    try {
+      const imageData = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = () => reject(new Error('Unable to read this image.'));
+        reader.readAsDataURL(file);
+      });
+
+      await updateProfilePhoto(imageData);
+    } catch (error) {
+      setPhotoError(error.response?.data?.message || error.message || 'Unable to update your profile photo.');
+    } finally {
+      setIsUploadingPhoto(false);
+    }
+  };
 
   const accountSummary = useMemo(() => {
     const memberSince = formatDate(user?.createdAt, {
@@ -183,7 +219,27 @@ function UserDashboardPage() {
           </div>
 
           <div className="dashboard-profile-card">
-            <div className="dashboard-avatar">{accountSummary.initials}</div>
+                        <div className="profile-photo-control">
+              <div className="dashboard-avatar dashboard-avatar--photo">
+                {user?.profileImage ? (
+                  <img src={user.profileImage} alt={user.name + ' profile'} />
+                ) : (
+                  accountSummary.initials
+                )}
+              </div>
+              <label className="profile-photo-button" htmlFor="profilePhoto">
+                <i className={'bi ' + (isUploadingPhoto ? 'bi-arrow-repeat' : 'bi-camera')} aria-hidden="true" />
+                <span>{isUploadingPhoto ? 'Uploading…' : 'Change photo'}</span>
+              </label>
+              <input
+                id="profilePhoto"
+                className="visually-hidden"
+                type="file"
+                accept="image/png,image/jpeg,image/webp"
+                onChange={handleProfilePhotoChange}
+                disabled={isUploadingPhoto}
+              />
+            </div>
             <div>
               <span className="section-eyebrow">Account Overview</span>
               <h2 className="h4 mb-1">{user?.name}</h2>
@@ -192,7 +248,8 @@ function UserDashboardPage() {
               </p>
             </div>
 
-            <div className="dashboard-meta-list">
+                        {photoError ? <p className="profile-photo-error" role="alert">{photoError}</p> : null}
+<div className="dashboard-meta-list">
               <div className="dashboard-meta-row">
                 <span>Role</span>
                 <strong>{user?.role}</strong>

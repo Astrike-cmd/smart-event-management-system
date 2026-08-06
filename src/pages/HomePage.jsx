@@ -26,7 +26,7 @@ function HomePage() {
   useEffect(() => {
     const loadFeaturedEvents = async () => {
       try {
-        setFeaturedEvents(await getFeaturedEvents(3));
+        setFeaturedEvents(await getFeaturedEvents(5));
       } catch {
         setFeaturedEvents([]);
       } finally {
@@ -59,73 +59,68 @@ function HomePage() {
     <div className="home-page home-page--simple">
       <section className="home-hero">
         <div className="container">
-          <div className="home-hero-content">
-            <span className="home-kicker">Find your next experience</span>
-            <h1>Events worth stepping out for.</h1>
-            <p>Discover, book, and manage events in one simple place.</p>
-            <div className="hero-actions">
-              <Link className="btn btn-primary btn-lg" to="/events">Explore events</Link>
-              {!isAuthenticated ? (
-                <Link className="btn btn-outline-primary btn-lg" to="/login">Sign in</Link>
-              ) : (
-                <Link className="btn btn-outline-primary btn-lg" to={isAdmin ? '/admin/dashboard' : '/dashboard'}>
-                  {isAdmin ? 'Open dashboard' : 'Hi, ' + (user?.name?.split(' ')[0] || 'there')}
-                </Link>
-              )}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="home-events-section">
-        <div className="container">
-          <div className="home-section-heading">
-            <div>
-              <span className="section-eyebrow">Happening now</span>
-              <h2>Featured events</h2>
-            </div>
-            <Link className="home-text-link" to="/events">
-              See all events <i className="bi bi-arrow-right" aria-hidden="true" />
-            </Link>
-          </div>
-
-          {featuredEventsLoading ? (
-            <div className="home-event-grid" aria-label="Loading featured events">
-              {[1, 2, 3].map((item) => <div className="event-skeleton" key={item} />)}
-            </div>
-          ) : null}
-
-          {!featuredEventsLoading && featuredEvents.length > 0 ? (
-            <div className="home-event-grid">
-              {featuredEvents.map((event) => (
-                <article className="home-event-card" key={event._id || event.slug}>
-                  <Link to={'/events/' + event.slug} className="home-event-image-link" aria-label={'View ' + event.title}>
-                    <EventImage src={event.imageData} alt={event.title} variant="card" />
+          <div className="home-hero-layout">
+            <div className="home-hero-content">
+              <span className="home-kicker">Find your next experience</span>
+              <h1>Events worth stepping out for.</h1>
+              <p>Discover, book, and manage events in one simple place.</p>
+              <div className="hero-actions">
+                <Link className="btn btn-primary btn-lg" to="/events">Explore events</Link>
+                {!isAuthenticated ? (
+                  <Link className="btn btn-outline-primary btn-lg" to="/login">Sign in</Link>
+                ) : (
+                  <Link className="btn btn-outline-primary btn-lg" to={isAdmin ? '/admin/dashboard' : '/dashboard'}>
+                    {isAdmin ? 'Open dashboard' : 'Hi, ' + (user?.name?.split(' ')[0] || 'there')}
                   </Link>
-                  <div className="home-event-card-body">
-                    <div className="home-event-meta">
-                      <span>{event.category}</span>
-                      <span>{event.price === 0 ? 'Free' : 'Rs. ' + event.price}</span>
-                    </div>
-                    <h3>{event.title}</h3>
-                    <p>{formatEventDate(event.startDate)} · {event.city}</p>
-                    <Link className="home-card-link" to={'/events/' + event.slug}>
-                      {event.availableTickets === 0 ? 'View details' : 'Book now'} <i className="bi bi-arrow-up-right" aria-hidden="true" />
-                    </Link>
-                  </div>
-                </article>
-              ))}
+                )}
+              </div>
             </div>
-          ) : null}
 
-          {!featuredEventsLoading && featuredEvents.length === 0 ? (
-            <div className="home-empty-state">
-              <div className="home-empty-icon"><i className="bi bi-calendar2-week" aria-hidden="true" /></div>
-              <h3>Nothing featured yet</h3>
-              <p>Explore all published events to find something to attend.</p>
-              <Link className="btn btn-primary" to="/events">Browse events</Link>
+            <div className="hero-carousel-wrap">
+              {featuredEventsLoading ? <div className="hero-carousel-skeleton" aria-label="Loading featured events" /> : null}
+
+              {!featuredEventsLoading && featuredEvents.length > 0 ? (
+                <div id="featuredEventsCarousel" className="carousel slide hero-event-carousel" data-bs-ride="carousel" data-bs-interval="4500">
+                  <div className="carousel-inner">
+                    {featuredEvents.map((event, index) => (
+                      <div className={'carousel-item' + (index === 0 ? ' active' : '')} key={event._id || event.slug}>
+                        <Link to={'/events/' + event.slug} className="hero-carousel-slide" aria-label={'View ' + event.title}>
+                          <EventImage src={event.imageData} alt={event.title} variant="card" />
+                          <div className="hero-carousel-caption">
+                            <span>Featured event</span>
+                            <h2>{event.title}</h2>
+                          </div>
+                        </Link>
+                      </div>
+                    ))}
+                  </div>
+
+                  {featuredEvents.length > 1 ? (
+                    <>
+                      <button className="carousel-control-prev" type="button" data-bs-target="#featuredEventsCarousel" data-bs-slide="prev" aria-label="Previous featured event">
+                        <span className="bi bi-arrow-left" aria-hidden="true" />
+                      </button>
+                      <button className="carousel-control-next" type="button" data-bs-target="#featuredEventsCarousel" data-bs-slide="next" aria-label="Next featured event">
+                        <span className="bi bi-arrow-right" aria-hidden="true" />
+                      </button>
+                      <div className="carousel-indicators">
+                        {featuredEvents.map((event, index) => (
+                          <button key={event._id || event.slug} type="button" data-bs-target="#featuredEventsCarousel" data-bs-slide-to={index} className={index === 0 ? 'active' : ''} aria-current={index === 0 ? 'true' : undefined} aria-label={'Show ' + event.title} />
+                        ))}
+                      </div>
+                    </>
+                  ) : null}
+                </div>
+              ) : null}
+
+              {!featuredEventsLoading && featuredEvents.length === 0 ? (
+                <Link className="hero-carousel-empty" to="/events">
+                  <i className="bi bi-calendar2-week" aria-hidden="true" />
+                  <span>Explore upcoming events</span>
+                </Link>
+              ) : null}
             </div>
-          ) : null}
+          </div>
         </div>
       </section>
 

@@ -1656,3 +1656,23 @@ body[data-theme=dark] .auth-layout .auth-feature-item { background: rgba(37,99,2
 .auth-simple-form .auth-input { min-height: 46px; }
 .auth-simple-form .alert { margin-bottom: 1.25rem; font-size: .84rem; }
 @media(max-width:575.98px) { .auth-layout--simple { min-height: auto; padding-top: 1.75rem !important; }.auth-simple-header { margin-bottom: 1.5rem; }.auth-back-link { font-size: 0; }.auth-back-link i { font-size: 1rem; } }
+
+/* Featured-event carousel */
+.home-hero-layout { display: grid; grid-template-columns: minmax(0, .95fr) minmax(360px, .8fr); align-items: center; gap: clamp(2.5rem, 7vw, 6rem); }
+.hero-carousel-wrap { min-width: 0; }
+.hero-event-carousel, .hero-carousel-skeleton, .hero-carousel-empty { overflow: hidden; min-height: 360px; border-radius: 20px; box-shadow: 0 22px 55px rgba(37,99,235,.16); }
+.hero-event-carousel { background: #0f172a; }
+.hero-carousel-slide { position: relative; display: block; height: 360px; color: #fff; }
+.hero-carousel-slide .event-image-frame-card { width: 100%; height: 100%; margin: 0; border: 0; border-radius: 0; }
+.hero-carousel-slide .event-image { filter: brightness(.76); transition: transform .6s ease; }
+.hero-carousel-slide:hover .event-image { transform: scale(1.04); }
+.hero-carousel-caption { position: absolute; right: 0; bottom: 0; left: 0; padding: 3.25rem 1.5rem 1.5rem; background: linear-gradient(transparent, rgba(15,23,42,.9)); }
+.hero-carousel-caption span { color: #bfdbfe; font-size: .72rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.hero-carousel-caption h2 { margin: .35rem 0 0; color: #fff; font-size: clamp(1.25rem,2vw,1.65rem); font-weight: 700; letter-spacing: -.035em; line-height: 1.25; }
+.hero-event-carousel .carousel-control-prev, .hero-event-carousel .carousel-control-next { top: auto; bottom: 18px; width: 32px; height: 32px; border: 1px solid rgba(255,255,255,.35); border-radius: 50%; background: rgba(15,23,42,.35); opacity: 1; font-size: .75rem; }
+.hero-event-carousel .carousel-control-prev { left: auto; right: 58px; }.hero-event-carousel .carousel-control-next { right: 18px; }
+.hero-event-carousel .carousel-indicators { right: auto; bottom: 3px; left: 18px; margin: 0; }.hero-event-carousel .carousel-indicators button { width: 20px; height: 3px; margin: 0 3px; border: 0; border-radius: 999px; background: rgba(255,255,255,.55); }.hero-event-carousel .carousel-indicators .active { background: #fff; }
+.hero-carousel-skeleton { background: linear-gradient(100deg,#dbeafe 30%,#eff6ff 50%,#dbeafe 70%); background-size: 200% 100%; animation: home-shimmer 1.3s infinite; }
+.hero-carousel-empty { display: grid; place-content: center; gap: .75rem; min-height: 360px; padding: 2rem; background: #eff6ff; color: #2563eb; text-align: center; font-size: .92rem; font-weight: 650; }.hero-carousel-empty i { font-size: 2rem; }
+@media(max-width:991.98px) { .home-hero-layout { grid-template-columns: 1fr; gap: 2.5rem; }.home-hero-content { max-width: 620px; }.hero-event-carousel,.hero-carousel-skeleton,.hero-carousel-empty,.hero-carousel-slide { min-height: 320px; height: 320px; } }
+@media(max-width:575.98px) { .home-hero-layout { gap: 2rem; }.hero-event-carousel,.hero-carousel-skeleton,.hero-carousel-empty,.hero-carousel-slide { min-height: 250px; height: 250px; }.hero-carousel-caption { padding: 2.5rem 1rem 1rem; }.hero-event-carousel .carousel-indicators { left: 12px; }.hero-event-carousel .carousel-control-next { right: 12px; }.hero-event-carousel .carousel-control-prev { right: 50px; } }

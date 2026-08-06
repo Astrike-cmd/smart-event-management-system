@@ -10,6 +10,10 @@ const getStatusLabel = (booking) => {
     return 'Sold Out Event';
   }
 
+  if (booking.bookingStatus === 'pending_payment') {
+    return 'Payment Review Pending';
+  }
+
   if (booking.bookingStatus === 'cancelled') {
     return 'Cancelled Booking';
   }
@@ -18,6 +22,14 @@ const getStatusLabel = (booking) => {
 };
 
 const getTicketTone = (booking) => {
+  if (booking.bookingStatus === 'pending_payment') {
+    return 'neutral';
+  }
+
+  if (booking.bookingStatus === 'pending_payment') {
+    return 'neutral';
+  }
+
   if (booking.bookingStatus === 'cancelled') {
     return 'muted';
   }

@@ -59,7 +59,7 @@ const bookingSchema = new mongoose.Schema(
     },
     bookingStatus: {
       type: String,
-      enum: ['confirmed', 'cancelled'],
+      enum: ['pending_payment', 'confirmed', 'cancelled'],
       default: 'confirmed'
     },
     paymentStatus: {
@@ -69,7 +69,7 @@ const bookingSchema = new mongoose.Schema(
     },
     paymentProvider: {
       type: String,
-      enum: ['razorpay', 'free', 'manual'],
+      enum: ['demo', 'upi_manual', 'free', 'manual'],
       default: 'manual'
     },
     paymentId: {

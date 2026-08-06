@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import EventImage from '../components/EventImage';
+import upiQr from '../assets/eventify-upi-qr.jpeg';
 import useAuth from '../hooks/useAuth';
 import { createBooking } from '../services/bookings';
 import { getEventBySlug } from '../services/events';
-import { createPaymentOrder, openPaymentCheckout, verifyPayment } from '../services/payments';
+import { completeDemoPayment, submitUpiPayment } from '../services/payments';
 
 const formatDate = (value) => {
   const date = new Date(value);
@@ -30,6 +31,8 @@ function EventDetailsPage() {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [quantity, setQuantity] = useState(1);
+  const [paymentMethod, setPaymentMethod] = useState('demo');
+  const [upiReference, setUpiReference] = useState('');
   const [feedback, setFeedback] = useState({
     type: '',
     message: ''
@@ -94,14 +97,10 @@ function EventDetailsPage() {
 
       if (event.price === 0) {
         booking = await createBooking({ eventId: event._id, quantity });
+      } else if (paymentMethod === 'upi') {
+        booking = await submitUpiPayment({ eventId: event._id, quantity, paymentId: upiReference });
       } else {
-        const order = await createPaymentOrder({ eventId: event._id, quantity });
-        const paymentResult = await openPaymentCheckout(order);
-        booking = await verifyPayment({
-          eventId: event._id,
-          quantity,
-          ...paymentResult
-        });
+        booking = await completeDemoPayment({ eventId: event._id, quantity });
       }
 
       navigate('/bookings', {
@@ -240,6 +239,28 @@ function EventDetailsPage() {
                   disabled={isSoldOut}
                 />
 
+                {event.price > 0 ? (
+                  <div className="mb-4">
+                    <label className="form-label">Payment Method</label>
+                    <div className="d-grid gap-2">
+                      <label className="dashboard-mini-card p-3 d-flex gap-2 align-items-start">
+                        <input type="radio" name="paymentMethod" value="demo" checked={paymentMethod === 'demo'} onChange={() => setPaymentMethod('demo')} />
+                        <span><strong>Demo Payment</strong><br /><small className="text-muted">For project testing only. No money is charged.</small></span>
+                      </label>
+                      <label className="dashboard-mini-card p-3 d-flex gap-2 align-items-start">
+                        <input type="radio" name="paymentMethod" value="upi" checked={paymentMethod === 'upi'} onChange={() => setPaymentMethod('upi')} />
+                        <span><strong>Pay by UPI QR</strong><br /><small className="text-muted">Scan your QR, then submit the UPI reference for admin review.</small></span>
+                      </label>
+                    </div>
+                    {paymentMethod === 'upi' ? (
+                      <div className="dashboard-mini-card p-3 mt-3">
+                        <img className="img-fluid rounded mb-3" src={upiQr} alt="Eventify UPI payment QR code" />
+                        <label className="form-label" htmlFor="upiReference">UPI Transaction / Reference ID</label>
+                        <input id="upiReference" className="form-control auth-input" value={upiReference} onChange={(changeEvent) => setUpiReference(changeEvent.target.value)} placeholder="Example: 412345678901" required={paymentMethod === 'upi'} />
+                      </div>
+                    ) : null}
+                  </div>
+                ) : null}
                 <div className="booking-summary-card mb-4">
                   <div className="event-meta-row">
                     <span>Price Per Ticket</span>
@@ -262,7 +283,7 @@ function EventDetailsPage() {
                   </div>
                 ) : (
                   <button className="btn btn-primary w-100" type="submit" disabled={submitting || isSoldOut}>
-                    {submitting ? (event.price === 0 ? 'Confirming Booking...' : 'Opening Payment...') : isSoldOut ? 'Sold Out' : event.price === 0 ? 'Confirm Free Booking' : 'Pay & Confirm Booking'}
+                    {submitting ? 'Processing...' : isSoldOut ? 'Sold Out' : event.price === 0 ? 'Confirm Free Booking' : paymentMethod === 'upi' ? 'Submit UPI Payment' : 'Complete Demo Payment'}
                   </button>
                 )}
               </form>

@@ -8,6 +8,7 @@ import {
   transferAdminBooking
 } from '../services/bookings';
 import { getManagedEvents } from '../services/events';
+import { confirmUpiPayment } from '../services/payments';
 
 const formatDate = (value) => {
   const date = new Date(value);
@@ -165,6 +166,19 @@ function AdminBookingsPage() {
     }
   };
 
+  const handleConfirmUpiPayment = async (bookingId) => {
+    setActiveBookingId(bookingId);
+    setFeedback({ type: '', message: '' });
+    try {
+      const updatedBooking = await confirmUpiPayment(bookingId);
+      replaceBooking(updatedBooking);
+      setFeedback({ type: 'success', message: `UPI payment confirmed for ${updatedBooking.bookingReference}.` });
+    } catch (error) {
+      setFeedback({ type: 'danger', message: error.response?.data?.message || 'Unable to confirm this UPI payment.' });
+    } finally {
+      setActiveBookingId('');
+    }
+  };
   const handleTransferSelection = (bookingId, userId) => {
     setTransferTargets((currentState) => ({
       ...currentState,
@@ -438,6 +452,11 @@ function AdminBookingsPage() {
                     ) : null}
 
                     <div className="d-flex gap-2 flex-wrap mt-3">
+                      {booking.bookingStatus === 'pending_payment' && booking.paymentProvider === 'upi_manual' ? (
+                        <button type="button" className="btn btn-primary" onClick={() => handleConfirmUpiPayment(booking._id)} disabled={activeBookingId === booking._id}>
+                          {activeBookingId === booking._id ? 'Confirming...' : 'Confirm UPI Payment'}
+                        </button>
+                      ) : null}
                       {booking.event ? (
                         <Link className="btn btn-outline-primary" to={`/events/${booking.eventSlug}`}>
                           Open Event

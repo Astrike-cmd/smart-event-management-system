@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import AuthFormCard from '../components/AuthFormCard';
 import useAuth from '../hooks/useAuth';
@@ -13,9 +13,7 @@ function AdminLoginPage() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState(initialFormState);
   const [error, setError] = useState('');
-  const [successMessage, setSuccessMessage] = useState(
-    'Use the admin credentials defined in backend/.env.'
-  );
+  const [successMessage, setSuccessMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (event) => {
@@ -50,7 +48,7 @@ function AdminLoginPage() {
   return (
     <AuthFormCard
       title="Admin Login"
-      subtitle="Sign in with an admin account to manage platform events and bookings."
+      subtitle="Sign in to continue."
       error={error}
       successMessage={successMessage}
       isSubmitting={isSubmitting}

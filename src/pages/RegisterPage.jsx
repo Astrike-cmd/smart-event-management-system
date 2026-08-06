@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import AuthFormCard from '../components/AuthFormCard';
 import useAuth from '../hooks/useAuth';
@@ -68,8 +68,8 @@ function RegisterPage() {
 
   return (
     <AuthFormCard
-      title="Create User Account"
-      subtitle="Register securely to start browsing and booking events."
+      title="Create your account"
+      subtitle="Join Eventify to book events."
       error={error}
       isSubmitting={isSubmitting}
       onSubmit={handleSubmit}

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import AuthFormCard from '../components/AuthFormCard';
 import useAuth from '../hooks/useAuth';
@@ -48,7 +48,7 @@ function LoginPage() {
   return (
     <AuthFormCard
       title="User Login"
-      subtitle="Sign in to access your bookings, profile, and event tools."
+      subtitle="Welcome back."
       error={error}
       isSubmitting={isSubmitting}
       onSubmit={handleSubmit}

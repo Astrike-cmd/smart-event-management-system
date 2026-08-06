@@ -1,46 +1,20 @@
-import { Link, Outlet } from 'react-router-dom';
+﻿import { Link, Outlet } from 'react-router-dom';
 
 function AuthLayout() {
   return (
-    <section className="container py-5 auth-layout">
-      <div className="row justify-content-center">
-        <div className="col-lg-10">
-          <div className="row g-4 align-items-stretch">
-            <div className="col-lg-5">
-              <div className="glass-panel p-4 p-md-5 h-100">
-                <span className="section-pill mb-3">
-                  Secure Access
-                </span>
-                <h1 className="display-6 fw-semibold mb-3">Secure access for users and admins</h1>
-                <p className="text-muted mb-4">
-                  Register accounts, sign in, and move into the right workspace from one
-                  clean authentication flow.
-                </p>
-                <div className="auth-feature-list d-grid gap-3">
-                  <div className="auth-feature-item">
-                    <span>User registration and sign-in</span>
-                  </div>
-                  <div className="auth-feature-item">
-                    <span>Protected sessions and route access</span>
-                  </div>
-                  <div className="auth-feature-item">
-                    <span>Dedicated admin access</span>
-                  </div>
-                </div>
+    <section className="container py-5 auth-layout auth-layout--simple">
+      <div className="auth-simple-header">
+        <Link className="auth-brand-link" to="/">
+          <span className="auth-brand-mark">E</span>
+          <span>Eventify</span>
+        </Link>
+        <Link className="auth-back-link" to="/">
+          <i className="bi bi-arrow-left" aria-hidden="true" /> Back to events
+        </Link>
+      </div>
 
-                <div className="mt-4 pt-3 border-top border-subtle">
-                  <Link className="text-primary fw-semibold" to="/">
-                    Back to home
-                  </Link>
-                </div>
-              </div>
-            </div>
-
-            <div className="col-lg-7">
-              <Outlet />
-            </div>
-          </div>
-        </div>
+      <div className="auth-simple-form">
+        <Outlet />
       </div>
     </section>
   );

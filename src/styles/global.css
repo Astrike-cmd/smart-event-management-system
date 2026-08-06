@@ -1676,3 +1676,11 @@ body[data-theme=dark] .auth-layout .auth-feature-item { background: rgba(37,99,2
 .hero-carousel-empty { display: grid; place-content: center; gap: .75rem; min-height: 360px; padding: 2rem; background: #eff6ff; color: #2563eb; text-align: center; font-size: .92rem; font-weight: 650; }.hero-carousel-empty i { font-size: 2rem; }
 @media(max-width:991.98px) { .home-hero-layout { grid-template-columns: 1fr; gap: 2.5rem; }.home-hero-content { max-width: 620px; }.hero-event-carousel,.hero-carousel-skeleton,.hero-carousel-empty,.hero-carousel-slide { min-height: 320px; height: 320px; } }
 @media(max-width:575.98px) { .home-hero-layout { gap: 2rem; }.hero-event-carousel,.hero-carousel-skeleton,.hero-carousel-empty,.hero-carousel-slide { min-height: 250px; height: 250px; }.hero-carousel-caption { padding: 2.5rem 1rem 1rem; }.hero-event-carousel .carousel-indicators { left: 12px; }.hero-event-carousel .carousel-control-next { right: 12px; }.hero-event-carousel .carousel-control-prev { right: 50px; } }
+
+/* Remove decorative backgrounds: keep the application surface deliberately quiet. */
+body, .app-main { background: var(--bg-primary); }
+.app-main::before,
+.app-main::after,
+.page-shell::before { display: none; }
+.home-hero { background: var(--bg-primary); }
+body[data-theme=dark] .home-hero { background: var(--bg-primary); }

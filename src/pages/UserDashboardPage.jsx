@@ -225,7 +225,10 @@ function UserDashboardPage() {
               to booking and event tools into one place.
             </p>
             <div className="d-flex flex-wrap gap-3">
-              <Link className="btn btn-primary dashboard-explore-button" to="/events">`r`n                <i className="bi bi-calendar-event" aria-hidden="true" />`r`n                Explore events`r`n              </Link>
+              <Link className="btn btn-primary dashboard-explore-button" to="/events">
+                <i className="bi bi-calendar-event" aria-hidden="true" />
+                Explore events
+              </Link>
               <span className="auth-welcome-chip">
                 {user?.email}
               </span>

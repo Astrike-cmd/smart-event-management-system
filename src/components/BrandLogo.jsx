@@ -1,5 +1,5 @@
-﻿import darkLogo from '../assets/eventify-logo-dark.png';
-import lightLogo from '../assets/eventify-logo-light.png';
+﻿import darkLogo from '../assets/eventify-logo-dark-transparent.png';
+import lightLogo from '../assets/eventify-logo-light-transparent.png';
 
 function BrandLogo({ className = '' }) {
   return (

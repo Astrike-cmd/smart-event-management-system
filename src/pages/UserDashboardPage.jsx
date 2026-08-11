@@ -364,11 +364,11 @@ function UserDashboardPage() {
         <div className="d-flex justify-content-between align-items-end gap-3 flex-wrap mb-4">
           <div>
             <span className="section-eyebrow">Upcoming Events</span>
-            <h2 className="h3 mb-0">What users can explore next</h2>
+            <h2 className="h3 mb-0">What you can explore next</h2>
           </div>
           <div className="section-action-group">
             <Link className="btn btn-outline-primary" to="/events">
-              Open Events Module
+              Go to Events
             </Link>
             <Link className="btn btn-primary" to="/my-events">
               Manage My Events

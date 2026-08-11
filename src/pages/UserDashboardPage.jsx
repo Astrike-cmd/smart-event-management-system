@@ -160,7 +160,7 @@ function UserDashboardPage() {
     },
     {
       icon: 'bi-calendar-event',
-      title: 'Open Events Module',
+      title: 'Open Events Page',
       description: 'Open the live events listing and browse what is currently available on the platform.',
       to: '/events',
       buttonLabel: 'View Events'

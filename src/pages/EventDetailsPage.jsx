@@ -187,20 +187,6 @@ function EventDetailsPage() {
                 </div>
               </div>
 
-              <div className="glass-panel p-4 mt-4">
-                <span className="section-eyebrow">Booking Notes</span>
-                <div className="dashboard-checklist">
-                  <div className="dashboard-check-item">
-                    <span>Ticket availability updates immediately after a booking is confirmed.</span>
-                  </div>
-                  <div className="dashboard-check-item">
-                    <span>Your booking history stays inside the protected user workspace.</span>
-                  </div>
-                  <div className="dashboard-check-item">
-                    <span>Cancelled bookings restore ticket inventory for the event automatically.</span>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
 

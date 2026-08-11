@@ -1323,6 +1323,10 @@ p,
   max-height: none;
 }
 
+.bookings-timeline-scroll {
+  max-height: 42rem;
+}
+
 .scroll-panel--compact {
   max-height: 40rem;
 }

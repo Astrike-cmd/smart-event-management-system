@@ -246,36 +246,38 @@ function BookingsPage() {
         {loading ? <p className="text-muted mb-0">Loading your bookings...</p> : null}
 
         {!loading && bookings.length > 0 ? (
-          <div className="booking-list">
-            {bookings.map((booking) => (
-              <div key={booking._id}>
-                <BookingTicket
-                  booking={booking}
-                  formatDate={formatDate}
-                  onDownloadPdf={handleDownloadTicketPdf}
-                  isDownloading={downloadingBookingId === booking._id}
-                  ref={setTicketRef(booking._id)}
-                />
+          <div className="scroll-panel bookings-timeline-scroll">
+            <div className="booking-list">
+              {bookings.map((booking) => (
+                <div key={booking._id}>
+                  <BookingTicket
+                    booking={booking}
+                    formatDate={formatDate}
+                    onDownloadPdf={handleDownloadTicketPdf}
+                    isDownloading={downloadingBookingId === booking._id}
+                    ref={setTicketRef(booking._id)}
+                  />
 
-                <div className="d-flex gap-2 flex-wrap mt-3">
-                  {booking.event ? (
-                    <Link className="btn btn-outline-primary" to={`/events/${booking.eventSlug}`}>
-                      View Event
-                    </Link>
-                  ) : null}
-                  {booking.bookingStatus === 'confirmed' ? (
-                    <button
-                      type="button"
-                      className="btn btn-outline-danger"
-                      onClick={() => handleCancelBooking(booking._id)}
-                      disabled={activeBookingId === booking._id}
-                    >
-                      {activeBookingId === booking._id ? 'Cancelling...' : 'Cancel Booking'}
-                    </button>
-                  ) : null}
+                  <div className="d-flex gap-2 flex-wrap mt-3">
+                    {booking.event ? (
+                      <Link className="btn btn-outline-primary" to={`/events/${booking.eventSlug}`}>
+                        View Event
+                      </Link>
+                    ) : null}
+                    {booking.bookingStatus === 'confirmed' ? (
+                      <button
+                        type="button"
+                        className="btn btn-outline-danger"
+                        onClick={() => handleCancelBooking(booking._id)}
+                        disabled={activeBookingId === booking._id}
+                      >
+                        {activeBookingId === booking._id ? 'Cancelling...' : 'Cancel Booking'}
+                      </button>
+                    ) : null}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         ) : null}
 

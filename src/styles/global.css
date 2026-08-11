@@ -1304,6 +1304,17 @@ p,
   scrollbar-width: thin;
 }
 
+.my-events-inventory-panel {
+  display: flex;
+  flex-direction: column;
+}
+
+.my-events-inventory-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: none;
+}
+
 .scroll-panel--compact {
   max-height: 40rem;
 }

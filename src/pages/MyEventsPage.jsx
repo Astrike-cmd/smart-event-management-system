@@ -303,7 +303,7 @@ function MyEventsPage() {
   };
 
   return (
-    <section className="container py-5">
+    <section className="container py-5 my-events-page">
       <div className="glass-panel p-4 p-md-5 mb-4">
         <div className="d-flex justify-content-between align-items-end gap-3 flex-wrap">
           <div>
@@ -647,8 +647,8 @@ function MyEventsPage() {
           </div>
         </div>
 
-        <div className="col-xl-7">
-          <div className="glass-panel p-4 p-md-5 h-100">
+        <div className="col-xl-7 d-flex">
+          <div className="glass-panel my-events-inventory-panel p-4 p-md-5 h-100 w-100">
             <div className="d-flex justify-content-between align-items-end gap-3 flex-wrap mb-4">
               <div>
                 <span className="section-eyebrow">My Event List</span>
@@ -660,7 +660,7 @@ function MyEventsPage() {
             {loading ? <p className="text-muted mb-0">Loading your events...</p> : null}
 
             {!loading && events.length > 0 ? (
-              <div className="scroll-panel">
+              <div className="scroll-panel my-events-inventory-scroll">
                 <div className="event-admin-list">
                   {events.map((eventItem) => (
                     <article className="dashboard-action-card" key={eventItem._id}>

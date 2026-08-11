@@ -30,7 +30,7 @@ function EventDetailsPage() {
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
-  const [quantity, setQuantity] = useState(1);
+  const [quantityInput, setQuantityInput] = useState('1');
   const [paymentMethod, setPaymentMethod] = useState('demo');
   const [upiReference, setUpiReference] = useState('');
   const [feedback, setFeedback] = useState({
@@ -61,13 +61,18 @@ function EventDetailsPage() {
     [event]
   );
 
+  const parsedQuantity = useMemo(() => {
+    const nextQuantity = Number.parseInt(quantityInput, 10);
+    return Number.isNaN(nextQuantity) ? 0 : nextQuantity;
+  }, [quantityInput]);
+
   const totalAmount = useMemo(() => {
     if (!event) {
       return 0;
     }
 
-    return event.price * quantity;
-  }, [event, quantity]);
+    return event.price * Math.max(parsedQuantity, 0);
+  }, [event, parsedQuantity]);
 
   const handleBooking = async (submitEvent) => {
     submitEvent.preventDefault();
@@ -89,6 +94,16 @@ function EventDetailsPage() {
       return;
     }
 
+    if (parsedQuantity < 1) {
+      setFeedback({
+        type: 'danger',
+        message: 'Enter at least 1 ticket before booking.'
+      });
+      return;
+    }
+
+    const bookingQuantity = event ? Math.min(parsedQuantity, Math.max(event.availableTickets, 1)) : parsedQuantity;
+
     setSubmitting(true);
     setFeedback({ type: '', message: '' });
 
@@ -96,11 +111,15 @@ function EventDetailsPage() {
       let booking;
 
       if (event.price === 0) {
-        booking = await createBooking({ eventId: event._id, quantity });
+        booking = await createBooking({ eventId: event._id, quantity: bookingQuantity });
       } else if (paymentMethod === 'upi') {
-        booking = await submitUpiPayment({ eventId: event._id, quantity, paymentId: upiReference });
+        booking = await submitUpiPayment({
+          eventId: event._id,
+          quantity: bookingQuantity,
+          paymentId: upiReference
+        });
       } else {
-        booking = await completeDemoPayment({ eventId: event._id, quantity });
+        booking = await completeDemoPayment({ eventId: event._id, quantity: bookingQuantity });
       }
 
       navigate('/bookings', {
@@ -218,10 +237,19 @@ function EventDetailsPage() {
                   min="1"
                   max={Math.max(event.availableTickets, 1)}
                   className="form-control auth-input mb-3"
-                  value={quantity}
-                  onChange={(changeEvent) =>
-                    setQuantity(Math.max(1, Number.parseInt(changeEvent.target.value, 10) || 1))
-                  }
+                  value={quantityInput}
+                  onChange={(changeEvent) => setQuantityInput(changeEvent.target.value)}
+                  onBlur={() => {
+                    if (!event) {
+                      return;
+                    }
+
+                    const clampedQuantity = Math.min(
+                      Math.max(parsedQuantity || 1, 1),
+                      Math.max(event.availableTickets, 1)
+                    );
+                    setQuantityInput(String(clampedQuantity));
+                  }}
                   disabled={isSoldOut}
                 />
 

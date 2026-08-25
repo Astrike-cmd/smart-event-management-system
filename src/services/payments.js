@@ -14,3 +14,8 @@ export const confirmUpiPayment = async (bookingId) => {
   const { data } = await api.post(`/payments/admin/${bookingId}/confirm-upi`);
   return data.booking;
 };
+
+export const getAdminPayments = async () => {
+  const { data } = await api.get('/payments/admin/list');
+  return data.payments;
+};

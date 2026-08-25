@@ -1761,3 +1761,9 @@ body[data-theme=dark] .dashboard-ticket-icon { background: rgba(37,99,235,.16); 
 /* Dashboard primary action */
 .dashboard-explore-button { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; min-height: 42px; padding: .55rem .9rem; border-radius: 9px; font-size: .84rem; font-weight: 650; }
 .dashboard-explore-button i { font-size: .9rem; }
+
+.admin-reveal-hint {
+  cursor: default;
+  user-select: none;
+  -webkit-user-select: none;
+}

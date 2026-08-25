@@ -1,10 +1,54 @@
-﻿import { NavLink, Outlet } from 'react-router-dom';
+﻿import { useEffect, useRef } from 'react';
+import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import BrandLogo from '../components/BrandLogo';
 import ThemeToggle from '../components/ThemeToggle';
 import useAuth from '../hooks/useAuth';
 
 function MainLayout() {
   const { isAuthenticated, isAdmin, logout, user } = useAuth();
+  const navigate = useNavigate();
+  const adminTapCount = useRef(0);
+  const adminTapTimer = useRef(null);
+
+  useEffect(() => {
+    // Ctrl+Shift+L is the reliable chord: Chrome on Windows reserves Ctrl+Shift+A
+    // for tab search, so the page never receives that one there.
+    const adminChordKeys = ['a', 'l'];
+
+    const handleKeyDown = (event) => {
+      if (!event.ctrlKey || !event.shiftKey || !event.key) {
+        return;
+      }
+
+      if (adminChordKeys.includes(event.key.toLowerCase())) {
+        event.preventDefault();
+        navigate('/admin/login');
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [navigate]);
+
+  useEffect(() => () => clearTimeout(adminTapTimer.current), []);
+
+  const handleAdminReveal = () => {
+    clearTimeout(adminTapTimer.current);
+    adminTapCount.current += 1;
+
+    if (adminTapCount.current >= 5) {
+      adminTapCount.current = 0;
+      navigate('/admin/login');
+      return;
+    }
+
+    adminTapTimer.current = setTimeout(() => {
+      adminTapCount.current = 0;
+    }, 1500);
+  };
 
   return (
     <div className="app-shell d-flex flex-column min-vh-100">
@@ -56,9 +100,6 @@ function MainLayout() {
                       <NavLink className="btn btn-nav-link" to="/register">
                         <i className="bi bi-person-plus" aria-hidden="true" /> Register
                       </NavLink>
-                      <NavLink className="btn btn-nav-link" to="/admin/login">
-                        <i className="bi bi-shield-lock" aria-hidden="true" /> Admin Login
-                      </NavLink>
                     </>
                   ) : (
                     <>
@@ -72,9 +113,14 @@ function MainLayout() {
                           </NavLink>
                         </>
                       ) : (
-                        <NavLink className="btn btn-nav-link" to="/admin/bookings">
-                          <i className="bi bi-clipboard-check" aria-hidden="true" /> Admin Bookings
-                        </NavLink>
+                        <>
+                          <NavLink className="btn btn-nav-link" to="/admin/bookings">
+                            <i className="bi bi-clipboard-check" aria-hidden="true" /> Admin Bookings
+                          </NavLink>
+                          <NavLink className="btn btn-nav-link" to="/admin/payments">
+                            <i className="bi bi-cash-coin" aria-hidden="true" /> Payments
+                          </NavLink>
+                        </>
                       )}
                       <NavLink
                         className="btn btn-nav-link"
@@ -100,7 +146,13 @@ function MainLayout() {
 
       <footer className="border-top border-subtle py-4">
         <div className="container d-flex flex-column flex-md-row justify-content-between gap-2 text-muted small">
-          <span>EVENTIFY keeps event publishing, ticket booking, and account access in one workspace</span>
+          <span
+            className="admin-reveal-hint"
+            role="presentation"
+            onClick={handleAdminReveal}
+          >
+            EVENTIFY keeps event publishing, ticket booking, and account access in one workspace
+          </span>
           <span>Admins manage platform quality while users manage their own events and bookings</span>
         </div>
       </footer>

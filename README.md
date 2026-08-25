@@ -27,7 +27,7 @@ npm run dev
 1. Copy `backend/.env.example` to `backend/.env`.
 2. Replace `MONGODB_URI` with your MongoDB Atlas connection string.
 3. Set the admin credentials in `backend/.env` to enable admin login.
-4. Add RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET from your Razorpay test account to ackend/.env for paid-ticket checkout.
+4. Paid tickets use the built-in demo gateway and manual UPI review, so no external payment keys are required.
 5. Install dependencies:
 
 ```bash
@@ -40,6 +40,15 @@ npm install
 ```bash
 npm run dev
 ```
+
+## Admin Access
+
+The admin login page is not linked anywhere in the navigation. Reach `/admin/login` with either
+hidden trigger:
+
+- Click the footer text on the left ("EVENTIFY keeps event publishing...") five times within
+  1.5 seconds of each click.
+- Press `Ctrl+Shift+L` (or `Ctrl+Shift+A`, where the browser does not reserve it) on any page.
 
 ## API Endpoints
 
@@ -54,7 +63,11 @@ npm run dev
 - `POST /api/events` creates a new event for an authenticated user.
 - `PUT /api/events/:id` updates an existing event for an authorized user.
 - `GET /api/bookings` returns bookings for the logged-in user.
-- `POST /api/bookings` creates a free-event booking for the logged-in user.`r`n- `POST /api/payments/orders` creates a Razorpay order for a paid booking.`r`n- `POST /api/payments/verify` verifies the Razorpay signature and confirms the paid booking.
+- `POST /api/bookings` creates a free-event booking for the logged-in user.
+- `POST /api/payments/demo` completes a demo-gateway payment and confirms the paid booking.
+- `POST /api/payments/upi` submits a manual UPI transfer reference for admin review.
+- `POST /api/payments/admin/:id/confirm-upi` confirms a reviewed UPI payment and activates the ticket.
+- `GET /api/payments/admin/list` returns the full payment ledger for admins.
 - `POST /api/bookings/:id/cancel` cancels a user booking and restores inventory.
 - `GET /api/bookings/admin/list` returns all bookings for admins.
 - `GET /api/health` returns API and database health information.

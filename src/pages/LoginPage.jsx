@@ -92,10 +92,6 @@ function LoginPage() {
             <Link className="text-primary fw-semibold" to="/register">
               Create an account
             </Link>
-            <span> | </span>
-            <Link className="text-primary fw-semibold" to="/admin/login">
-              Admin login
-            </Link>
           </>
         )
       }}

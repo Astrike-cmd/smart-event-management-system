@@ -6,6 +6,7 @@ import AdminBookingsPage from './pages/AdminBookingsPage';
 import MainLayout from './layouts/MainLayout';
 import AdminDashboardPage from './pages/AdminDashboardPage';
 import AdminLoginPage from './pages/AdminLoginPage';
+import AdminPaymentsPage from './pages/AdminPaymentsPage';
 import BookingsPage from './pages/BookingsPage';
 import EventDetailsPage from './pages/EventDetailsPage';
 import EventsPage from './pages/EventsPage';
@@ -44,6 +45,7 @@ function App() {
         >
           <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
           <Route path="/admin/bookings" element={<AdminBookingsPage />} />
+          <Route path="/admin/payments" element={<AdminPaymentsPage />} />
         </Route>
 
         <Route path="*" element={<NotFoundPage />} />

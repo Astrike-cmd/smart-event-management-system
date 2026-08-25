@@ -155,6 +155,9 @@ function AdminDashboardPage() {
             <Link className="btn btn-outline-primary" to="/events">
               View Public Events Page
             </Link>
+            <Link className="btn btn-outline-primary" to="/admin/payments">
+              Open Payment Ledger
+            </Link>
             <Link className="btn btn-primary" to="/admin/bookings">
               Open Booking Operations
             </Link>

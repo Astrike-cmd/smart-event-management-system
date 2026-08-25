@@ -1,5 +1,7 @@
 import Booking from '../models/Booking.js';
 import Event from '../models/Event.js';
+import Payment from '../models/Payment.js';
+import { markPaymentsPaid, recordPayment } from '../utils/paymentLedger.js';
 
 const generateBookingReference = () => `BKG-${new Date().toISOString().slice(0, 10).replace(/-/g, '')}-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
 const normalizeQuantity = (value) => Number.parseInt(value, 10);
@@ -18,6 +20,10 @@ const createPaymentBooking = async ({ eventId, quantity, userId, paymentProvider
     eventTitle: event.title, eventSlug: event.slug, eventStartDate: event.startDate,
     venue: event.venue, city: event.city, quantity, unitPrice: event.price, totalAmount: event.price * quantity,
     paymentProvider, paymentStatus, bookingStatus, paymentId
+  });
+  await recordPayment({
+    booking, event, userId, provider: paymentProvider,
+    amount: booking.totalAmount, status: paymentStatus, transactionId: paymentId
   });
   return populateBooking(Booking.findById(booking._id));
 };
@@ -67,6 +73,24 @@ export const confirmUpiPayment = async (req, res, next) => {
       res.status(400); next(new Error('This booking is not awaiting a UPI payment review.')); return;
     }
     booking.bookingStatus = 'confirmed'; booking.paymentStatus = 'paid'; await booking.save();
+    await markPaymentsPaid(booking._id, req.user._id);
     res.status(200).json({ success: true, message: 'UPI payment confirmed and ticket activated.', booking: await populateBooking(Booking.findById(booking._id)) });
+  } catch (error) { next(error); }
+};
+
+export const getAdminPayments = async (req, res, next) => {
+  try {
+    const payments = await Payment.find()
+      .populate('user', 'name email role')
+      .populate('event', 'title slug city price')
+      .populate('confirmedBy', 'name email')
+      .sort({ createdAt: -1 })
+      .lean();
+
+    res.status(200).json({
+      success: true,
+      count: payments.length,
+      payments
+    });
   } catch (error) { next(error); }
 };

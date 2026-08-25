@@ -1,6 +1,7 @@
 import Booking from '../models/Booking.js';
 import Event from '../models/Event.js';
 import User from '../models/User.js';
+import { markPaymentsRefunded, recordPayment } from '../utils/paymentLedger.js';
 
 const generateBookingReference = () => {
   const datePart = new Date().toISOString().slice(0, 10).replace(/-/g, '');
@@ -80,6 +81,16 @@ const createBookingForUser = async ({ eventId, quantity, userId }) => {
   }
 
   const booking = await Booking.create(buildBookingPayload(event, userId, quantity));
+
+  await recordPayment({
+    booking,
+    event,
+    userId,
+    provider: booking.paymentProvider,
+    amount: booking.totalAmount,
+    status: booking.paymentStatus === 'not_required' ? 'not_required' : 'paid'
+  });
+
   return getPopulatedBookingById(booking._id);
 };
 
@@ -108,6 +119,7 @@ const cancelExistingBooking = async (booking) => {
   booking.paymentStatus = 'refunded';
   await booking.save();
   await restoreInventoryForBooking(booking);
+  await markPaymentsRefunded(booking._id);
 
   return {
     booking: await getPopulatedBookingById(booking._id)

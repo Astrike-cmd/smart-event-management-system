@@ -5,6 +5,7 @@ import AuthLayout from './layouts/AuthLayout';
 import AdminBookingsPage from './pages/AdminBookingsPage';
 import MainLayout from './layouts/MainLayout';
 import AdminDashboardPage from './pages/AdminDashboardPage';
+import AdminFeedbackPage from './pages/AdminFeedbackPage';
 import AdminLoginPage from './pages/AdminLoginPage';
 import AdminPaymentsPage from './pages/AdminPaymentsPage';
 import BookingsPage from './pages/BookingsPage';
@@ -46,6 +47,7 @@ function App() {
           <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
           <Route path="/admin/bookings" element={<AdminBookingsPage />} />
           <Route path="/admin/payments" element={<AdminPaymentsPage />} />
+          <Route path="/admin/feedback" element={<AdminFeedbackPage />} />
         </Route>
 
         <Route path="*" element={<NotFoundPage />} />

@@ -1767,3 +1767,7 @@ body[data-theme=dark] .dashboard-ticket-icon { background: rgba(37,99,235,.16); 
   user-select: none;
   -webkit-user-select: none;
 }
+
+/* Feedback / review star rating */
+.review-stars { display: inline-flex; gap: .15rem; color: #f59e0b; font-size: .9rem; }
+.review-stars i { line-height: 1; }

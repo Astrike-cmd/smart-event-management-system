@@ -9,6 +9,7 @@ import notFoundMiddleware from './middleware/notFoundMiddleware.js';
 import authRoutes from './routes/authRoutes.js';
 import bookingRoutes from './routes/bookingRoutes.js';
 import eventRoutes from './routes/eventRoutes.js';
+import feedbackRoutes from './routes/feedbackRoutes.js';
 import healthRoutes from './routes/healthRoutes.js';
 import paymentRoutes from './routes/paymentRoutes.js';
 
@@ -42,6 +43,7 @@ app.get('/', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/events', eventRoutes);
+app.use('/api/feedback', feedbackRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/health', healthRoutes);
 

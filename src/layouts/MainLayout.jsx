@@ -120,6 +120,9 @@ function MainLayout() {
                           <NavLink className="btn btn-nav-link" to="/admin/payments">
                             <i className="bi bi-cash-coin" aria-hidden="true" /> Payments
                           </NavLink>
+                          <NavLink className="btn btn-nav-link" to="/admin/feedback">
+                            <i className="bi bi-star" aria-hidden="true" /> Feedback
+                          </NavLink>
                         </>
                       )}
                       <NavLink

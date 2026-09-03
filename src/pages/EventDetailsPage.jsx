@@ -5,6 +5,13 @@ import upiQr from '../assets/eventify-upi-qr.jpeg';
 import useAuth from '../hooks/useAuth';
 import { createBooking } from '../services/bookings';
 import { getEventBySlug } from '../services/events';
+import {
+  createFeedback,
+  deleteFeedback,
+  getEventFeedback,
+  getMyFeedbackForEvent,
+  updateFeedback
+} from '../services/feedback';
 import { completeDemoPayment, submitUpiPayment } from '../services/payments';
 
 const formatDate = (value) => {
@@ -23,6 +30,14 @@ const formatDate = (value) => {
   }).format(date);
 };
 
+const renderStars = (value) => (
+  <span className="review-stars" aria-hidden="true">
+    {[1, 2, 3, 4, 5].map((star) => (
+      <i key={star} className={`bi ${star <= Math.round(value) ? 'bi-star-fill' : 'bi-star'}`} />
+    ))}
+  </span>
+);
+
 function EventDetailsPage() {
   const { slug } = useParams();
   const navigate = useNavigate();
@@ -37,6 +52,13 @@ function EventDetailsPage() {
     type: '',
     message: ''
   });
+  const [reviews, setReviews] = useState({ count: 0, average: 0, feedback: [] });
+  const [myReview, setMyReview] = useState({ eligible: false, feedback: null });
+  const [myReviewLoaded, setMyReviewLoaded] = useState(false);
+  const [reviewForm, setReviewForm] = useState({ rating: '5', comment: '' });
+  const [reviewSubmitting, setReviewSubmitting] = useState(false);
+  const [reviewDeleting, setReviewDeleting] = useState(false);
+  const [reviewAlert, setReviewAlert] = useState({ type: '', message: '' });
 
   useEffect(() => {
     const loadEvent = async () => {
@@ -55,6 +77,149 @@ function EventDetailsPage() {
 
     loadEvent();
   }, [slug]);
+
+  useEffect(() => {
+    if (!event?._id) {
+      return;
+    }
+
+    let cancelled = false;
+
+    const loadReviews = async () => {
+      try {
+        const data = await getEventFeedback(event._id);
+
+        if (!cancelled) {
+          setReviews(data);
+        }
+      } catch (error) {
+        // Reviews are supplementary; ignore load failures silently.
+      }
+    };
+
+    loadReviews();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [event?._id]);
+
+  useEffect(() => {
+    if (!event?._id || !isAuthenticated || isAdmin) {
+      setMyReview({ eligible: false, feedback: null });
+      setMyReviewLoaded(false);
+      return;
+    }
+
+    let cancelled = false;
+    setMyReviewLoaded(false);
+
+    const loadMyReview = async () => {
+      try {
+        const data = await getMyFeedbackForEvent(event._id);
+
+        if (cancelled) {
+          return;
+        }
+
+        setMyReview({ eligible: data.eligible, feedback: data.feedback });
+
+        if (data.feedback) {
+          setReviewForm({ rating: String(data.feedback.rating), comment: data.feedback.comment });
+        }
+      } catch (error) {
+        if (!cancelled) {
+          setMyReview({ eligible: false, feedback: null });
+        }
+      } finally {
+        if (!cancelled) {
+          setMyReviewLoaded(true);
+        }
+      }
+    };
+
+    loadMyReview();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [event?._id, isAuthenticated, isAdmin]);
+
+  const handleReviewSubmit = async (submitEvent) => {
+    submitEvent.preventDefault();
+
+    if (!event) {
+      return;
+    }
+
+    const ratingValue = Number.parseInt(reviewForm.rating, 10);
+
+    if (!ratingValue || ratingValue < 1 || ratingValue > 5) {
+      setReviewAlert({ type: 'danger', message: 'Choose a rating between 1 and 5 stars.' });
+      return;
+    }
+
+    if (!reviewForm.comment.trim()) {
+      setReviewAlert({ type: 'danger', message: 'Add a short comment with your review.' });
+      return;
+    }
+
+    setReviewSubmitting(true);
+    setReviewAlert({ type: '', message: '' });
+
+    try {
+      const payload = {
+        eventId: event._id,
+        rating: ratingValue,
+        comment: reviewForm.comment.trim()
+      };
+
+      const savedFeedback = myReview.feedback
+        ? await updateFeedback(myReview.feedback._id, payload)
+        : await createFeedback(payload);
+
+      setMyReview({ eligible: true, feedback: savedFeedback });
+      setReviews(await getEventFeedback(event._id));
+      setReviewAlert({ type: 'success', message: 'Thanks! Your review has been saved.' });
+    } catch (error) {
+      setReviewAlert({
+        type: 'danger',
+        message: error.response?.data?.message || 'Unable to save your review right now.'
+      });
+    } finally {
+      setReviewSubmitting(false);
+    }
+  };
+
+  const handleReviewDelete = async () => {
+    if (!myReview.feedback) {
+      return;
+    }
+
+    const confirmed = window.confirm('Remove your review for this event?');
+
+    if (!confirmed) {
+      return;
+    }
+
+    setReviewDeleting(true);
+    setReviewAlert({ type: '', message: '' });
+
+    try {
+      await deleteFeedback(myReview.feedback._id);
+      setMyReview({ eligible: true, feedback: null });
+      setReviewForm({ rating: '5', comment: '' });
+      setReviews(await getEventFeedback(event._id));
+      setReviewAlert({ type: 'success', message: 'Your review was removed.' });
+    } catch (error) {
+      setReviewAlert({
+        type: 'danger',
+        message: error.response?.data?.message || 'Unable to remove your review right now.'
+      });
+    } finally {
+      setReviewDeleting(false);
+    }
+  };
 
   const isSoldOut = useMemo(
     () => !event || event.status === 'sold_out' || event.availableTickets === 0,
@@ -152,6 +317,7 @@ function EventDetailsPage() {
       ) : null}
 
       {!loading && event ? (
+        <>
         <div className="row g-4">
           <div className="col-lg-8">
             <div className="glass-panel p-4 p-md-5 h-100">
@@ -320,6 +486,123 @@ function EventDetailsPage() {
             </div>
           </div>
         </div>
+
+        <div className="glass-panel p-4 p-md-5 mt-4">
+          <div className="d-flex justify-content-between align-items-end gap-3 flex-wrap mb-4">
+            <div>
+              <span className="section-eyebrow">Attendee Reviews</span>
+              <h2 className="h3 mb-0">
+                {reviews.count > 0 ? `${reviews.average.toFixed(1)} / 5` : 'No reviews yet'}
+              </h2>
+            </div>
+            {reviews.count > 0 ? (
+              <div className="text-end">
+                {renderStars(reviews.average)}
+                <span className="text-muted small d-block">
+                  {reviews.count} review{reviews.count === 1 ? '' : 's'}
+                </span>
+              </div>
+            ) : null}
+          </div>
+
+          {!isAuthenticated ? (
+            <div className="dashboard-mini-card p-4 mb-4">
+              <p className="text-muted mb-2">Sign in with a confirmed booking to leave a review.</p>
+              <Link className="btn btn-outline-primary" to="/login">
+                Sign In
+              </Link>
+            </div>
+          ) : null}
+
+          {isAuthenticated && !isAdmin && myReviewLoaded ? (
+            <div className="dashboard-mini-card p-4 mb-4">
+              {myReview.eligible ? (
+                <>
+                  <h3 className="h6 mb-3">{myReview.feedback ? 'Edit your review' : 'Leave a review'}</h3>
+
+                  {reviewAlert.message ? (
+                    <div className={`alert alert-${reviewAlert.type || 'danger'}`} role="alert">
+                      {reviewAlert.message}
+                    </div>
+                  ) : null}
+
+                  <form onSubmit={handleReviewSubmit}>
+                    <label className="form-label" htmlFor="reviewRating">
+                      Rating
+                    </label>
+                    <select
+                      id="reviewRating"
+                      className="form-select auth-input mb-3"
+                      value={reviewForm.rating}
+                      onChange={(changeEvent) =>
+                        setReviewForm((current) => ({ ...current, rating: changeEvent.target.value }))
+                      }
+                    >
+                      {[5, 4, 3, 2, 1].map((star) => (
+                        <option key={star} value={star}>
+                          {star} Star{star === 1 ? '' : 's'}
+                        </option>
+                      ))}
+                    </select>
+
+                    <label className="form-label" htmlFor="reviewComment">
+                      Comment
+                    </label>
+                    <textarea
+                      id="reviewComment"
+                      className="form-control auth-input mb-3"
+                      rows={3}
+                      maxLength={800}
+                      value={reviewForm.comment}
+                      onChange={(changeEvent) =>
+                        setReviewForm((current) => ({ ...current, comment: changeEvent.target.value }))
+                      }
+                      placeholder="Share how the event went for you..."
+                    />
+
+                    <div className="d-flex gap-2 flex-wrap">
+                      <button className="btn btn-primary" type="submit" disabled={reviewSubmitting}>
+                        {reviewSubmitting ? 'Saving...' : myReview.feedback ? 'Update Review' : 'Submit Review'}
+                      </button>
+                      {myReview.feedback ? (
+                        <button
+                          type="button"
+                          className="btn btn-outline-danger"
+                          onClick={handleReviewDelete}
+                          disabled={reviewDeleting}
+                        >
+                          {reviewDeleting ? 'Removing...' : 'Remove Review'}
+                        </button>
+                      ) : null}
+                    </div>
+                  </form>
+                </>
+              ) : (
+                <p className="text-muted mb-0">
+                  Book this event and have a confirmed booking to leave a review.
+                </p>
+              )}
+            </div>
+          ) : null}
+
+          {reviews.feedback.length > 0 ? (
+            <div className="d-grid gap-3">
+              {reviews.feedback.map((item) => (
+                <div className="dashboard-mini-card p-3" key={item._id}>
+                  <div className="d-flex justify-content-between align-items-start gap-3 flex-wrap mb-2">
+                    <strong>{item.user?.name || 'Eventify Attendee'}</strong>
+                    {renderStars(item.rating)}
+                  </div>
+                  <p className="text-muted small mb-1">{item.comment}</p>
+                  <span className="text-muted small">{formatDate(item.createdAt)}</span>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-muted mb-0">Be the first to review this event.</p>
+          )}
+        </div>
+        </>
       ) : null}
     </section>
   );

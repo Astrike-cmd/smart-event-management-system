@@ -1241,29 +1241,25 @@ body[data-theme='dark'] .health-status-pill {
 .chip-scroll,
 .app-nav-scroll {
   display: flex;
-  gap: 0.75rem;
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  scrollbar-width: thin;
+  gap: 0.5rem 0.75rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
 
 .chip-scroll {
   padding-bottom: 0.35rem;
 }
 
-.chip-scroll::-webkit-scrollbar,
-.app-nav-scroll::-webkit-scrollbar {
+.chip-scroll::-webkit-scrollbar {
   height: 8px;
 }
 
-.chip-scroll::-webkit-scrollbar-thumb,
-.app-nav-scroll::-webkit-scrollbar-thumb {
+.chip-scroll::-webkit-scrollbar-thumb {
   border-radius: 999px;
   background: rgba(17, 17, 17, 0.14);
 }
 
-body[data-theme='dark'] .chip-scroll::-webkit-scrollbar-thumb,
-body[data-theme='dark'] .app-nav-scroll::-webkit-scrollbar-thumb {
+body[data-theme='dark'] .chip-scroll::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.14);
 }
 

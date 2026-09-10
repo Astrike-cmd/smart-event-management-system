@@ -1,0 +1,741 @@
+{
+  "_type": "Project",
+  "_id": "RVZGEAAAAQA=",
+  "name": "Untitled",
+  "ownedElements": [
+    {
+      "_type": "UMLModel",
+      "_id": "RVZGEAAAAgA=",
+      "_parent": {
+        "$ref": "RVZGEAAAAQA="
+      },
+      "name": "Model",
+      "ownedElements": [
+        {
+          "_type": "UMLClassDiagram",
+          "_id": "RVZGEAAABQA=",
+          "_parent": {
+            "$ref": "RVZGEAAAAgA="
+          },
+          "name": "Main",
+          "defaultDiagram": true
+        }
+      ]
+    },
+    {
+      "_type": "DFDDataFlowModel",
+      "_id": "RVZGEAAAAwA=",
+      "_parent": {
+        "$ref": "RVZGEAAAAQA="
+      },
+      "name": "DataFlowModel1",
+      "ownedElements": [
+        {
+          "_type": "DFDDiagram",
+          "_id": "RVZGEAAABAA=",
+          "_parent": {
+            "$ref": "RVZGEAAAAwA="
+          },
+          "name": "DFDDiagram1",
+          "ownedViews": [
+            {
+              "_type": "DFDExternalEntityView",
+              "_id": "RVZGEAAABwA=",
+              "_parent": {
+                "$ref": "RVZGEAAABAA="
+              },
+              "model": {
+                "$ref": "RVZGEAAABgA="
+              },
+              "subViews": [
+                {
+                  "_type": "LabelView",
+                  "_id": "RVZGEAAACAA=",
+                  "_parent": {
+                    "$ref": "RVZGEAAABwA="
+                  },
+                  "font": "Arial;13;0",
+                  "parentStyle": true,
+                  "left": 90,
+                  "top": 305,
+                  "width": 110,
+                  "height": 13
+                },
+                {
+                  "_type": "LabelView",
+                  "_id": "RVZGEAAACQA=",
+                  "_parent": {
+                    "$ref": "RVZGEAAABwA="
+                  },
+                  "font": "Arial;13;0",
+                  "parentStyle": true,
+                  "left": 90,
+                  "top": 310,
+                  "width": 110,
+                  "height": 13,
+                  "text": "User",
+                  "wordWrap": true
+                },
+                {
+                  "_type": "LabelView",
+                  "_id": "RVZGEAAACgA=",
+                  "_parent": {
+                    "$ref": "RVZGEAAABwA="
+                  },
+                  "font": "Arial;13;0",
+                  "parentStyle": true,
+                  "left": 90,
+                  "top": 280,
+                  "width": 110,
+                  "height": 13
+                }
+              ],
+              "font": "Arial;13;0",
+              "parentStyle": false,
+              "left": 80,
+              "top": 300,
+              "width": 130,
+              "height": 40,
+              "nameLabel": {
+                "$ref": "RVZGEAAACQA="
+              }
+            },
+            {
+              "_type": "DFDExternalEntityView",
+              "_id": "RVZGEAAADAA=",
+              "_parent": {
+                "$ref": "RVZGEAAABAA="
+              },
+              "model": {
+                "$ref": "RVZGEAAACwA="
+              },
+              "subViews": [
+                {
+                  "_type": "LabelView",
+                  "_id": "RVZGEAAADQA=",
+                  "_parent": {
+                    "$ref": "RVZGEAAADAA="
+                  },
+                  "font": "Arial;13;0",
+                  "parentStyle": true,
+                  "left": 790,
+                  "top": 305,
+                  "width": 110,
+                  "height": 13
+                },
+                {
+                  "_type": "LabelView",
+                  "_id": "RVZGEAAADgA=",
+                  "_parent": {
+                    "$ref": "RVZGEAAADAA="
+                  },
+                  "font": "Arial;13;0",
+                  "parentStyle": true,
+                  "left": 790,
+                  "top": 310,
+                  "width": 110,
+                  "height": 13,
+                  "text": "Admin",
+                  "wordWrap": true
+                },
+                {
+                  "_type": "LabelView",
+                  "_id": "RVZGEAAADwA=",
+                  "_parent": {
+                    "$ref": "RVZGEAAADAA="
+                  },
+                  "font": "Arial;13;0",
+                  "parentStyle": true,
+                  "left": 790,
+                  "top": 280,
+                  "width": 110,
+                  "height": 13
+                }
+              ],
+              "font": "Arial;13;0",
+              "parentStyle": false,
+              "left": 780,
+              "top": 300,
+              "width": 130,
+              "height": 40,
+              "nameLabel": {
+                "$ref": "RVZGEAAADgA="
+              }
+            },
+            {
+              "_type": "DFDProcessView",
+              "_id": "RVZGEAAAEQA=",
+              "_parent": {
+                "$ref": "RVZGEAAABAA="
+              },
+              "model": {
+                "$ref": "RVZGEAAAEAA="
+              },
+              "subViews": [
+                {
+                  "_type": "LabelView",
+                  "_id": "RVZGEAAAEgA=",
+                  "_parent": {
+                    "$ref": "RVZGEAAAEQA="
+                  },
+                  "font": "Arial;13;0",
+                  "parentStyle": true,
+                  "left": 410,
+                  "top": 285,
+                  "width": 180,
+                  "height": 13
+                },
+                {
+                  "_type": "LabelView",
+                  "_id": "RVZGEAAAEwA=",
+                  "_parent": {
+                    "$ref": "RVZGEAAAEQA="
+                  },
+                  "font": "Arial;13;0",
+                  "parentStyle": true,
+                  "left": 410,
+                  "top": 290,
+                  "width": 180,
+                  "height": 13,
+                  "text": "0\nSmart Event Management and\nTicket Booking System",
+                  "wordWrap": true
+                },
+                {
+                  "_type": "LabelView",
+                  "_id": "RVZGEAAAFAA=",
+                  "_parent": {
+                    "$ref": "RVZGEAAAEQA="
+                  },
+                  "font": "Arial;13;0",
+                  "parentStyle": true,
+                  "left": 410,
+                  "top": 260,
+                  "width": 180,
+                  "height": 13
+                }
+              ],
+              "font": "Arial;13;0",
+              "parentStyle": false,
+              "left": 400,
+              "top": 280,
+              "width": 200,
+              "height": 80,
+              "nameLabel": {
+                "$ref": "RVZGEAAAEwA="
+              }
+            },
+            {
+              "_type": "DFDDataFlowView",
+              "_id": "RVZGEAAAFgA=",
+              "_parent": {
+                "$ref": "RVZGEAAABAA="
+              },
+              "model": {
+                "$ref": "RVZGEAAAFQA="
+              },
+              "subViews": [
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "RVZGEAAAFwA=",
+                  "_parent": {
+                    "$ref": "RVZGEAAAFgA="
+                  },
+                  "font": "Arial;13;0",
+                  "parentStyle": true,
+                  "edgePosition": 1,
+                  "left": 400,
+                  "top": 292,
+                  "width": 60,
+                  "height": 13,
+                  "alpha": 1.57,
+                  "distance": 15
+                },
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "RVZGEAAAGAA=",
+                  "_parent": {
+                    "$ref": "RVZGEAAAFgA="
+                  },
+                  "font": "Arial;13;0",
+                  "parentStyle": true,
+                  "edgePosition": 1,
+                  "left": 400,
+                  "top": 305,
+                  "width": 60,
+                  "height": 13,
+                  "alpha": 1.57,
+                  "distance": 15,
+                  "text": "Registration / Login Credentials"
+                },
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "RVZGEAAAGQA=",
+                  "_parent": {
+                    "$ref": "RVZGEAAAFgA="
+                  },
+                  "font": "Arial;13;0",
+                  "parentStyle": true,
+                  "edgePosition": 1,
+                  "left": 400,
+                  "top": 318,
+                  "width": 60,
+                  "height": 13,
+                  "alpha": 1.57,
+                  "distance": 15
+                }
+              ],
+              "font": "Arial;13;0",
+              "parentStyle": false,
+              "tail": {
+                "$ref": "RVZGEAAABwA="
+              },
+              "head": {
+                "$ref": "RVZGEAAAEQA="
+              },
+              "lineStyle": 1,
+              "points": [
+                [
+                  210,
+                  315
+                ],
+                [
+                  400,
+                  305
+                ]
+              ],
+              "nameLabel": {
+                "$ref": "RVZGEAAAGAA="
+              }
+            },
+            {
+              "_type": "DFDDataFlowView",
+              "_id": "RVZGEAAAGwA=",
+              "_parent": {
+                "$ref": "RVZGEAAABAA="
+              },
+              "model": {
+                "$ref": "RVZGEAAAGgA="
+              },
+              "subViews": [
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "RVZGEAAAHAA=",
+                  "_parent": {
+                    "$ref": "RVZGEAAAGwA="
+                  },
+                  "font": "Arial;13;0",
+                  "parentStyle": true,
+                  "edgePosition": 1,
+                  "left": 210,
+                  "top": 317,
+                  "width": 60,
+                  "height": 13,
+                  "alpha": 1.57,
+                  "distance": 15
+                },
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "RVZGEAAAHQA=",
+                  "_parent": {
+                    "$ref": "RVZGEAAAGwA="
+                  },
+                  "font": "Arial;13;0",
+                  "parentStyle": true,
+                  "edgePosition": 1,
+                  "left": 210,
+                  "top": 330,
+                  "width": 60,
+                  "height": 13,
+                  "alpha": 1.57,
+                  "distance": 15,
+                  "text": "Event Listings & Booking Confirmation"
+                },
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "RVZGEAAAHgA=",
+                  "_parent": {
+                    "$ref": "RVZGEAAAGwA="
+                  },
+                  "font": "Arial;13;0",
+                  "parentStyle": true,
+                  "edgePosition": 1,
+                  "left": 210,
+                  "top": 343,
+                  "width": 60,
+                  "height": 13,
+                  "alpha": 1.57,
+                  "distance": 15
+                }
+              ],
+              "font": "Arial;13;0",
+              "parentStyle": false,
+              "tail": {
+                "$ref": "RVZGEAAAEQA="
+              },
+              "head": {
+                "$ref": "RVZGEAAABwA="
+              },
+              "lineStyle": 1,
+              "points": [
+                [
+                  400,
+                  335
+                ],
+                [
+                  210,
+                  330
+                ]
+              ],
+              "nameLabel": {
+                "$ref": "RVZGEAAAHQA="
+              }
+            },
+            {
+              "_type": "DFDDataFlowView",
+              "_id": "RVZGEAAAIAA=",
+              "_parent": {
+                "$ref": "RVZGEAAABAA="
+              },
+              "model": {
+                "$ref": "RVZGEAAAHwA="
+              },
+              "subViews": [
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "RVZGEAAAIQA=",
+                  "_parent": {
+                    "$ref": "RVZGEAAAIAA="
+                  },
+                  "font": "Arial;13;0",
+                  "parentStyle": true,
+                  "edgePosition": 1,
+                  "left": 400,
+                  "top": 337,
+                  "width": 60,
+                  "height": 13,
+                  "alpha": 1.57,
+                  "distance": 15
+                },
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "RVZGEAAAIgA=",
+                  "_parent": {
+                    "$ref": "RVZGEAAAIAA="
+                  },
+                  "font": "Arial;13;0",
+                  "parentStyle": true,
+                  "edgePosition": 1,
+                  "left": 400,
+                  "top": 350,
+                  "width": 60,
+                  "height": 13,
+                  "alpha": 1.57,
+                  "distance": 15,
+                  "text": "Booking & Payment Details"
+                },
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "RVZGEAAAIwA=",
+                  "_parent": {
+                    "$ref": "RVZGEAAAIAA="
+                  },
+                  "font": "Arial;13;0",
+                  "parentStyle": true,
+                  "edgePosition": 1,
+                  "left": 400,
+                  "top": 363,
+                  "width": 60,
+                  "height": 13,
+                  "alpha": 1.57,
+                  "distance": 15
+                }
+              ],
+              "font": "Arial;13;0",
+              "parentStyle": false,
+              "tail": {
+                "$ref": "RVZGEAAABwA="
+              },
+              "head": {
+                "$ref": "RVZGEAAAEQA="
+              },
+              "lineStyle": 1,
+              "points": [
+                [
+                  210,
+                  345
+                ],
+                [
+                  400,
+                  350
+                ]
+              ],
+              "nameLabel": {
+                "$ref": "RVZGEAAAIgA="
+              }
+            },
+            {
+              "_type": "DFDDataFlowView",
+              "_id": "RVZGEAAAJQA=",
+              "_parent": {
+                "$ref": "RVZGEAAABAA="
+              },
+              "model": {
+                "$ref": "RVZGEAAAJAA="
+              },
+              "subViews": [
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "RVZGEAAAJgA=",
+                  "_parent": {
+                    "$ref": "RVZGEAAAJQA="
+                  },
+                  "font": "Arial;13;0",
+                  "parentStyle": true,
+                  "edgePosition": 1,
+                  "left": 600,
+                  "top": 292,
+                  "width": 60,
+                  "height": 13,
+                  "alpha": 1.57,
+                  "distance": 15
+                },
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "RVZGEAAAJwA=",
+                  "_parent": {
+                    "$ref": "RVZGEAAAJQA="
+                  },
+                  "font": "Arial;13;0",
+                  "parentStyle": true,
+                  "edgePosition": 1,
+                  "left": 600,
+                  "top": 305,
+                  "width": 60,
+                  "height": 13,
+                  "alpha": 1.57,
+                  "distance": 15,
+                  "text": "Event & Moderation Commands"
+                },
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "RVZGEAAAKAA=",
+                  "_parent": {
+                    "$ref": "RVZGEAAAJQA="
+                  },
+                  "font": "Arial;13;0",
+                  "parentStyle": true,
+                  "edgePosition": 1,
+                  "left": 600,
+                  "top": 318,
+                  "width": 60,
+                  "height": 13,
+                  "alpha": 1.57,
+                  "distance": 15
+                }
+              ],
+              "font": "Arial;13;0",
+              "parentStyle": false,
+              "tail": {
+                "$ref": "RVZGEAAADAA="
+              },
+              "head": {
+                "$ref": "RVZGEAAAEQA="
+              },
+              "lineStyle": 1,
+              "points": [
+                [
+                  780,
+                  315
+                ],
+                [
+                  600,
+                  305
+                ]
+              ],
+              "nameLabel": {
+                "$ref": "RVZGEAAAJwA="
+              }
+            },
+            {
+              "_type": "DFDDataFlowView",
+              "_id": "RVZGEAAAKgA=",
+              "_parent": {
+                "$ref": "RVZGEAAABAA="
+              },
+              "model": {
+                "$ref": "RVZGEAAAKQA="
+              },
+              "subViews": [
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "RVZGEAAAKwA=",
+                  "_parent": {
+                    "$ref": "RVZGEAAAKgA="
+                  },
+                  "font": "Arial;13;0",
+                  "parentStyle": true,
+                  "edgePosition": 1,
+                  "left": 780,
+                  "top": 317,
+                  "width": 60,
+                  "height": 13,
+                  "alpha": 1.57,
+                  "distance": 15
+                },
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "RVZGEAAALAA=",
+                  "_parent": {
+                    "$ref": "RVZGEAAAKgA="
+                  },
+                  "font": "Arial;13;0",
+                  "parentStyle": true,
+                  "edgePosition": 1,
+                  "left": 780,
+                  "top": 330,
+                  "width": 60,
+                  "height": 13,
+                  "alpha": 1.57,
+                  "distance": 15,
+                  "text": "Booking, Payment & User Reports"
+                },
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "RVZGEAAALQA=",
+                  "_parent": {
+                    "$ref": "RVZGEAAAKgA="
+                  },
+                  "font": "Arial;13;0",
+                  "parentStyle": true,
+                  "edgePosition": 1,
+                  "left": 780,
+                  "top": 343,
+                  "width": 60,
+                  "height": 13,
+                  "alpha": 1.57,
+                  "distance": 15
+                }
+              ],
+              "font": "Arial;13;0",
+              "parentStyle": false,
+              "tail": {
+                "$ref": "RVZGEAAAEQA="
+              },
+              "head": {
+                "$ref": "RVZGEAAADAA="
+              },
+              "lineStyle": 1,
+              "points": [
+                [
+                  600,
+                  335
+                ],
+                [
+                  780,
+                  330
+                ]
+              ],
+              "nameLabel": {
+                "$ref": "RVZGEAAALAA="
+              }
+            }
+          ]
+        },
+        {
+          "_type": "DFDExternalEntity",
+          "_id": "RVZGEAAABgA=",
+          "_parent": {
+            "$ref": "RVZGEAAAAwA="
+          },
+          "name": "User"
+        },
+        {
+          "_type": "DFDExternalEntity",
+          "_id": "RVZGEAAACwA=",
+          "_parent": {
+            "$ref": "RVZGEAAAAwA="
+          },
+          "name": "Admin"
+        },
+        {
+          "_type": "DFDProcess",
+          "_id": "RVZGEAAAEAA=",
+          "_parent": {
+            "$ref": "RVZGEAAAAwA="
+          },
+          "name": "0\nSmart Event Management and\nTicket Booking System"
+        },
+        {
+          "_type": "DFDDataFlow",
+          "_id": "RVZGEAAAFQA=",
+          "_parent": {
+            "$ref": "RVZGEAAAAwA="
+          },
+          "name": "Registration / Login Credentials",
+          "source": {
+            "$ref": "RVZGEAAABgA="
+          },
+          "target": {
+            "$ref": "RVZGEAAAEAA="
+          }
+        },
+        {
+          "_type": "DFDDataFlow",
+          "_id": "RVZGEAAAGgA=",
+          "_parent": {
+            "$ref": "RVZGEAAAAwA="
+          },
+          "name": "Event Listings & Booking Confirmation",
+          "source": {
+            "$ref": "RVZGEAAAEAA="
+          },
+          "target": {
+            "$ref": "RVZGEAAABgA="
+          }
+        },
+        {
+          "_type": "DFDDataFlow",
+          "_id": "RVZGEAAAHwA=",
+          "_parent": {
+            "$ref": "RVZGEAAAAwA="
+          },
+          "name": "Booking & Payment Details",
+          "source": {
+            "$ref": "RVZGEAAABgA="
+          },
+          "target": {
+            "$ref": "RVZGEAAAEAA="
+          }
+        },
+        {
+          "_type": "DFDDataFlow",
+          "_id": "RVZGEAAAJAA=",
+          "_parent": {
+            "$ref": "RVZGEAAAAwA="
+          },
+          "name": "Event & Moderation Commands",
+          "source": {
+            "$ref": "RVZGEAAACwA="
+          },
+          "target": {
+            "$ref": "RVZGEAAAEAA="
+          }
+        },
+        {
+          "_type": "DFDDataFlow",
+          "_id": "RVZGEAAAKQA=",
+          "_parent": {
+            "$ref": "RVZGEAAAAwA="
+          },
+          "name": "Booking, Payment & User Reports",
+          "source": {
+            "$ref": "RVZGEAAAEAA="
+          },
+          "target": {
+            "$ref": "RVZGEAAACwA="
+          }
+        }
+      ]
+    }
+  ]
+}

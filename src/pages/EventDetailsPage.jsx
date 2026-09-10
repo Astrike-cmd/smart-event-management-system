@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import EventImage from '../components/EventImage';
 import upiQr from '../assets/eventify-upi-qr.jpeg';
 import useAuth from '../hooks/useAuth';
@@ -41,7 +41,8 @@ const renderStars = (value) => (
 function EventDetailsPage() {
   const { slug } = useParams();
   const navigate = useNavigate();
-  const { isAuthenticated, isAdmin } = useAuth();
+  const { hash } = useLocation();
+  const { isAuthenticated, isAdmin, user } = useAuth();
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -59,23 +60,38 @@ function EventDetailsPage() {
   const [reviewSubmitting, setReviewSubmitting] = useState(false);
   const [reviewDeleting, setReviewDeleting] = useState(false);
   const [reviewAlert, setReviewAlert] = useState({ type: '', message: '' });
+  const [reviewsError, setReviewsError] = useState('');
+  const [eligibilityError, setEligibilityError] = useState('');
+  const [reviewRetry, setReviewRetry] = useState(0);
 
   useEffect(() => {
+    if (!loading && event && hash === '#reviews') {
+      document.getElementById('reviews')?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [loading, event, hash]);
+
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+    setEvent(null);
+    setFeedback({ type: '', message: '' });
     const loadEvent = async () => {
       try {
         const nextEvent = await getEventBySlug(slug);
-        setEvent(nextEvent);
+        if (!cancelled) setEvent(nextEvent);
       } catch (error) {
+        if (cancelled) return;
         setFeedback({
           type: 'danger',
           message: error.response?.data?.message || 'Unable to load this event right now.'
         });
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     };
 
     loadEvent();
+    return () => { cancelled = true; };
   }, [slug]);
 
   useEffect(() => {
@@ -84,6 +100,8 @@ function EventDetailsPage() {
     }
 
     let cancelled = false;
+    setReviews({ count: 0, average: 0, feedback: [] });
+    setReviewsError('');
 
     const loadReviews = async () => {
       try {
@@ -93,7 +111,7 @@ function EventDetailsPage() {
           setReviews(data);
         }
       } catch (error) {
-        // Reviews are supplementary; ignore load failures silently.
+        if (!cancelled) setReviewsError('Unable to load reviews. Please try again.');
       }
     };
 
@@ -102,9 +120,12 @@ function EventDetailsPage() {
     return () => {
       cancelled = true;
     };
-  }, [event?._id]);
+  }, [event?._id, reviewRetry]);
 
   useEffect(() => {
+    setReviewForm({ rating: '5', comment: '' });
+    setReviewAlert({ type: '', message: '' });
+    setEligibilityError('');
     if (!event?._id || !isAuthenticated || isAdmin) {
       setMyReview({ eligible: false, feedback: null });
       setMyReviewLoaded(false);
@@ -130,6 +151,7 @@ function EventDetailsPage() {
       } catch (error) {
         if (!cancelled) {
           setMyReview({ eligible: false, feedback: null });
+          setEligibilityError('Unable to check your review eligibility. Please try again.');
         }
       } finally {
         if (!cancelled) {
@@ -143,7 +165,16 @@ function EventDetailsPage() {
     return () => {
       cancelled = true;
     };
-  }, [event?._id, isAuthenticated, isAdmin]);
+  }, [event?._id, isAuthenticated, isAdmin, user?._id, reviewRetry]);
+
+  const refreshReviews = async () => {
+    try {
+      setReviews(await getEventFeedback(event._id));
+      setReviewsError('');
+    } catch {
+      setReviewsError('Your change was saved, but reviews could not be refreshed. Please try again.');
+    }
+  };
 
   const handleReviewSubmit = async (submitEvent) => {
     submitEvent.preventDefault();
@@ -178,8 +209,8 @@ function EventDetailsPage() {
         ? await updateFeedback(myReview.feedback._id, payload)
         : await createFeedback(payload);
 
-      setMyReview({ eligible: true, feedback: savedFeedback });
-      setReviews(await getEventFeedback(event._id));
+      setMyReview((current) => ({ ...current, feedback: savedFeedback }));
+      await refreshReviews();
       setReviewAlert({ type: 'success', message: 'Thanks! Your review has been saved.' });
     } catch (error) {
       setReviewAlert({
@@ -207,9 +238,9 @@ function EventDetailsPage() {
 
     try {
       await deleteFeedback(myReview.feedback._id);
-      setMyReview({ eligible: true, feedback: null });
+      setMyReview((current) => ({ ...current, feedback: null }));
       setReviewForm({ rating: '5', comment: '' });
-      setReviews(await getEventFeedback(event._id));
+      await refreshReviews();
       setReviewAlert({ type: 'success', message: 'Your review was removed.' });
     } catch (error) {
       setReviewAlert({
@@ -487,7 +518,13 @@ function EventDetailsPage() {
           </div>
         </div>
 
-        <div className="glass-panel p-4 p-md-5 mt-4">
+        <div id="reviews" className="glass-panel p-4 p-md-5 mt-4">
+          {reviewsError || eligibilityError ? (
+            <div className="alert alert-warning" role="alert">
+              {reviewsError || eligibilityError}
+              <button type="button" className="btn btn-link" onClick={() => setReviewRetry((value) => value + 1)}>Try Again</button>
+            </div>
+          ) : null}
           <div className="d-flex justify-content-between align-items-end gap-3 flex-wrap mb-4">
             <div>
               <span className="section-eyebrow">Attendee Reviews</span>
@@ -516,7 +553,7 @@ function EventDetailsPage() {
 
           {isAuthenticated && !isAdmin && myReviewLoaded ? (
             <div className="dashboard-mini-card p-4 mb-4">
-              {myReview.eligible ? (
+              {myReview.eligible || myReview.feedback ? (
                 <>
                   <h3 className="h6 mb-3">{myReview.feedback ? 'Edit your review' : 'Leave a review'}</h3>
 
@@ -561,7 +598,7 @@ function EventDetailsPage() {
                     />
 
                     <div className="d-flex gap-2 flex-wrap">
-                      <button className="btn btn-primary" type="submit" disabled={reviewSubmitting}>
+                      <button className="btn btn-primary" type="submit" disabled={reviewSubmitting || reviewDeleting}>
                         {reviewSubmitting ? 'Saving...' : myReview.feedback ? 'Update Review' : 'Submit Review'}
                       </button>
                       {myReview.feedback ? (
@@ -569,7 +606,7 @@ function EventDetailsPage() {
                           type="button"
                           className="btn btn-outline-danger"
                           onClick={handleReviewDelete}
-                          disabled={reviewDeleting}
+                          disabled={reviewDeleting || reviewSubmitting}
                         >
                           {reviewDeleting ? 'Removing...' : 'Remove Review'}
                         </button>
@@ -579,7 +616,7 @@ function EventDetailsPage() {
                 </>
               ) : (
                 <p className="text-muted mb-0">
-                  Book this event and have a confirmed booking to leave a review.
+                  {eligibilityError ? 'Review eligibility is currently unavailable.' : 'Book this event and have a confirmed booking to leave a review.'}
                 </p>
               )}
             </div>

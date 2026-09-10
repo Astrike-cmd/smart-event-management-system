@@ -2,7 +2,7 @@ import Booking from '../models/Booking.js';
 import Event from '../models/Event.js';
 import Feedback from '../models/Feedback.js';
 
-const populateFeedbackQuery = (query) => query.populate('user', 'name email');
+const populateFeedbackQuery = (query) => query.populate('user', 'name');
 
 const populateAdminFeedbackQuery = (query) =>
   query
@@ -12,14 +12,15 @@ const populateAdminFeedbackQuery = (query) =>
 const getPopulatedFeedbackById = async (feedbackId) =>
   populateFeedbackQuery(Feedback.findById(feedbackId)).lean();
 
-const normalizeRating = (value) => Number.parseInt(value, 10);
+const normalizeRating = (value) =>
+  typeof value === 'number' || typeof value === 'string' ? Number(value) : NaN;
 
 const validateRatingAndComment = (rating, comment) => {
   if (!Number.isInteger(rating) || rating < 1 || rating > 5) {
     return 'Rating must be a whole number between 1 and 5.';
   }
 
-  if (!comment || !comment.trim()) {
+  if (typeof comment !== 'string' || !comment.trim()) {
     return 'Review comment is required.';
   }
 

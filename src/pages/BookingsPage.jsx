@@ -260,8 +260,13 @@ function BookingsPage() {
 
                   <div className="d-flex gap-2 flex-wrap mt-3">
                     {booking.event ? (
-                      <Link className="btn btn-outline-primary" to={`/events/${booking.eventSlug}`}>
+                      <Link className="btn btn-outline-primary" to={`/events/${booking.event.slug || booking.eventSlug}`}>
                         View Event
+                      </Link>
+                    ) : null}
+                    {booking.event && booking.bookingStatus === 'confirmed' ? (
+                      <Link className="btn btn-primary" to={`/events/${booking.event.slug || booking.eventSlug}#reviews`}>
+                        Leave Feedback
                       </Link>
                     ) : null}
                     {booking.bookingStatus === 'confirmed' ? (

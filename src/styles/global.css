@@ -374,7 +374,22 @@ body[data-theme='dark'] .btn-nav-link.active {
 .hero-actions {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 0.75rem;
+}
+
+/* Keep action buttons at their natural height even when the group is a
+   stretched flex child of a taller section header. */
+.section-action-group > .btn,
+.hero-actions > .btn,
+.cta-actions > .btn {
+  align-self: center;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  white-space: nowrap;
 }
 
 .hero-section {
@@ -1495,6 +1510,7 @@ body[data-theme='dark'] .alert {
   .hero-actions .btn,
   .section-action-group .btn {
     width: 100%;
+    align-self: stretch;
   }
 
   .dashboard-meta-row {
@@ -1658,7 +1674,7 @@ body[data-theme=dark] .auth-layout .auth-feature-item { background: rgba(37,99,2
   .app-main section.container.py-5 > .glass-panel:first-child { padding: 1.25rem !important; }
   .app-main section.container.py-5 > .glass-panel:first-child > .d-flex { align-items: flex-start !important; }
   .app-main section.container.py-5 > .glass-panel:first-child .section-action-group,
-  .app-main section.container.py-5 > .glass-panel:first-child .section-action-group .btn { width: 100%; }
+  .app-main section.container.py-5 > .glass-panel:first-child .section-action-group .btn { width: 100%; align-self: stretch; }
   .dashboard-stat-card { min-height: 108px; }
 }
 

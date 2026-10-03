@@ -94,7 +94,7 @@ function AdminPaymentsPage() {
   return (
     <div className="container py-5">
       <div className="glass-panel p-4 p-md-5 mb-4">
-        <div className="d-flex flex-column flex-lg-row justify-content-between gap-3">
+        <div className="d-flex justify-content-between align-items-end gap-3 flex-wrap">
           <div>
             <span className="section-eyebrow">Payments</span>
             <h1 className="h2 mb-2">Payment Ledger</h1>
